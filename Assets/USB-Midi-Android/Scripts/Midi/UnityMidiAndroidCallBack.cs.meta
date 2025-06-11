@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 7f965c9bd43d4f4fb0af256d1dd282d2
+timeCreated: 1640263362
+AssetOrigin:
+  serializedVersion: 1
+  productId: 211036
+  packageName: USB Midi Android Plugin
+  packageVersion: 1.0.2
+  assetPath: Assets/USB-Midi-Android/Scripts/Midi/UnityMidiAndroidCallBack.cs
+  uploadId: 609239

@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.1.6f1
+CRC: 2978198807
+HashAppended: 0
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: asset_resources
+      Dependencies: {}
+    Info_1:
+      Name: scene_samplescene
+      Dependencies:
+        Dependency_0: asset_mat0
+        Dependency_1: asset_asset0
+    Info_2:
+      Name: asset_mat0
+      Dependencies:
+        Dependency_0: asset_shader0
+    Info_3:
+      Name: asset_shader0
+      Dependencies: {}
+    Info_4:
+      Name: asset_asset0
+      Dependencies: {}

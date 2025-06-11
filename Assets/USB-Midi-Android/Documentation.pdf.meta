@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: deaae68b99ee831f2a69652a9357ab8b
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 211036
+  packageName: USB Midi Android Plugin
+  packageVersion: 1.0.2
+  assetPath: Assets/USB-Midi-Android/Documentation.pdf
+  uploadId: 609239

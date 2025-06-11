@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 575eec3a87585aaa6bad4807122ad3d5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 211036
+  packageName: USB Midi Android Plugin
+  packageVersion: 1.0.2
+  assetPath: Assets/USB-Midi-Android/Scripts/MidiEventHandler.cs
+  uploadId: 609239

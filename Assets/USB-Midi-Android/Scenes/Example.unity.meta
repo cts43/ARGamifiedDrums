@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2cda990e2423bbf4892e6590ba056729
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 211036
+  packageName: USB Midi Android Plugin
+  packageVersion: 1.0.2
+  assetPath: Assets/USB-Midi-Android/Scenes/Example.unity
+  uploadId: 609239

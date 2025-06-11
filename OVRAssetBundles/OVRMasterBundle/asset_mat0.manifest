@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.1.6f1
+CRC: 1789018837
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a873bcb802b37f9bcfe5fb3bf05f37e9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 4afb0d898c1c22a5e88248733bd69457
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 5459e6c02b8fcf9f58ab49319e17711c
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Packages/com.meta.xr.sdk.core/Editor/BuildingBlocks/BlockData/HandTracking/Materials/SystemGestureSkeletonBoneMaterial.mat
+- Packages/com.meta.xr.sdk.core/Editor/BuildingBlocks/BlockData/HandTracking/Materials/SystemGestureHandMaterial.mat
+- Packages/com.meta.xr.sdk.core/Editor/BuildingBlocks/BlockData/HandTracking/Materials/SkeletonBoneMaterial.mat
+- Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat
+- Assets/Materials/Lit Variant.mat
+- Packages/com.meta.xr.sdk.core/Editor/BuildingBlocks/BlockData/HandTracking/Materials/DefaultHandMaterial.mat
+Dependencies:
+- C:/Users/chris/Documents/MR Test 09-06-25/OVRAssetBundles/OVRMasterBundle/asset_shader0

@@ -1,0 +1,39 @@
+fileFormatVersion: 2
+guid: 592a0094b558587e49d233aa700c209f
+PluginImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  iconMap: {}
+  executionOrder: {}
+  defineConstraints: []
+  isPreloaded: 0
+  isOverridable: 0
+  isExplicitlyReferenced: 0
+  validateReferences: 1
+  platformData:
+  - first:
+      Android: Android
+    second:
+      enabled: 1
+      settings: {}
+  - first:
+      Any: 
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      Editor: Editor
+    second:
+      enabled: 0
+      settings:
+        DefaultValueInitialized: true
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 211036
+  packageName: USB Midi Android Plugin
+  packageVersion: 1.0.2
+  assetPath: Assets/USB-Midi-Android/Plugins/Android/USBMidiAndroid-release.aar
+  uploadId: 609239

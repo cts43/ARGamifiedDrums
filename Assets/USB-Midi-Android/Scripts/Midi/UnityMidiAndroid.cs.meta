@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6735e3e52a161c299ba2561103e11051
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 211036
+  packageName: USB Midi Android Plugin
+  packageVersion: 1.0.2
+  assetPath: Assets/USB-Midi-Android/Scripts/Midi/UnityMidiAndroid.cs
+  uploadId: 609239
