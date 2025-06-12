@@ -1194,6 +1194,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Note Spawner
       objectReference: {fileID: 0}
+    - target: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+      propertyPath: m_TagString
+      value: Note Spawner
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1611,6 +1615,7 @@ MonoBehaviour:
   enableDebugActions: 1
   RTriggerMIDINote: 42
   drumManager: {fileID: 1568977027}
+  noteSpawner: {fileID: 0}
 --- !u!1 &284627998
 GameObject:
   m_ObjectHideFlags: 0
@@ -9420,6 +9425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   framesToHighlightOnHit: 10
+  hitWindowInMs: 300
 --- !u!4 &1568977028
 Transform:
   m_ObjectHideFlags: 0

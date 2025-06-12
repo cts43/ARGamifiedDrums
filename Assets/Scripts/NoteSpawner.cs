@@ -30,7 +30,7 @@ public class NoteSpawner : MonoBehaviour
 
     }
 
-    float getCurrentTime()
+    public float getCurrentOffsetTime()
     {
         return currentTime - spawnWindow; //offset time by spawn window
     }
@@ -67,16 +67,22 @@ public class NoteSpawner : MonoBehaviour
 
         GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
         spawnedNote.transform.Translate(startPos);
-
-        float initialSpawnTime = getCurrentTime();
+        spawnedNote.GetComponent<NoteIndicator>().ScheduledTime = noteTime + spawnWindow;
         Vector3 distanceFromTarget = targetPos - startPos;
 
         Vector3 speedToMove = distanceFromTarget / spawnWindow;
 
         while (true)
         {
-            spawnedNote.transform.Translate(speedToMove*Time.deltaTime);
-            yield return null;
+            if (spawnedNote != null)
+            {
+                spawnedNote.transform.Translate(speedToMove * Time.deltaTime);
+                yield return null;
+            }
+            else
+            {
+                yield break;
+            }
         }
 
 
@@ -86,21 +92,23 @@ public class NoteSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         while (notesList.Count > 0) //while rather than if to allow multiple notes on the same frame
         {
             var currentNote = notesList.Peek();
             var currentNoteTime = currentNote.Item3.TotalSeconds;
-            //Debug.Log(getCurrentTime() + " " + currentNoteTime + " " + ((getCurrentTime() >= currentNoteTime)));
-            if ((getCurrentTime() >= currentNoteTime))
+
+            if ((getCurrentOffsetTime() >= currentNoteTime))
             {
                 var noteToSpawn = notesList.Dequeue(); //remove note from queue and spawn
-                StartCoroutine(SpawnNote(noteToSpawn.Item1, noteToSpawn.Item2,currentNoteTime));
-
+                StartCoroutine(SpawnNote(noteToSpawn.Item1, noteToSpawn.Item2, currentNoteTime));
             }
             else
             {
                 break; //but break if out of notes
             }
+
+
         }
         currentTime += Time.deltaTime; //time since previous frame added to current time each frame
     }

@@ -1,4 +1,6 @@
 using System.Collections;
+using Melanchall.DryWetMidi.Interaction;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DrumHit : MonoBehaviour
@@ -13,19 +15,43 @@ public class DrumHit : MonoBehaviour
 
     private int waitFrames = 10; //default 10
 
+    private int hitWindowInMs;
+
+    private NoteSpawner noteSpawner;
+
     private Coroutine changeColourOnHit;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        waitFrames = GetComponentInParent<DrumManager>().framesToHighlightOnHit;
+        DrumManager drumManager = GetComponentInParent<DrumManager>();
+        waitFrames = drumManager.framesToHighlightOnHit;
+        hitWindowInMs = drumManager.hitWindowInMs;
+
         selfRenderer = GetComponent<Renderer>();
         ResetColour(); //set initial colour to one set in Inspector
+        noteSpawner = GameObject.FindGameObjectWithTag("Note Spawner").GetComponent<NoteSpawner>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void checkIfHitNote()
     {
+        double currentTime = noteSpawner.getCurrentOffsetTime();
+        foreach (var note in GetComponentsInChildren<NoteIndicator>())
+        {
+            double diff = System.Math.Abs(currentTime - note.ScheduledTime);
+            if (diff <= (hitWindowInMs / 1000.0) / 2)
+            {
+                Debug.Log("Successfully Hit Note at Time " + note.ScheduledTime);
+                note.destroy(); //destroy hit note
+                break; //avoid double hits on close together notes
+                
+            }
+            else
+            {
+                Debug.Log("Missed Note");
+            }
+
+        }
     }
 
     public void OnDrumHit()
@@ -37,6 +63,7 @@ public class DrumHit : MonoBehaviour
         }
 
         changeColourOnHit = StartCoroutine(ShowDrumHitbyChangeColour());
+        checkIfHitNote();
     }
 
     public IEnumerator ShowDrumHitbyChangeColour()

@@ -4,6 +4,7 @@ public class DrumManager : MonoBehaviour
 {
 
     public int framesToHighlightOnHit; //amount of time in frames to change colour when a drum is hit.
+    public int hitWindowInMs;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

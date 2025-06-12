@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MIDI Reader
   - Drum
+  - Note Spawner
   layers:
   - Default
   - TransparentFX

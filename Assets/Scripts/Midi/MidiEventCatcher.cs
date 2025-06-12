@@ -10,8 +10,9 @@ public class MidiEventCatcher : MonoBehaviour
 
     public Boolean enableDebugActions;
     public int RTriggerMIDINote;
-
     public DrumManager drumManager;
+
+    public NoteSpawner noteSpawner;
 
     private void OnEnable()
     {
@@ -35,7 +36,7 @@ public class MidiEventCatcher : MonoBehaviour
         {
             if (note == drum.note)
             {
-                Debug.Log("Found drum!");
+                //Debug.Log("Found drum!");
                 drum.OnDrumHit();
             }
         }
@@ -58,7 +59,7 @@ public class MidiEventCatcher : MonoBehaviour
         {
             if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
             {
-                Debug.Log("pressed right trigger");
+                //Debug.Log("pressed right trigger");
                 checkForDrum(RTriggerMIDINote, 127);
             }
         }
