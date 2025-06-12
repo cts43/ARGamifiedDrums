@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - MIDI Reader
+  - Drum
   layers:
   - Default
   - TransparentFX

@@ -2,6 +2,8 @@ using UnityEngine;
 using Melanchall.DryWetMidi.Interaction;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
+using Unity.VisualScripting;
 
 
 public class NoteSpawner : MonoBehaviour
@@ -33,11 +35,38 @@ public class NoteSpawner : MonoBehaviour
         return currentTime - spawnWindow; //offset time by spawn window
     }
 
+    private GameObject GetDrum(int note)
+    {
+        var drums = GameObject.FindGameObjectsWithTag("Drum");
+
+        //Checks whether the MIDI note hit exists as a drum in DrumManager, and runs relevant function if so
+
+        foreach (GameObject drum in drums)
+        {
+            var DrumScript = drum.GetComponent<DrumHit>();
+            if (note == DrumScript.note)
+            {
+                Debug.Log("Found drum!");
+                return drum;
+            }
+        }
+        //if not found, return null
+        return null;
+    }
+
     IEnumerator SpawnNote(int note, int velocity, double noteTime)
     {
-        GameObject spawnedNote = Instantiate(visualNotePrefab, startPos, Quaternion.identity);
 
-        Debug.Log(spawnedNote.transform.position + "SPAWNEDNOTEPOS");
+        GameObject noteDrum = GetDrum(note);
+
+        if (noteDrum == null)
+        {
+            Debug.Log("Tried to spawn note for drum " + note + ", but doesn't exist!");
+            yield break;
+        }
+
+        GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
+        spawnedNote.transform.Translate(startPos);
 
         float initialSpawnTime = getCurrentTime();
         Vector3 distanceFromTarget = targetPos - startPos;
