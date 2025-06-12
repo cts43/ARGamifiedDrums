@@ -1,17 +1,20 @@
 using UnityEngine;
-using Melanchall.DryWetMidi.Core;
-using System.IO;
 using Melanchall.DryWetMidi.Interaction;
-using Melanchall.DryWetMidi.MusicTheory;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
-using System.Linq;
+
 
 public class NoteSpawner : MonoBehaviour
 {
 
-    private float startTime;
-    private float currentTime;
+    //Ideally this will be refactored to use musical time (Bar:Beat:Seconds) rather than only seconds. That will allow easier looping and representation of time signatures etc.
+    private float currentTime = 0f;
+
+    public Vector3 targetPos;
+
+    public Vector3 startPos;
+
+    public float spawnWindow; //How long before a beat to spawn a note in seconds
 
     public GameObject visualNotePrefab;
 
@@ -23,37 +26,54 @@ public class NoteSpawner : MonoBehaviour
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
         notesList = MIDIReader.LoadedFile;
 
-        startTime = Time.time;
-
     }
 
     float getCurrentTime()
     {
-        return Time.time - startTime;
+        return currentTime - spawnWindow; //offset time by spawn window
     }
 
-    void spawnNote(int note, int velocity)
+    IEnumerator SpawnNote(int note, int velocity, double noteTime)
     {
-        Debug.Log("Note " + note + ", velocity " + velocity + " spawned");
-        var noteObject = Instantiate(visualNotePrefab);
+        GameObject spawnedNote = Instantiate(visualNotePrefab, startPos, Quaternion.identity);
+
+        Debug.Log(spawnedNote.transform.position + "SPAWNEDNOTEPOS");
+
+        float initialSpawnTime = getCurrentTime();
+        Vector3 distanceFromTarget = targetPos - startPos;
+
+        Vector3 speedToMove = distanceFromTarget / spawnWindow;
+
+        while (true)
+        {
+            spawnedNote.transform.Translate(speedToMove*Time.deltaTime);
+            yield return null;
+        }
+
 
     }
+
 
     // Update is called once per frame
     void Update()
     {
-        if (notesList.Count > 0)
+        while (notesList.Count > 0) //while rather than if to allow multiple notes on the same frame
         {
             var currentNote = notesList.Peek();
             var currentNoteTime = currentNote.Item3.TotalSeconds;
             //Debug.Log(getCurrentTime() + " " + currentNoteTime + " " + ((getCurrentTime() >= currentNoteTime)));
-            if ((getCurrentTime() >= currentNoteTime) && (notesList.Count > 0))
+            if ((getCurrentTime() >= currentNoteTime))
             {
-                var noteToSpawn = notesList.Dequeue();
-                spawnNote(noteToSpawn.Item1, noteToSpawn.Item2);
+                var noteToSpawn = notesList.Dequeue(); //remove note from queue and spawn
+                StartCoroutine(SpawnNote(noteToSpawn.Item1, noteToSpawn.Item2,currentNoteTime));
 
             }
+            else
+            {
+                break; //but break if out of notes
+            }
         }
+        currentTime += Time.deltaTime; //time since previous frame added to current time each frame
     }
 
     

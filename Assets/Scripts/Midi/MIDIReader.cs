@@ -22,7 +22,7 @@ public class MIDIReader : MonoBehaviour
     {
 
         var readNotes = new Queue<(int, int, MetricTimeSpan)> { };
-        //list of tuples. Note (No.), Velocity, Time 
+        //queue of tuples. Note (No.), Velocity, Time 
         //Time is based on Tempo set within MIDI file
 
         if (File.Exists(Path))
