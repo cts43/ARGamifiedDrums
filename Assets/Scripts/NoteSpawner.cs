@@ -46,7 +46,7 @@ public class NoteSpawner : MonoBehaviour
             var DrumScript = drum.GetComponent<DrumHit>();
             if (note == DrumScript.note)
             {
-                Debug.Log("Found drum!");
+                //Debug.Log("Found drum!");
                 return drum;
             }
         }
