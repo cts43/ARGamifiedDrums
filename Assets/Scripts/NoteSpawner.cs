@@ -82,7 +82,7 @@ public class NoteSpawner : MonoBehaviour
 
     public long GetCurrentOffsetMusicalTimeAsTicks()
     {
-        return currentTick - TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
+        return currentTick; //- TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
     }
 
     private GameObject GetDrum(int note)
