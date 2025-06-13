@@ -12013,7 +12013,7 @@ MonoBehaviour:
   useRotationTracking: 1
   useIPDInPositionTracking: 1
   resetTrackerOnLoad: 0
-  AllowRecenter: 1
+  AllowRecenter: 0
   LateControllerUpdate: 1
   LateLatching: 0
   controllerDrivenHandPosesType: 0
