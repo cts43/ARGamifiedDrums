@@ -499,7 +499,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967287
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1144,7 +1144,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1556321683050073238, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.41141
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1556321683050073238, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1187,9 +1187,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1568977026}
     - target: {fileID: 1874053029513688152, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+      propertyPath: MIDIFilePath
+      value: Assets/MIDI Files/Basic 4-4.mid
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874053029513688152, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
       propertyPath: visualNotePrefab
       value: 
       objectReference: {fileID: 7027843401711388810, guid: dc323282e85f4bc4897d5c781fdab05e, type: 3}
+    - target: {fileID: 2470973381985292546, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470973381985292546, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928211804177470211, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+      propertyPath: m_text
+      value: fdsafdsafsda
+      objectReference: {fileID: 0}
     - target: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
       propertyPath: m_Name
       value: Note Spawner
@@ -1197,6 +1213,18 @@ PrefabInstance:
     - target: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
       propertyPath: m_TagString
       value: Note Spawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 7297955586263455063, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7297955586263455063, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7297955586263455063, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

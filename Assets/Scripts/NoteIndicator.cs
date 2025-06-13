@@ -1,8 +1,11 @@
 using UnityEngine;
+using Melanchall.DryWetMidi.Interaction;
 
 public class NoteIndicator : MonoBehaviour
 {
-    public double ScheduledTime;
+    public long ScheduledTimeInTicks;
+
+    public TempoMap TempoMap;
 
     public void destroy()
     {

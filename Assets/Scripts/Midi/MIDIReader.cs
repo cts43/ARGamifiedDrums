@@ -8,20 +8,18 @@ using System.Collections.Generic;
 public class MIDIReader : MonoBehaviour
 {
 
-    public string MIDIFilePath;
-
-    public Queue<(int, int, MetricTimeSpan)> LoadedFile { get; private set; }
+    public Queue<(int, int, BarBeatTicksTimeSpan)> LoadedFile { get; private set; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        LoadedFile = LoadMIDIFile(MIDIFilePath);
     }
 
-    Queue<(int, int, MetricTimeSpan)> LoadMIDIFile(string Path)
+    public (Queue<(int, int, BarBeatTicksTimeSpan)>,TempoMap) LoadMIDIFile(string Path)
     {
 
-        var readNotes = new Queue<(int, int, MetricTimeSpan)> { };
+        var readNotes = new Queue<(int, int, BarBeatTicksTimeSpan)> { };
+        TempoMap tempoMap = null;
         //queue of tuples. Note (No.), Velocity, Time 
         //Time is based on Tempo set within MIDI file
 
@@ -29,14 +27,14 @@ public class MIDIReader : MonoBehaviour
         {
             MidiFile file = MidiFile.Read(Path);
             ICollection<Melanchall.DryWetMidi.Interaction.Note> notes = file.GetNotes();
-            TempoMap tempoMap = file.GetTempoMap();
+            tempoMap = file.GetTempoMap();
             //^^^explicit types here based on GetType() output. Unsure if necessary
 
             foreach (Melanchall.DryWetMidi.Interaction.Note note in notes)
             {
                 int noteNumber = note.NoteNumber;
                 int noteVelocity = note.Velocity;
-                MetricTimeSpan noteTime = note.TimeAs<MetricTimeSpan>(tempoMap);
+                BarBeatTicksTimeSpan noteTime = note.TimeAs<BarBeatTicksTimeSpan>(tempoMap);
 
                 var readNote = (noteNumber, noteVelocity, noteTime);
 
@@ -49,7 +47,7 @@ public class MIDIReader : MonoBehaviour
             Debug.Log("No file found at path!");
         }
 
-        return readNotes;
+        return (readNotes,tempoMap);
     }
 
     // Update is called once per frame
