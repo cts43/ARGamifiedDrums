@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 963107}
   m_Layer: 0
   m_Name: MoveableScene
-  m_TagString: Untagged
+  m_TagString: Moveable Scene
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2453,7 +2453,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 415179857}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.19159883, y: -0, z: -0, w: 0.9814733}
+  m_LocalRotation: {x: -0.19159706, y: 0, z: 0, w: 0.98147374}
   m_LocalPosition: {x: 0, y: -0.04500997, z: 0.08750996}
   m_LocalScale: {x: 0.2, y: 0.01, z: 0.19999999}
   m_ConstrainProportionsScale: 0
@@ -6069,6 +6069,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 438944133}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &959314933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 959314935}
+  - component: {fileID: 959314934}
+  m_Layer: 0
+  m_Name: ManualAlign
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &959314934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959314933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f7d117e189f16d45b4cf9029784d571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &959314935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959314933}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.35781, y: 0, z: 1.25981}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &961770072
 GameObject:
   m_ObjectHideFlags: 0
@@ -6448,7 +6492,7 @@ GameObject:
   - component: {fileID: 999732840}
   m_Layer: 0
   m_Name: RightHandAnchor
-  m_TagString: Untagged
+  m_TagString: RightHandAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12458,4 +12502,5 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 2025155486}
   - {fileID: 969679139}
+  - {fileID: 959314935}
   - {fileID: 963107}
