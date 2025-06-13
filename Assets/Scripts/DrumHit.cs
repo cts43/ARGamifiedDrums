@@ -1,6 +1,5 @@
 using System.Collections;
 using Melanchall.DryWetMidi.Interaction;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DrumHit : MonoBehaviour

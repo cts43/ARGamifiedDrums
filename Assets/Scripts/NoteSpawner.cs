@@ -2,11 +2,9 @@ using UnityEngine;
 using Melanchall.DryWetMidi.Interaction;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.XR.CoreUtils;
-using Unity.VisualScripting;
 using Melanchall.DryWetMidi.Core;
 using System;
-using TMPro;
+
 
 
 public class NoteSpawner : MonoBehaviour
