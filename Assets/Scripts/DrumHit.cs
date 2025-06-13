@@ -33,26 +33,27 @@ public class DrumHit : MonoBehaviour
         noteSpawner = GameObject.FindGameObjectWithTag("Note Spawner").GetComponent<NoteSpawner>();
     }
 
-    // private void checkIfHitNote()
-    // {
-    //     double currentTime = noteSpawner.getCurrentOffsetTime();
-    //     foreach (var note in GetComponentsInChildren<NoteIndicator>())
-    //     {
-    //         double diff = System.Math.Abs(currentTime - note.ScheduledTime);
-    //         if (diff <= (hitWindowInMs / 1000.0) / 2)
-    //         {
-    //             Debug.Log("Successfully Hit Note at Time " + note.ScheduledTime);
-    //             note.destroy(); //destroy hit note
-    //             break; //avoid double hits on close together notes
-                
-    //         }
-    //         else
-    //         {
-    //             Debug.Log("Missed Note");
-    //         }
+    private void checkIfHitNote()
+    {
+        var hitWindowAsTimeSpan = new MetricTimeSpan(0, 0, 0, hitWindowInMs);
+        long currentTime = noteSpawner.GetCurrentOffsetMusicalTimeAsTicks();
+        foreach (var note in GetComponentsInChildren<NoteIndicator>())
+        {
+            double diff = System.Math.Abs(currentTime - note.ScheduledTimeInTicks);
+            if (diff <= (TimeConverter.ConvertFrom(hitWindowAsTimeSpan,note.TempoMap)) /2)
+            {
+                Debug.Log("Successfully Hit Note at Time " + note.ScheduledTimeInTicks);
+                note.destroy(); //destroy hit note
+                break; //avoid double hits on close together notes
 
-    //     }
-    // }
+            }
+            else
+            {
+                Debug.Log("Missed Note");
+            }
+
+        }
+    }
 
     public void OnDrumHit()
     {
@@ -63,7 +64,7 @@ public class DrumHit : MonoBehaviour
         }
 
         changeColourOnHit = StartCoroutine(ShowDrumHitbyChangeColour());
-        //checkIfHitNote();
+        checkIfHitNote();
     }
 
     public IEnumerator ShowDrumHitbyChangeColour()

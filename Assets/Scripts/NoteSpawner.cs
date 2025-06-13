@@ -23,7 +23,9 @@ public class NoteSpawner : MonoBehaviour
 
     public Vector3 startPos;
 
-    public float spawnWindow; //How long before a beat to spawn a note in seconds
+    public long spawnWindow; //How long before a beat to spawn a note in seconds
+
+    private long spawnWindowinUs;
 
     private BarBeatTicksTimeSpan spawnWindowAsBarsBeats;
 
@@ -33,13 +35,11 @@ public class NoteSpawner : MonoBehaviour
 
     private Queue<(int, int, BarBeatTicksTimeSpan)> notesList;
 
-    private TextMeshPro TimeLabel;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
-        TimeLabel = GetComponent<TextMeshPro>();
+        spawnWindowinUs = spawnWindow * 1000000;
 
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
         (Queue<(int, int, BarBeatTicksTimeSpan)>, TempoMap) notesAndMap = MIDIReader.LoadMIDIFile(MIDIFilePath); //returns tuple collection of notes + tempo map
@@ -50,13 +50,9 @@ public class NoteSpawner : MonoBehaviour
         //Debug.Log("Ticks/ 1/4 note: " + ticksPerQuarterNote);
         Debug.Log("Tempo: " + tempoMap.GetTempoAtTime(new MidiTimeSpan(0)));
 
-        var spawnWindowAsTimespan = new MetricTimeSpan((long)spawnWindow*1000000); //time in microseconds
+        var spawnWindowAsTimespan = new MetricTimeSpan((long)spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan,tempoMap);
     }
-
-    //public float getCurrentOffsetTime(){
-    //    return currentTime - spawnWindow; //offset time by spawn window
-    //}
 
     public BarBeatTicksTimeSpan GetCurrentMusicalTime() {
         return TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap);
@@ -75,6 +71,11 @@ public class NoteSpawner : MonoBehaviour
             time = new BarBeatTicksTimeSpan(0,0,0);
         }
         return time;
+    }
+
+    public long GetCurrentOffsetMusicalTimeAsTicks()
+    {
+        return currentTick - TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
     }
 
     private GameObject GetDrum(int note)
@@ -96,8 +97,10 @@ public class NoteSpawner : MonoBehaviour
         return null;
     }
 
-    IEnumerator SpawnNote(int note, int velocity, double noteTime)
+    IEnumerator SpawnNote(int note, int velocity, BarBeatTicksTimeSpan noteTime)
     {
+
+        long noteTimeInTicks = TimeConverter.ConvertFrom(noteTime, tempoMap);
 
         GameObject noteDrum = GetDrum(note);
 
@@ -109,7 +112,8 @@ public class NoteSpawner : MonoBehaviour
 
         GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
         spawnedNote.transform.Translate(startPos);
-        spawnedNote.GetComponent<NoteIndicator>().ScheduledTime = noteTime + spawnWindow;
+        spawnedNote.GetComponent<NoteIndicator>().ScheduledTimeInTicks = noteTimeInTicks + TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
+        spawnedNote.GetComponent<NoteIndicator>().TempoMap = tempoMap;
         Vector3 distanceFromTarget = targetPos - startPos;
 
         Vector3 speedToMove = distanceFromTarget / spawnWindow;
@@ -143,7 +147,7 @@ public class NoteSpawner : MonoBehaviour
             if ((GetCurrentMusicalTime() >= currentNoteTime))
             {
                 var noteToSpawn = notesList.Dequeue(); //remove note from queue and spawn
-                StartCoroutine(SpawnNote(noteToSpawn.Item1, noteToSpawn.Item2, TimeConverter.ConvertFrom(currentNoteTime, tempoMap))); //time as long for spawner
+                StartCoroutine(SpawnNote(noteToSpawn.Item1, noteToSpawn.Item2, currentNoteTime)); //time as long for spawner
             }
             else
             {
@@ -153,10 +157,8 @@ public class NoteSpawner : MonoBehaviour
 
         }
 
-        TimeLabel.text = GetCurrentOffsetMusicalTime().ToShortString();
-
         //convert delta time (seconds) to microseconds and then to midi ticks
-        long deltaTimeinuS = (long)(Time.deltaTime * 1000000.0);
+        long deltaTimeinuS = (long)(Time.deltaTime * spawnWindowinUs);
 
         MetricTimeSpan deltaAsTimeSpan = new MetricTimeSpan(deltaTimeinuS);
         long deltaAsTicks = TimeConverter.ConvertFrom(deltaAsTimeSpan, tempoMap);

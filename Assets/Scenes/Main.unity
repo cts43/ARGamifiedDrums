@@ -1226,14 +1226,10 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8546012931645490403, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
 --- !u!1 &190555133
 GameObject:
