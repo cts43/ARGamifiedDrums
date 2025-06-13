@@ -9,6 +9,7 @@ TagManager:
   - Note Spawner
   - Moveable Scene
   - RightHandAnchor
+  - BeatIndicatorText
   layers:
   - Default
   - TransparentFX

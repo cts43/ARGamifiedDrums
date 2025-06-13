@@ -42,7 +42,7 @@ public class NoteSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameObject currentBeatLabelObject = GameObject.FindWithTag("NoteLabel");
+        GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
         Debug.Log(currentBeatLabelObject);
         currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
 
