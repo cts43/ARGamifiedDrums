@@ -7,6 +7,8 @@ TagManager:
   - MIDI Reader
   - Drum
   - Note Spawner
+  - Moveable Scene
+  - RightHandAnchor
   layers:
   - Default
   - TransparentFX

@@ -4,6 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Core;
 using System;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 
 
@@ -29,6 +32,8 @@ public class NoteSpawner : MonoBehaviour
 
     public GameObject visualNotePrefab;
 
+    private TextMeshProUGUI currentBeatLabel;
+
     private TempoMap tempoMap;
 
     private Queue<(int, int, BarBeatTicksTimeSpan)> notesList;
@@ -37,6 +42,10 @@ public class NoteSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        GameObject currentBeatLabelObject = GameObject.FindWithTag("NoteLabel");
+        Debug.Log(currentBeatLabelObject);
+        currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
+
         spawnWindowinUs = spawnWindow * 1000000;
 
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
@@ -156,7 +165,7 @@ public class NoteSpawner : MonoBehaviour
         }
 
         //convert delta time (seconds) to microseconds and then to midi ticks
-        long deltaTimeinuS = (long)(Time.deltaTime * spawnWindowinUs);
+        long deltaTimeinuS = (long)(Time.deltaTime * 1000000);
 
         MetricTimeSpan deltaAsTimeSpan = new MetricTimeSpan(deltaTimeinuS);
         long deltaAsTicks = TimeConverter.ConvertFrom(deltaAsTimeSpan, tempoMap);
@@ -165,6 +174,10 @@ public class NoteSpawner : MonoBehaviour
         currentTick += deltaAsTicks;
         //Debug.Log(GetCurrentMusicalTime());
         //currentTime += Time.deltaTime; //time since previous frame added to current time each frame
+
+        //show beats on label
+        currentBeatLabel.text = GetCurrentOffsetMusicalTime().ToString();
+        Debug.Log(GetCurrentOffsetMusicalTime().ToString());
     }
 
     
