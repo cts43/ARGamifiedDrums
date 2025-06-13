@@ -82,7 +82,7 @@ public class NoteSpawner : MonoBehaviour
 
     public long GetCurrentOffsetMusicalTimeAsTicks()
     {
-        return currentTick; //- TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
+        return currentTick - TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
     }
 
     private GameObject GetDrum(int note)
@@ -119,7 +119,7 @@ public class NoteSpawner : MonoBehaviour
 
         GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
         spawnedNote.transform.Translate(startPos);
-        spawnedNote.GetComponent<NoteIndicator>().ScheduledTimeInTicks = noteTimeInTicks + TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
+        spawnedNote.GetComponent<NoteIndicator>().ScheduledTimeInTicks = noteTimeInTicks;// + TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
         spawnedNote.GetComponent<NoteIndicator>().TempoMap = tempoMap;
         Vector3 distanceFromTarget = targetPos - startPos;
 
