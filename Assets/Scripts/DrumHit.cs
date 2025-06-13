@@ -35,20 +35,24 @@ public class DrumHit : MonoBehaviour
     private void checkIfHitNote()
     {
         var hitWindowAsTimeSpan = new MetricTimeSpan(0, 0, 0, hitWindowInMs);
+        bool hitNote = false;
         long currentTime = noteSpawner.GetCurrentOffsetMusicalTimeAsTicks();
         foreach (var note in GetComponentsInChildren<NoteIndicator>())
         {
             double diff = System.Math.Abs(currentTime - note.ScheduledTimeInTicks);
             if (diff <= (TimeConverter.ConvertFrom(hitWindowAsTimeSpan,note.TempoMap)) /2)
             {
-                Debug.Log("Successfully Hit Note at Time " + note.ScheduledTimeInTicks);
+                hitNote = true;
+                Debug.Log("Successfully Hit Note at Tick " + note.ScheduledTimeInTicks);
                 note.destroy(); //destroy hit note
                 break; //avoid double hits on close together notes
 
             }
-            else
+            if (!hitNote)
             {
-                Debug.Log("Missed Note");
+                {
+                    Debug.Log("Missed Note");
+                }
             }
 
         }
