@@ -8,6 +8,7 @@ using TMPro;
 using System.IO;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
+using System.Linq;
 
 
 
@@ -41,15 +42,20 @@ public class NoteSpawner : MonoBehaviour
 
     private Queue<(int, int, BarBeatTicksTimeSpan)> notesList;
 
+    private Queue<(int, int, BarBeatTicksTimeSpan)> originalNotesList;
+
     private bool playing = false;
 
+    private BarBeatTicksTimeSpan finalNoteTime;
 
     private void startPlaying()
     {
         if (!playing)
         {
-            currentTick = 0;
+
+            //notesList = originalNotesList;
             LoadMIDI();
+            currentTick = 0;
             playing = true;
         }
     }
@@ -84,7 +90,9 @@ public class NoteSpawner : MonoBehaviour
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
         (Queue<(int, int, BarBeatTicksTimeSpan)>, TempoMap) notesAndMap = MIDIReader.LoadMIDIFile(localFilePath); //returns tuple collection of notes + tempo map
         notesList = notesAndMap.Item1;
+        originalNotesList = notesList;
         tempoMap = notesAndMap.Item2;
+        finalNoteTime = notesList.Last().Item3; //last item in queue's note time should be the final note
     }
 
     async void InitLoadMIDI()
@@ -101,7 +109,7 @@ public class NoteSpawner : MonoBehaviour
         //Debug.Log("Tempo: " + tempoMap.GetTempoAtTime(new MidiTimeSpan(0)));
 
         //init spawn window as bars beats for easy operations
-        var spawnWindowAsTimespan = new MetricTimeSpan((long)spawnWindowinUs); //time in microseconds
+        var spawnWindowAsTimespan = new MetricTimeSpan(spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
     }
 
@@ -115,8 +123,6 @@ public class NoteSpawner : MonoBehaviour
         spawnWindowinUs = spawnWindow * 1000000;
 
         InitLoadMIDI();
-
-        //startPlaying();
     }
 
     public BarBeatTicksTimeSpan GetCurrentMusicalTime() {
@@ -237,15 +243,16 @@ public class NoteSpawner : MonoBehaviour
 
         MetricTimeSpan deltaAsTimeSpan = new MetricTimeSpan(deltaTimeinuS);
         long deltaAsTicks = TimeConverter.ConvertFrom(deltaAsTimeSpan, tempoMap);
-
-        //Debug.Log("Time in uS: "+deltaTimeinuS+" Time as timespan: "+deltaAsTimeSpan+" Time as ticks: "+deltaAsTicks);
         currentTick += deltaAsTicks;
-        //Debug.Log(GetCurrentMusicalTime());
-        //currentTime += Time.deltaTime; //time since previous frame added to current time each frame
+
 
         //show beats on label
         currentBeatLabel.text = GetCurrentOffsetMusicalTime().ToString();
-        //Debug.Log(GetCurrentOffsetMusicalTime().ToString());
+
+        if (GetCurrentOffsetMusicalTime() >= finalNoteTime){
+            playing = false;
+        }
+
     }
 
     
