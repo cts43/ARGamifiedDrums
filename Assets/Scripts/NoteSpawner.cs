@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using Melanchall.DryWetMidi.Core;
 using System;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEngine.UI;
 using System.IO;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
@@ -67,28 +65,35 @@ public class NoteSpawner : MonoBehaviour
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    async void Start()
+    private void LoadMIDI()
     {
-        GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
-        //Debug.Log(currentBeatLabelObject);
-        currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
-
-        spawnWindowinUs = spawnWindow * 1000000;
-
-        MIDIFilePath = Path.Combine(Application.streamingAssetsPath, MIDIFilePath);
-
-        MIDIFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
-
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
         (Queue<(int, int, BarBeatTicksTimeSpan)>, TempoMap) notesAndMap = MIDIReader.LoadMIDIFile(MIDIFilePath); //returns tuple collection of notes + tempo map
         notesList = notesAndMap.Item1;
         tempoMap = notesAndMap.Item2;
-        var timeDivision = (TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision; //cast type
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    async void Start()
+    {
+        //init text label that displays current musical time in Bars:Beats:Ticks
+        GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
+        currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
+
+        spawnWindowinUs = spawnWindow * 1000000;
+
+        //Load MIDI from file
+        MIDIFilePath = Path.Combine(Application.streamingAssetsPath, MIDIFilePath);
+        MIDIFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
+        LoadMIDI();
+
+        //unnecessary but leaving here so I remember how to access all of these values
+        //var timeDivision = (TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision; //cast type
         //ticksPerQuarterNote = timeDivision.TicksPerQuarterNote; //get ticks per 1/4 note from tempo map
         //Debug.Log("Ticks/ 1/4 note: " + ticksPerQuarterNote);
-        Debug.Log("Tempo: " + tempoMap.GetTempoAtTime(new MidiTimeSpan(0)));
+        //Debug.Log("Tempo: " + tempoMap.GetTempoAtTime(new MidiTimeSpan(0)));
 
+        //init spawn window as bars beats for easy operations
         var spawnWindowAsTimespan = new MetricTimeSpan((long)spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
     }
