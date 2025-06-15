@@ -7,6 +7,9 @@ using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.UI;
+using System.IO;
+using UnityEngine.Networking;
+using System.Threading.Tasks;
 
 
 
@@ -39,14 +42,43 @@ public class NoteSpawner : MonoBehaviour
     private Queue<(int, int, BarBeatTicksTimeSpan)> notesList;
 
 
+    private async Task<string> LoadFileFromStreamingAssets(string path)
+    {
+        //File loading for Android builds adapted from Unity docs
+        UnityWebRequest request = UnityWebRequest.Get(path);
+        UnityWebRequestAsyncOperation operation = request.SendWebRequest();
+
+        while (!operation.isDone)
+        {
+            await Task.Yield();
+        }
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            //Debug.Log(request.downloadHandler.text); the binary file contents
+            string newPath = Path.Combine(Application.persistentDataPath, "received.mid");
+            File.WriteAllBytes(newPath, request.downloadHandler.data); //write file to received.mid
+
+            return newPath;
+        }
+        else
+        {
+            Debug.LogError("Cannot load file at " + MIDIFilePath);
+            return null;
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    async void Start()
     {
         GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
-        Debug.Log(currentBeatLabelObject);
+        //Debug.Log(currentBeatLabelObject);
         currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
 
         spawnWindowinUs = spawnWindow * 1000000;
+
+        MIDIFilePath = Path.Combine(Application.streamingAssetsPath, MIDIFilePath);
+
+        MIDIFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
 
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
         (Queue<(int, int, BarBeatTicksTimeSpan)>, TempoMap) notesAndMap = MIDIReader.LoadMIDIFile(MIDIFilePath); //returns tuple collection of notes + tempo map
@@ -58,7 +90,7 @@ public class NoteSpawner : MonoBehaviour
         Debug.Log("Tempo: " + tempoMap.GetTempoAtTime(new MidiTimeSpan(0)));
 
         var spawnWindowAsTimespan = new MetricTimeSpan((long)spawnWindowinUs); //time in microseconds
-        spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan,tempoMap);
+        spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
     }
 
     public BarBeatTicksTimeSpan GetCurrentMusicalTime() {
@@ -177,7 +209,7 @@ public class NoteSpawner : MonoBehaviour
 
         //show beats on label
         currentBeatLabel.text = GetCurrentOffsetMusicalTime().ToString();
-        Debug.Log(GetCurrentOffsetMusicalTime().ToString());
+        //Debug.Log(GetCurrentOffsetMusicalTime().ToString());
     }
 
     

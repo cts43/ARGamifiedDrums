@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 963106}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.49487, y: 0.8125, z: 0.34518}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -153,6 +153,8 @@ Transform:
   - {fileID: 260457037}
   - {fileID: 948199352}
   - {fileID: 773022981}
+  - {fileID: 1966957416}
+  - {fileID: 1919749987}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &18118690
@@ -1232,7 +1234,7 @@ PrefabInstance:
       objectReference: {fileID: 1568977026}
     - target: {fileID: 1874053029513688152, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
       propertyPath: MIDIFilePath
-      value: Assets/MIDI Files/Basic 4-4.mid
+      value: MIDI Files/Basic 4-4.mid
       objectReference: {fileID: 0}
     - target: {fileID: 1874053029513688152, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
       propertyPath: visualNotePrefab
@@ -11741,12 +11743,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919749984}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.49487, y: -0.8125, z: -0.34518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 963107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1934200219
 GameObject:
@@ -12177,18 +12179,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966957412}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.36}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 3.0148199}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1953520852}
   - {fileID: 1427698853}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 963107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2.34}
+  m_AnchoredPosition: {x: -0.49487, y: 1.5274999}
   m_SizeDelta: {x: 985, y: 529}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1976260863
@@ -13110,5 +13112,3 @@ SceneRoots:
   - {fileID: 969679139}
   - {fileID: 959314935}
   - {fileID: 963107}
-  - {fileID: 1966957416}
-  - {fileID: 1919749987}

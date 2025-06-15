@@ -44,7 +44,7 @@ public class MIDIReader : MonoBehaviour
         }
         else
         {
-            Debug.Log("No file found at path!");
+            Debug.Log("(MIDIReader) No file found at path!");
         }
 
         return (readNotes,tempoMap);
