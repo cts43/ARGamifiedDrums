@@ -21,6 +21,8 @@ public class NoteSpawner : MonoBehaviour
 
     public string MIDIFilePath;
 
+    private string localFilePath;
+
     public Vector3 targetPos;
 
     public Vector3 startPos;
@@ -39,6 +41,18 @@ public class NoteSpawner : MonoBehaviour
 
     private Queue<(int, int, BarBeatTicksTimeSpan)> notesList;
 
+    private bool playing = false;
+
+
+    private void startPlaying()
+    {
+        if (!playing)
+        {
+            currentTick = 0;
+            LoadMIDI();
+            playing = true;
+        }
+    }
 
     private async Task<string> LoadFileFromStreamingAssets(string path)
     {
@@ -68,23 +82,16 @@ public class NoteSpawner : MonoBehaviour
     private void LoadMIDI()
     {
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
-        (Queue<(int, int, BarBeatTicksTimeSpan)>, TempoMap) notesAndMap = MIDIReader.LoadMIDIFile(MIDIFilePath); //returns tuple collection of notes + tempo map
+        (Queue<(int, int, BarBeatTicksTimeSpan)>, TempoMap) notesAndMap = MIDIReader.LoadMIDIFile(localFilePath); //returns tuple collection of notes + tempo map
         notesList = notesAndMap.Item1;
         tempoMap = notesAndMap.Item2;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    async void Start()
+    async void InitLoadMIDI()
     {
-        //init text label that displays current musical time in Bars:Beats:Ticks
-        GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
-        currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
-
-        spawnWindowinUs = spawnWindow * 1000000;
-
         //Load MIDI from file
         MIDIFilePath = Path.Combine(Application.streamingAssetsPath, MIDIFilePath);
-        MIDIFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
+        localFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
         LoadMIDI();
 
         //unnecessary but leaving here so I remember how to access all of these values
@@ -96,6 +103,20 @@ public class NoteSpawner : MonoBehaviour
         //init spawn window as bars beats for easy operations
         var spawnWindowAsTimespan = new MetricTimeSpan((long)spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private void Start()
+    {
+        //init text label that displays current musical time in Bars:Beats:Ticks
+        GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
+        currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
+
+        spawnWindowinUs = spawnWindow * 1000000;
+
+        InitLoadMIDI();
+
+        //startPlaying();
     }
 
     public BarBeatTicksTimeSpan GetCurrentMusicalTime() {
@@ -182,6 +203,16 @@ public class NoteSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger))
+        {
+            startPlaying();
+        }
+
+        if (!playing)
+        {
+            return;
+        }
 
         while (notesList.Count > 0) //while rather than if to allow multiple notes on the same frame
         {
