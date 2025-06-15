@@ -40,7 +40,7 @@ public class NoteSpawner : MonoBehaviour
 
     private TempoMap tempoMap;
 
-    private Queue<(int, int, BarBeatTicksTimeSpan)> notesList;
+    private Queue<(int, int, BarBeatTicksTimeSpan)> notesList = new Queue<(int, int, BarBeatTicksTimeSpan)>();
 
     private Queue<(int, int, BarBeatTicksTimeSpan)> originalNotesList;
 
@@ -88,10 +88,17 @@ public class NoteSpawner : MonoBehaviour
     private void LoadMIDI()
     {
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
-        (Queue<(int, int, BarBeatTicksTimeSpan)>, TempoMap) notesAndMap = MIDIReader.LoadMIDIFile(localFilePath); //returns tuple collection of notes + tempo map
-        notesList = notesAndMap.Item1;
+        (Queue<(int, int, BarBeatTicksTimeSpan)> notes, TempoMap TempoMap) = MIDIReader.LoadMIDIFile(localFilePath); //returns tuple collection of notes + tempo map
+
+        //queue every note onto our local queue. This way when we call this again old notes are not discarded.
+        foreach (var note in notes)
+        {
+            notesList.Enqueue(note);
+        }
+
+        tempoMap = TempoMap;
         originalNotesList = notesList;
-        tempoMap = notesAndMap.Item2;
+        //tempoMap = notesAndMap.Item2;
         finalNoteTime = notesList.Last().Item3; //last item in queue's note time should be the final note
     }
 
@@ -222,13 +229,12 @@ public class NoteSpawner : MonoBehaviour
 
         while (notesList.Count > 0) //while rather than if to allow multiple notes on the same frame
         {
-            var currentNote = notesList.Peek();
-            var currentNoteTime = currentNote.Item3;
+            (var noteNumber, var noteVelocity, var currentNoteTime) = notesList.Peek();
 
-            if ((GetCurrentMusicalTime() >= currentNoteTime))
+            if (GetCurrentMusicalTime() >= currentNoteTime)
             {
                 var noteToSpawn = notesList.Dequeue(); //remove note from queue and spawn
-                StartCoroutine(SpawnNote(noteToSpawn.Item1, noteToSpawn.Item2, currentNoteTime)); //time as long for spawner
+                StartCoroutine(SpawnNote(noteNumber, noteVelocity, currentNoteTime)); //time as long for spawner
             }
             else
             {
