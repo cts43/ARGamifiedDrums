@@ -8,18 +8,15 @@ using TMPro;
 using System.IO;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
+using System.Linq;
 
 
 
 public class NoteSpawner : MonoBehaviour
 {
-
-    //Ideally this will be refactored to use musical time (Bar:Beat:Seconds) rather than only seconds. That will allow easier looping and representation of time signatures etc.
     private long currentTick = 0;
-
-    //private long ticksPerQuarterNote;
-
     public string MIDIFilePath;
+    private string localFilePath;
 
     public Vector3 targetPos;
 
@@ -37,8 +34,23 @@ public class NoteSpawner : MonoBehaviour
 
     private TempoMap tempoMap;
 
-    private Queue<(int, int, BarBeatTicksTimeSpan)> notesList;
+    private Queue<(int, int, BarBeatTicksTimeSpan)> notesList = new Queue<(int, int, BarBeatTicksTimeSpan)>();
 
+    private bool playing = false;
+
+    private BarBeatTicksTimeSpan finalNoteTime;
+
+    private void startPlaying()
+    {
+        if (!playing)
+        {
+
+            //notesList = originalNotesList;
+            LoadMIDI();
+            currentTick = 0;
+            playing = true;
+        }
+    }
 
     private async Task<string> LoadFileFromStreamingAssets(string path)
     {
@@ -68,23 +80,23 @@ public class NoteSpawner : MonoBehaviour
     private void LoadMIDI()
     {
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
-        (Queue<(int, int, BarBeatTicksTimeSpan)>, TempoMap) notesAndMap = MIDIReader.LoadMIDIFile(MIDIFilePath); //returns tuple collection of notes + tempo map
-        notesList = notesAndMap.Item1;
-        tempoMap = notesAndMap.Item2;
+        (Queue<(int, int, BarBeatTicksTimeSpan)> notes, TempoMap TempoMap) = MIDIReader.LoadMIDIFile(localFilePath); //returns tuple collection of notes + tempo map
+
+        //queue every note onto our local queue. This way when we call this again old notes are not discarded.
+        foreach (var note in notes)
+        {
+            notesList.Enqueue(note);
+        }
+
+        tempoMap = TempoMap;
+        finalNoteTime = notesList.Last().Item3; //last item in queue's note time should be the final note
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    async void Start()
+    async void InitLoadMIDI()
     {
-        //init text label that displays current musical time in Bars:Beats:Ticks
-        GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
-        currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
-
-        spawnWindowinUs = spawnWindow * 1000000;
-
         //Load MIDI from file
         MIDIFilePath = Path.Combine(Application.streamingAssetsPath, MIDIFilePath);
-        MIDIFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
+        localFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
         LoadMIDI();
 
         //unnecessary but leaving here so I remember how to access all of these values
@@ -94,15 +106,27 @@ public class NoteSpawner : MonoBehaviour
         //Debug.Log("Tempo: " + tempoMap.GetTempoAtTime(new MidiTimeSpan(0)));
 
         //init spawn window as bars beats for easy operations
-        var spawnWindowAsTimespan = new MetricTimeSpan((long)spawnWindowinUs); //time in microseconds
+        var spawnWindowAsTimespan = new MetricTimeSpan(spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private void Start()
+    {
+        //init text label that displays current musical time in Bars:Beats:Ticks
+        GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
+        currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
+
+        spawnWindowinUs = spawnWindow * 1000000;
+
+        InitLoadMIDI();
     }
 
     public BarBeatTicksTimeSpan GetCurrentMusicalTime() {
         return TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap);
     }
 
-    public BarBeatTicksTimeSpan GetCurrentOffsetMusicalTime()
+    public BarBeatTicksTimeSpan GetVisualTime()
     {   //Returns real, musical time that notes hit their window. If exception because negative time, keep at 0 until can increment
 
         BarBeatTicksTimeSpan time;
@@ -183,15 +207,24 @@ public class NoteSpawner : MonoBehaviour
     void Update()
     {
 
+        if (OVRInput.GetDown(OVRInput.RawButton.B))
+        {
+            startPlaying();
+        }
+
+        if (!playing)
+        {
+            return;
+        }
+
         while (notesList.Count > 0) //while rather than if to allow multiple notes on the same frame
         {
-            var currentNote = notesList.Peek();
-            var currentNoteTime = currentNote.Item3;
+            (var noteNumber, var noteVelocity, var currentNoteTime) = notesList.Peek();
 
-            if ((GetCurrentMusicalTime() >= currentNoteTime))
+            if (GetCurrentMusicalTime() >= currentNoteTime)
             {
-                var noteToSpawn = notesList.Dequeue(); //remove note from queue and spawn
-                StartCoroutine(SpawnNote(noteToSpawn.Item1, noteToSpawn.Item2, currentNoteTime)); //time as long for spawner
+                notesList.Dequeue(); //remove note from queue and spawn
+                StartCoroutine(SpawnNote(noteNumber, noteVelocity, currentNoteTime)); //time as long for spawner
             }
             else
             {
@@ -206,15 +239,16 @@ public class NoteSpawner : MonoBehaviour
 
         MetricTimeSpan deltaAsTimeSpan = new MetricTimeSpan(deltaTimeinuS);
         long deltaAsTicks = TimeConverter.ConvertFrom(deltaAsTimeSpan, tempoMap);
-
-        //Debug.Log("Time in uS: "+deltaTimeinuS+" Time as timespan: "+deltaAsTimeSpan+" Time as ticks: "+deltaAsTicks);
         currentTick += deltaAsTicks;
-        //Debug.Log(GetCurrentMusicalTime());
-        //currentTime += Time.deltaTime; //time since previous frame added to current time each frame
+
 
         //show beats on label
-        currentBeatLabel.text = GetCurrentOffsetMusicalTime().ToString();
-        //Debug.Log(GetCurrentOffsetMusicalTime().ToString());
+        currentBeatLabel.text = GetVisualTime().ToString();
+
+        if (GetVisualTime() >= finalNoteTime){
+            playing = false;
+        }
+
     }
 
     
