@@ -14,14 +14,8 @@ using System.Linq;
 
 public class NoteSpawner : MonoBehaviour
 {
-
-    //Ideally this will be refactored to use musical time (Bar:Beat:Seconds) rather than only seconds. That will allow easier looping and representation of time signatures etc.
     private long currentTick = 0;
-
-    //private long ticksPerQuarterNote;
-
     public string MIDIFilePath;
-
     private string localFilePath;
 
     public Vector3 targetPos;
@@ -41,8 +35,6 @@ public class NoteSpawner : MonoBehaviour
     private TempoMap tempoMap;
 
     private Queue<(int, int, BarBeatTicksTimeSpan)> notesList = new Queue<(int, int, BarBeatTicksTimeSpan)>();
-
-    private Queue<(int, int, BarBeatTicksTimeSpan)> originalNotesList;
 
     private bool playing = false;
 
@@ -97,8 +89,6 @@ public class NoteSpawner : MonoBehaviour
         }
 
         tempoMap = TempoMap;
-        originalNotesList = notesList;
-        //tempoMap = notesAndMap.Item2;
         finalNoteTime = notesList.Last().Item3; //last item in queue's note time should be the final note
     }
 
@@ -136,7 +126,7 @@ public class NoteSpawner : MonoBehaviour
         return TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap);
     }
 
-    public BarBeatTicksTimeSpan GetCurrentOffsetMusicalTime()
+    public BarBeatTicksTimeSpan GetVisualTime()
     {   //Returns real, musical time that notes hit their window. If exception because negative time, keep at 0 until can increment
 
         BarBeatTicksTimeSpan time;
@@ -217,7 +207,7 @@ public class NoteSpawner : MonoBehaviour
     void Update()
     {
 
-        if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger))
+        if (OVRInput.GetDown(OVRInput.RawButton.B))
         {
             startPlaying();
         }
@@ -233,7 +223,7 @@ public class NoteSpawner : MonoBehaviour
 
             if (GetCurrentMusicalTime() >= currentNoteTime)
             {
-                var noteToSpawn = notesList.Dequeue(); //remove note from queue and spawn
+                notesList.Dequeue(); //remove note from queue and spawn
                 StartCoroutine(SpawnNote(noteNumber, noteVelocity, currentNoteTime)); //time as long for spawner
             }
             else
@@ -253,9 +243,9 @@ public class NoteSpawner : MonoBehaviour
 
 
         //show beats on label
-        currentBeatLabel.text = GetCurrentOffsetMusicalTime().ToString();
+        currentBeatLabel.text = GetVisualTime().ToString();
 
-        if (GetCurrentOffsetMusicalTime() >= finalNoteTime){
+        if (GetVisualTime() >= finalNoteTime){
             playing = false;
         }
 

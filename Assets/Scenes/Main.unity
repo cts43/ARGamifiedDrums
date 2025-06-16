@@ -1234,7 +1234,7 @@ PrefabInstance:
       objectReference: {fileID: 1568977026}
     - target: {fileID: 1874053029513688152, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
       propertyPath: MIDIFilePath
-      value: MIDI Files/Basic 4-4.mid
+      value: MIDI Files/200 bpm.mid
       objectReference: {fileID: 0}
     - target: {fileID: 1874053029513688152, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
       propertyPath: visualNotePrefab
