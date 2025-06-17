@@ -13,18 +13,19 @@ public class PlaybackManager : MonoBehaviour
 
     private void loadNewRhythm(string Path)
     {
-        MIDIFilePath = Path;
-        activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
-        activeNoteSpawner.Initialise(MIDIFilePath);
-        rhythmLoaded = true;
-
+        if (rhythmLoaded)
+        {
+            MIDIFilePath = Path;
+            activeNoteSpawner.Initialise(MIDIFilePath);
+            rhythmLoaded = true;
+        }
     }
 
     private void playRhythm()
     {
         if (rhythmLoaded)
         {
-            //activeNoteSpawner.startPlaying();
+            activeNoteSpawner.Play();
         }
     }
 
@@ -46,8 +47,17 @@ public class PlaybackManager : MonoBehaviour
 
     private void Start()
     {
-        loadNewRhythm(MIDIFilePath);
-        playRhythm();  
+      activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
+    }
+
+    private void Update()
+    {
+        if (OVRInput.GetDown(OVRInput.RawButton.B))
+        {
+            loadNewRhythm(MIDIFilePath);
+            playRhythm();
+
+        }
     }
 
 }
