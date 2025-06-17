@@ -4291,6 +4291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6933793bb216e942a96405338977849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteSpawnerObj: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+  MIDIFilePath: MIDI Files/Basic 4-4.mid
 --- !u!4 &736645346
 Transform:
   m_ObjectHideFlags: 0
