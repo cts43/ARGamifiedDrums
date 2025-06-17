@@ -34,23 +34,9 @@ public class NoteSpawner : MonoBehaviour
 
     private TempoMap tempoMap;
 
-    private Queue<(int, int, BarBeatTicksTimeSpan)> notesList = new Queue<(int, int, BarBeatTicksTimeSpan)>();
-
-    private bool playing = false;
+    private Queue<(int, int, BarBeatTicksTimeSpan)> notesList;
 
     private BarBeatTicksTimeSpan finalNoteTime;
-
-    public void startPlaying()
-    {
-        if (!playing)
-        {
-
-            //notesList = originalNotesList;
-            LoadMIDI();
-            currentTick = 0;
-            playing = true;
-        }
-    }
 
     private async Task<string> LoadFileFromStreamingAssets(string path)
     {
@@ -79,6 +65,9 @@ public class NoteSpawner : MonoBehaviour
 
     private void LoadMIDI()
     {
+        //first clear existing note queue if exists
+        notesList = new Queue<(int, int, BarBeatTicksTimeSpan)>();
+
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
         (Queue<(int, int, BarBeatTicksTimeSpan)> notes, TempoMap TempoMap) = MIDIReader.LoadMIDIFile(localFilePath); //returns tuple collection of notes + tempo map
 
@@ -89,7 +78,7 @@ public class NoteSpawner : MonoBehaviour
         }
 
         tempoMap = TempoMap;
-        finalNoteTime = notesList.Last().Item3; //last item in queue's note time should be the final note
+        //finalNoteTime = notesList.Last().Item3; //last item in queue's note time should be the final note
     }
 
     async void InitLoadMIDI()
@@ -99,12 +88,6 @@ public class NoteSpawner : MonoBehaviour
         localFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
         LoadMIDI();
 
-        //unnecessary but leaving here so I remember how to access all of these values
-        //var timeDivision = (TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision; //cast type
-        //ticksPerQuarterNote = timeDivision.TicksPerQuarterNote; //get ticks per 1/4 note from tempo map
-        //Debug.Log("Ticks/ 1/4 note: " + ticksPerQuarterNote);
-        //Debug.Log("Tempo: " + tempoMap.GetTempoAtTime(new MidiTimeSpan(0)));
-
         //init spawn window as bars beats for easy operations
         var spawnWindowAsTimespan = new MetricTimeSpan(spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
@@ -113,7 +96,7 @@ public class NoteSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
-        Initialise(MIDIFilePath);
+        
     }
 
     public void Initialise(string filePath, int window = 2)
@@ -217,23 +200,14 @@ public class NoteSpawner : MonoBehaviour
     void Update()
     {
 
-        // if (OVRInput.GetDown(OVRInput.RawButton.B))
-        // {
-        //     startPlaying();
-        // }
-
-        if (!playing)
-        {
-            return;
-        }
-
         while (notesList.Count > 0) //while rather than if to allow multiple notes on the same frame
         {
-            (var noteNumber, var noteVelocity, var currentNoteTime) = notesList.Peek();
+            (var note, var velocity, var noteTime) = notesList.Peek();
 
-            if (GetCurrentMusicalTime() >= currentNoteTime)
+            if (GetCurrentMusicalTime() >= noteTime)
             {
-                notesList.Dequeue(); //remove note from queue and spawn
+                (var noteNumber, var noteVelocity, var currentNoteTime) = notesList.Dequeue(); //remove note from queue and spawn
+                //Debug.Log($"Spawning note {noteNumber} at time {currentNoteTime}");
                 StartCoroutine(SpawnNote(noteNumber, noteVelocity, currentNoteTime)); //time as long for spawner
             }
             else
@@ -254,10 +228,6 @@ public class NoteSpawner : MonoBehaviour
 
         //show beats on label
         currentBeatLabel.text = GetVisualTime().ToString();
-
-        if (GetVisualTime() >= finalNoteTime){
-            playing = false;
-        }
 
     }
 
