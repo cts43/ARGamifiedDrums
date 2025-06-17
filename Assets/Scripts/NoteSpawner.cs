@@ -18,9 +18,8 @@ public class NoteSpawner : MonoBehaviour
     public string MIDIFilePath;
     private string localFilePath;
 
-    public Vector3 targetPos;
-
-    public Vector3 startPos;
+    private Vector3 targetPos = new Vector3(0,0,0);
+    private Vector3 startPos = new Vector3(0,1,0);
 
     public long spawnWindow; //How long before a beat to spawn a note in seconds
 
@@ -28,7 +27,8 @@ public class NoteSpawner : MonoBehaviour
 
     private BarBeatTicksTimeSpan spawnWindowAsBarsBeats;
 
-    public GameObject visualNotePrefab;
+    private string visualNotePrefabPath = "Prefabs/NoteIndicator";
+    private GameObject visualNotePrefab;
 
     private TextMeshProUGUI currentBeatLabel;
 
@@ -40,7 +40,7 @@ public class NoteSpawner : MonoBehaviour
 
     private BarBeatTicksTimeSpan finalNoteTime;
 
-    private void startPlaying()
+    public void startPlaying()
     {
         if (!playing)
         {
@@ -113,6 +113,15 @@ public class NoteSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
+        Initialise(MIDIFilePath);
+    }
+
+    public void Initialise(string filePath, int window = 2)
+    {
+        visualNotePrefab = Resources.Load<GameObject>(visualNotePrefabPath);
+        MIDIFilePath = filePath;
+        spawnWindow = window;
+
         //init text label that displays current musical time in Bars:Beats:Ticks
         GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
         currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
@@ -122,7 +131,8 @@ public class NoteSpawner : MonoBehaviour
         InitLoadMIDI();
     }
 
-    public BarBeatTicksTimeSpan GetCurrentMusicalTime() {
+    public BarBeatTicksTimeSpan GetCurrentMusicalTime()
+    {
         return TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap);
     }
 
@@ -207,10 +217,10 @@ public class NoteSpawner : MonoBehaviour
     void Update()
     {
 
-        if (OVRInput.GetDown(OVRInput.RawButton.B))
-        {
-            startPlaying();
-        }
+        // if (OVRInput.GetDown(OVRInput.RawButton.B))
+        // {
+        //     startPlaying();
+        // }
 
         if (!playing)
         {
