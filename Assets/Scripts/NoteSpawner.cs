@@ -126,7 +126,11 @@ public class NoteSpawner : MonoBehaviour
 
     public BarBeatTicksTimeSpan GetCurrentMusicalTime()
     {
-        return TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap);
+        if (playing)
+        {
+            return TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap);
+        }
+        else return new BarBeatTicksTimeSpan(0, 0, 0);
     }
 
     public BarBeatTicksTimeSpan GetVisualTime()
@@ -146,7 +150,14 @@ public class NoteSpawner : MonoBehaviour
 
     public long GetCurrentOffsetMusicalTimeAsTicks()
     {
-        return currentTick - TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
+        if (playing)
+        {
+            return currentTick - TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
+        }
+        else
+        {
+            return -TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
+        }
     }
 
     private GameObject GetDrum(int note)

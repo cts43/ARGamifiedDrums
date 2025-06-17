@@ -7,13 +7,15 @@ public class PlaybackManager : MonoBehaviour
     public GameObject noteSpawnerObj; //prefab for note spawner class
     public string MIDIFilePath;
 
-    private bool rhythmLoaded = false;
+    public static PlaybackManager instance;
+
+    public static bool rhythmLoaded = false;
     private bool motionRecorded = false;
     private NoteSpawner activeNoteSpawner;
 
     private void loadNewRhythm(string Path)
     {
-        if (rhythmLoaded)
+        if (!rhythmLoaded)
         {
             MIDIFilePath = Path;
             activeNoteSpawner.Initialise(MIDIFilePath);
