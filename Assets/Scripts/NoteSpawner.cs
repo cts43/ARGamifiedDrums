@@ -18,8 +18,8 @@ public class NoteSpawner : MonoBehaviour
     public string MIDIFilePath;
     private string localFilePath;
 
-    private Vector3 targetPos = new Vector3(0,0,0);
-    private Vector3 startPos = new Vector3(0,1,0);
+    private Vector3 targetPos = new Vector3(0, 0, 0);
+    private Vector3 startPos = new Vector3(0, 1, 0);
 
     public long spawnWindow; //How long before a beat to spawn a note in seconds
 
@@ -38,7 +38,19 @@ public class NoteSpawner : MonoBehaviour
 
     private BarBeatTicksTimeSpan finalNoteTime;
 
-    private bool playing = false;
+    public bool playing { get; private set; } = false;
+
+    public event Action StartedPlaying;
+    public void RaiseStartedPlaying()
+    {
+        StartedPlaying?.Invoke();
+    }
+
+    public event Action FinishedPlaying;
+    public void RaiseFinishedPlaying()
+    {
+        FinishedPlaying?.Invoke();
+    }
 
     private async Task<string> LoadFileFromStreamingAssets(string path)
     {
@@ -121,6 +133,7 @@ public class NoteSpawner : MonoBehaviour
         if (!playing)
         {
             playing = true;
+            RaiseStartedPlaying();
         }
     }
 
@@ -221,7 +234,7 @@ public class NoteSpawner : MonoBehaviour
     void Update()
     {
 
-        if (playing)
+        if (playing && notesList != null)
         {
 
             while (notesList.Count > 0) //while rather than if to allow multiple notes on the same frame
@@ -249,10 +262,14 @@ public class NoteSpawner : MonoBehaviour
             long deltaAsTicks = TimeConverter.ConvertFrom(deltaAsTimeSpan, tempoMap);
             currentTick += deltaAsTicks;
 
-            // if (GetCurrentMusicalTime() >= finalNoteTime + new BarBeatTicksTimeSpan(0, 1, 0))
-            // {
-            //     playing = false;
-            // }
+            if (GetCurrentOffsetMusicalTimeAsTicks() >= TimeConverter.ConvertFrom(finalNoteTime, tempoMap) + 480) //quarter note window to allow for final hits
+            {
+                playing = false;
+                currentTick = 0;
+                LoadMIDI();
+                
+                RaiseFinishedPlaying();
+            }
 
         }
         

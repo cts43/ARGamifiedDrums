@@ -36,16 +36,35 @@ public class ControllerRecorder : MonoBehaviour
         RightHandAnchor = GameObject.FindGameObjectWithTag("RightHandAnchor");
     }
 
-    private void Update()
+    public bool hasStoredRecording()
     {
+        return recordedTransforms.Count != 0;
+    }
 
-        if (OVRInput.GetDown(OVRInput.RawButton.RThumbstick))
+    public void Play()
+    {
+        if (!recording && hasStoredRecording())
+        {
+            playing = true;
+        }
+        else
+        {
+            playing = false;
+        }
+    }
+
+    public void Record()
+    {
+        if (!playing)
         {
             recording = !recording; //Toggle alignment when 'A' button pressed
             Debug.Log("Toggled Recording");
             justStartedRecording = true;
         }
+    }
 
+    private void Update()
+    {
         if (recording)
         {
 
@@ -63,18 +82,15 @@ public class ControllerRecorder : MonoBehaviour
 
             //start recording input
 
-            recordedTransform recordedMotion = new recordedTransform(RightHandAnchor.transform.position,RightHandAnchor.transform.eulerAngles);
+            recordedTransform recordedMotion = new recordedTransform(RightHandAnchor.transform.position, RightHandAnchor.transform.eulerAngles);
             recordedTransforms.Enqueue(recordedMotion);
 
             playbackInstance.transform.position = new Vector3(recordedMotion.position.x, recordedMotion.position.y, recordedMotion.position.z);
             playbackInstance.transform.rotation = Quaternion.Euler(new Vector3(recordedMotion.rotation.x, recordedMotion.rotation.y, recordedMotion.rotation.z));
         }
 
-        else if (playing && recordedTransforms.Count() != 0)
+        else if (playing)
         {
-
-            Debug.Log("Playing Back");
-
             var playbackMotion = recordedTransforms.Dequeue();
 
             playbackInstance.transform.position = new Vector3(playbackMotion.position.x, playbackMotion.position.y, playbackMotion.position.z);

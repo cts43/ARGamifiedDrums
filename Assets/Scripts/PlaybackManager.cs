@@ -5,13 +5,20 @@ public class PlaybackManager : MonoBehaviour
 {
 
     public GameObject noteSpawnerObj; //prefab for note spawner class
+    public GameObject ControllerRecorderObj;
+    private NoteSpawner activeNoteSpawner;
+    private ControllerRecorder ControllerRecorder;
+    public GameObject drumManagerObj;
+    private DrumManager drumManager;
+
     public string MIDIFilePath;
 
     public static PlaybackManager instance;
 
     public static bool rhythmLoaded = false;
+
+    public static bool playing = false;
     private bool motionRecorded = false;
-    private NoteSpawner activeNoteSpawner;
 
     private void loadNewRhythm(string Path)
     {
@@ -19,6 +26,8 @@ public class PlaybackManager : MonoBehaviour
         {
             MIDIFilePath = Path;
             activeNoteSpawner.Initialise(MIDIFilePath);
+            activeNoteSpawner.StartedPlaying += OnStartedPlaying;
+            activeNoteSpawner.FinishedPlaying += OnFinishedPlaying;
             rhythmLoaded = true;
         }
     }
@@ -35,7 +44,8 @@ public class PlaybackManager : MonoBehaviour
     {
         //reload and play with recording on
         loadNewRhythm(MIDIFilePath);
-        //incomplete
+        playRhythm();
+        ControllerRecorder.Record();
         motionRecorded = true;
     }
 
@@ -49,7 +59,9 @@ public class PlaybackManager : MonoBehaviour
 
     private void Start()
     {
-      activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
+        activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
+        ControllerRecorder = ControllerRecorderObj.GetComponent<ControllerRecorder>();
+        drumManager = drumManagerObj.GetComponent<DrumManager>();
     }
 
     private void Update()
@@ -60,6 +72,19 @@ public class PlaybackManager : MonoBehaviour
             playRhythm();
 
         }
+
+        playing = activeNoteSpawner.playing;
+    }
+
+    private void OnStartedPlaying()
+    {
+        Debug.Log("NOTE SPAWNER STARTED PLAYING");
+    }
+
+    private void OnFinishedPlaying()
+    {
+        Debug.Log("NOTE SPAWNER FINISHED PLAYING");
+        drumManager.clearNotes();
     }
 
 }

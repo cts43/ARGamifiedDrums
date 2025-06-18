@@ -4292,6 +4292,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteSpawnerObj: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+  ControllerRecorderObj: {fileID: 823286943}
+  drumManagerObj: {fileID: 1568977026}
   MIDIFilePath: MIDI Files/Basic 4-4.mid
 --- !u!4 &736645346
 Transform:

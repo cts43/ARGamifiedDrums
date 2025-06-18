@@ -66,7 +66,10 @@ public class DrumHit : MonoBehaviour
         }
 
         changeColourOnHit = StartCoroutine(ShowDrumHitbyChangeColour());
-        checkIfHitNote();
+        if (PlaybackManager.playing)
+        {
+            checkIfHitNote();
+        }
     }
 
     public IEnumerator ShowDrumHitbyChangeColour()
