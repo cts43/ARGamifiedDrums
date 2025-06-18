@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,20 @@ public class ControllerRecorder : MonoBehaviour
     private bool justStartedRecording = false;
     private bool instantiated = false;
 
+    public event Action StartedRecording;
+
+    public void RaiseStartedRecording()
+    {
+        StartedRecording?.Invoke();
+    }
+
+    public event Action FinishedRecording;
+
+    public void RaiseFinishedRecording()
+    {
+        FinishedRecording?.Invoke();
+    }
+
     private void Start()
     {
         RightHandAnchor = GameObject.FindGameObjectWithTag("RightHandAnchor");
@@ -63,6 +78,16 @@ public class ControllerRecorder : MonoBehaviour
         }
     }
 
+    public void StopRecording()
+    {
+        if (recording)
+        {
+            recording = false;
+            RaiseFinishedRecording();
+            Debug.Log("Recording motion finished");
+        }
+    }
+
     private void Update()
     {
         if (recording)
@@ -76,6 +101,7 @@ public class ControllerRecorder : MonoBehaviour
 
             if (justStartedRecording)
             {
+                RaiseStartedRecording();
                 recordedTransforms = new Queue<recordedTransform>(); //when recording starts, clear the queue
                 justStartedRecording = false;
             }
@@ -91,10 +117,13 @@ public class ControllerRecorder : MonoBehaviour
 
         else if (playing)
         {
-            var playbackMotion = recordedTransforms.Dequeue();
+            if (recordedTransforms.Count != 0)
+            {
+                var playbackMotion = recordedTransforms.Dequeue();
 
-            playbackInstance.transform.position = new Vector3(playbackMotion.position.x, playbackMotion.position.y, playbackMotion.position.z);
-            playbackInstance.transform.rotation = Quaternion.Euler(new Vector3(playbackMotion.rotation.x, playbackMotion.rotation.y, playbackMotion.rotation.z));
+                playbackInstance.transform.position = new Vector3(playbackMotion.position.x, playbackMotion.position.y, playbackMotion.position.z);
+                playbackInstance.transform.rotation = Quaternion.Euler(new Vector3(playbackMotion.rotation.x, playbackMotion.rotation.y, playbackMotion.rotation.z));
+            }
         }
     }
 }

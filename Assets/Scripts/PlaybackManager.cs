@@ -26,8 +26,8 @@ public class PlaybackManager : MonoBehaviour
         {
             MIDIFilePath = Path;
             activeNoteSpawner.Initialise(MIDIFilePath);
-            activeNoteSpawner.StartedPlaying += OnStartedPlaying;
-            activeNoteSpawner.FinishedPlaying += OnFinishedPlaying;
+            activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
+            activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
             rhythmLoaded = true;
         }
     }
@@ -46,7 +46,6 @@ public class PlaybackManager : MonoBehaviour
         loadNewRhythm(MIDIFilePath);
         playRhythm();
         ControllerRecorder.Record();
-        motionRecorded = true;
     }
 
     private void playRecorded()
@@ -54,6 +53,8 @@ public class PlaybackManager : MonoBehaviour
         if (motionRecorded && rhythmLoaded)
         {
             //play with recorded motion
+            playRhythm();
+            ControllerRecorder.Play();
         }
     }
 
@@ -62,29 +63,49 @@ public class PlaybackManager : MonoBehaviour
         activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
         ControllerRecorder = ControllerRecorderObj.GetComponent<ControllerRecorder>();
         drumManager = drumManagerObj.GetComponent<DrumManager>();
+
+        ControllerRecorder.StartedRecording += OnStartedRecording;
+        ControllerRecorder.FinishedRecording += OnFinishedRecording;
     }
 
     private void Update()
     {
         if (OVRInput.GetDown(OVRInput.RawButton.B))
         {
-            loadNewRhythm(MIDIFilePath);
-            playRhythm();
-
+            if (!motionRecorded)
+            {
+                playWithRecord();
+            }
+            else
+            {
+                playRecorded();
+            }
         }
 
         playing = activeNoteSpawner.playing;
     }
 
-    private void OnStartedPlaying()
+    private void OnMIDIStartedPlaying()
     {
-        Debug.Log("NOTE SPAWNER STARTED PLAYING");
+        Debug.Log("(Playback Manager) MIDI Started");
     }
 
-    private void OnFinishedPlaying()
+    private void OnMIDIFinishedPlaying()
     {
-        Debug.Log("NOTE SPAWNER FINISHED PLAYING");
+        Debug.Log("(Playback Manager) MIDI Finished");
+        ControllerRecorder.StopRecording();
         drumManager.clearNotes();
+    }
+
+    private void OnStartedRecording()
+    {
+        Debug.Log("(Playback Manager) Motion Recording");
+    }
+
+    private void OnFinishedRecording()
+    {
+        Debug.Log("(Playback Manager) Motion Recording Finished");
+        motionRecorded = true;
     }
 
 }
