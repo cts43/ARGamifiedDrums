@@ -18,6 +18,7 @@ public class PlaybackManager : MonoBehaviour
     public static bool rhythmLoaded = false;
 
     public static bool playing = false;
+    private bool motionRecording = false;
     private bool motionRecorded = false;
 
     private void loadNewRhythm(string Path)
@@ -50,7 +51,7 @@ public class PlaybackManager : MonoBehaviour
 
     private void playRecorded()
     {
-        if (motionRecorded && rhythmLoaded)
+        if (motionRecorded && rhythmLoaded && (!motionRecording))
         {
             //play with recorded motion
             playRhythm();
@@ -70,19 +71,28 @@ public class PlaybackManager : MonoBehaviour
 
     private void Update()
     {
+        playing = activeNoteSpawner.playing;
         if (OVRInput.GetDown(OVRInput.RawButton.B))
         {
-            if (!motionRecorded)
+            if (!playing)
+            {
+                if (!motionRecorded)
+                {
+                    playWithRecord();
+                }
+                else
+                {
+                    playRecorded();
+                }
+            }
+        }
+        else if (OVRInput.GetDown(OVRInput.RawButton.Y))
+        {
+            if (!playing)
             {
                 playWithRecord();
             }
-            else
-            {
-                playRecorded();
-            }
         }
-
-        playing = activeNoteSpawner.playing;
     }
 
     private void OnMIDIStartedPlaying()
@@ -100,12 +110,14 @@ public class PlaybackManager : MonoBehaviour
     private void OnStartedRecording()
     {
         Debug.Log("(Playback Manager) Motion Recording");
+        motionRecording = true;
     }
 
     private void OnFinishedRecording()
     {
         Debug.Log("(Playback Manager) Motion Recording Finished");
         motionRecorded = true;
+        motionRecording = false;
     }
 
 }

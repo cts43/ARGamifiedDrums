@@ -25,6 +25,7 @@ public class ControllerRecorder : MonoBehaviour
     private GameObject playbackInstance;
 
     private Queue<recordedTransform> recordedTransforms = new Queue<recordedTransform>();
+    private Queue<recordedTransform> recordedTransformsCopy = new Queue<recordedTransform>();
 
     private bool recording = false;
     private bool playing = false;
@@ -60,11 +61,14 @@ public class ControllerRecorder : MonoBehaviour
     {
         if (!recording && hasStoredRecording())
         {
+            Debug.Log("Playing stored recoring");
+            recordedTransformsCopy = new Queue<recordedTransform>(recordedTransforms);
             playing = true;
         }
         else
         {
             playing = false;
+            Debug.Log("Didn't play. hasStoredRecoring() = " + hasStoredRecording());
         }
     }
 
@@ -117,12 +121,17 @@ public class ControllerRecorder : MonoBehaviour
 
         else if (playing)
         {
-            if (recordedTransforms.Count != 0)
+            if (recordedTransformsCopy.Count != 0)
             {
-                var playbackMotion = recordedTransforms.Dequeue();
+                var playbackMotion = recordedTransformsCopy.Dequeue();
 
                 playbackInstance.transform.position = new Vector3(playbackMotion.position.x, playbackMotion.position.y, playbackMotion.position.z);
                 playbackInstance.transform.rotation = Quaternion.Euler(new Vector3(playbackMotion.rotation.x, playbackMotion.rotation.y, playbackMotion.rotation.z));
+            }
+            else
+            {
+                playing = false;
+                Debug.Log("Stopped playing");
             }
         }
     }
