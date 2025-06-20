@@ -38,6 +38,8 @@ public class NoteSpawner : MonoBehaviour
 
     private BarBeatTicksTimeSpan finalNoteTime;
 
+    public int totalNotes { get; private set; }
+
     public bool playing { get; private set; } = false;
 
     public event Action StartedPlaying;
@@ -93,6 +95,7 @@ public class NoteSpawner : MonoBehaviour
 
         tempoMap = TempoMap;
         finalNoteTime = notesList.Last().Item3; //last item in queue's note time should be the final note
+        totalNotes = notesList.Count;
     }
 
     async void InitLoadMIDI()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Melanchall.DryWetMidi.Interaction;
 using UnityEngine;
@@ -20,6 +21,12 @@ public class DrumHit : MonoBehaviour
 
     private Coroutine changeColourOnHit;
 
+    public event Action<int,long,long,bool> HitDrum;
+    public void RaiseHitDrum(int note, long timeHit,long closestNote, bool hitNote)
+    {
+        HitDrum?.Invoke(note,timeHit,closestNote,hitNote);
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,29 +39,48 @@ public class DrumHit : MonoBehaviour
         noteSpawner = GameObject.FindGameObjectWithTag("Note Spawner").GetComponent<NoteSpawner>();
     }
 
-    private void checkIfHitNote()
+    private (long,long,bool) checkIfHitNote()
     {
         var hitWindowAsTimeSpan = new MetricTimeSpan(0, 0, 0, hitWindowInMs);
         bool hitNote = false;
         long currentTime = noteSpawner.GetCurrentOffsetMusicalTimeAsTicks();
+        long closestNoteTime = 0;
+        double? prevDiff = null;
         foreach (var note in GetComponentsInChildren<NoteIndicator>())
         {
             double diff = System.Math.Abs(currentTime - note.ScheduledTimeInTicks);
-            if (diff <= (TimeConverter.ConvertFrom(hitWindowAsTimeSpan, note.TempoMap)) / 2)
+
+            if (prevDiff != null)
+            {
+                if (diff < prevDiff)
+                {
+                    closestNoteTime = note.ScheduledTimeInTicks;
+                }
+            }
+            else
+            {
+                closestNoteTime = note.ScheduledTimeInTicks;
+            }
+
+            if (diff <= TimeConverter.ConvertFrom(hitWindowAsTimeSpan, note.TempoMap) / 2)
             {
                 hitNote = true;
-                Debug.Log("Successfully Hit Note at Tick " + note.ScheduledTimeInTicks);
+                Debug.Log("Successfully Hit Note at Tick " + currentTime+", closest note: "+closestNoteTime);
                 note.destroy(); //destroy hit note
                 break; //avoid double hits on close together notes
 
             }
+
+            prevDiff = diff;
         }
         if (!hitNote)
+        {
             {
-                {
-                    Debug.Log("Missed Note");
-                }
+                Debug.Log("Missed Note at Tick " + currentTime);
             }
+        }
+
+        return (currentTime,closestNoteTime,hitNote);
     }
 
     public void OnDrumHit()
@@ -68,7 +94,9 @@ public class DrumHit : MonoBehaviour
         changeColourOnHit = StartCoroutine(ShowDrumHitbyChangeColour());
         if (PlaybackManager.playing)
         {
-            checkIfHitNote();
+            (var timeHit,var closestNote,var hitNote) = checkIfHitNote();
+            RaiseHitDrum(note, timeHit, closestNote, hitNote); //send hit drum signal with int note number, velocity (not here yet), time hit
+            
         }
     }
 
