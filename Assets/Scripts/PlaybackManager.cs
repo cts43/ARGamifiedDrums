@@ -247,7 +247,7 @@ public class PlaybackManager : MonoBehaviour
         Debug.Log("From QUEUE from JSON, first note time: "+newNoteTime); //print first note from .json to check if it works
 
 
-    }
+    }  
 
     private void OnStartedRecording()
     {
