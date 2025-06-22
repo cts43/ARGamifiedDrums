@@ -1,6 +1,7 @@
 using Midi;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ public class MidiEventCatcher : MonoBehaviour
 {
 
     public Boolean enableDebugActions;
+    public Boolean acceptInputs = true;
     public int RTriggerMIDINote;
     public DrumManager drumManager;
 
@@ -24,7 +26,7 @@ public class MidiEventCatcher : MonoBehaviour
         MidiEventHandler.OnNoteOff -= NoteOff;
     }
 
-    private void checkForDrum(int note, int velocity)
+    public void checkForDrum(int note, int velocity)
     {
         DrumHit[] drums = drumManager.GetComponentsInChildren<DrumHit>();
 
@@ -35,15 +37,23 @@ public class MidiEventCatcher : MonoBehaviour
             if (note == drum.note)
             {
                 //Debug.Log("Found drum!");
-                drum.OnDrumHit();
+                drum.OnDrumHit(velocity);
             }
         }
     }
 
     private void NoteOn(int note, int velocity)
     {
-        Debug.Log("Note " + note + " on, velocity " + velocity);
-        checkForDrum(note, velocity);
+        if (acceptInputs)
+        {
+            Debug.Log("Note " + note + " on, velocity " + velocity);
+            checkForDrum(note, velocity);
+        }
+        else
+        {
+            Debug.Log("Recieved MIDI input but acceptInputs = False");
+        }
+        
     }
 
     private void NoteOff(int note)
@@ -53,7 +63,7 @@ public class MidiEventCatcher : MonoBehaviour
 
     private void Update()
     {
-        if (enableDebugActions) //Use Right trigger to activate given drum, for outside of headset debug purposes
+        if (enableDebugActions && acceptInputs) //Use Right trigger to activate given drum, for outside of headset debug purposes
         {
             if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
             {

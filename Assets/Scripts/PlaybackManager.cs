@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlaybackManager : MonoBehaviour
@@ -24,7 +23,8 @@ public class PlaybackManager : MonoBehaviour
     private bool motionRecording = false;
     private bool motionRecorded = false;
     private bool savingPlaythrough = false;
-    private Queue<(int,long,long,bool)> savedPlaythrough = new Queue<(int,long,long,bool)>();
+    private Queue<(int,int,long,long,bool)> savedPlaythrough = new Queue<(int,int,long,long,bool)>();
+    private bool hasSavedPlaythrough = false;
 
     private void loadNewRhythm(string Path)
     {
@@ -64,12 +64,12 @@ public class PlaybackManager : MonoBehaviour
         }
     }
 
-    private void recordHit(int noteNumber, long timeHit, long closestNote, bool hitNote)
+    private void recordHit(int noteNumber,int velocity, long timeHit, long closestNote, bool hitNote)
     {
         if (savingPlaythrough)
         {
-            Debug.Log("Hit note: " + noteNumber + " Success: " + hitNote + " At: " + timeHit);
-            savedPlaythrough.Enqueue((noteNumber, timeHit,closestNote,hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
+            Debug.Log("Hit note: " + noteNumber + " with velocity: "+ velocity +" Success: " + hitNote + " At: " + timeHit);
+            savedPlaythrough.Enqueue((noteNumber,velocity, timeHit,closestNote,hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
         }
     }
 
@@ -92,9 +92,17 @@ public class PlaybackManager : MonoBehaviour
         subscribeToDrumHits();
     }
 
+    bool playingBack = false;
+
     private void Update()
     {
+        
         playing = activeNoteSpawner.playing;
+        if (playing)
+        {
+            currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks(); //Update current time from active note spawner instance. unsure if necessary
+        }
+
         if (OVRInput.GetDown(OVRInput.RawButton.B))
         {
             if (!playing)
@@ -117,23 +125,38 @@ public class PlaybackManager : MonoBehaviour
             }
         }
 
-        if (playing)
-        {
-            currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks(); //Update current time from active note spawner instance. unsure if necessary
+        if (playingBack)
+        { //testing playing back user inputs
+            if (savedPlaythrough.Count > 0)
+            {
+                (var note, var velocity, var time, var closest, var success) = savedPlaythrough.Peek();
+                if (activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks() >= time) //offset based on spawn window
+                {
+                    savedPlaythrough.Dequeue();
+                    MidiEventCatcher MIDIEventCatcher = GameObject.FindWithTag("MIDI Input Handler").GetComponent<MidiEventCatcher>();
+                    MIDIEventCatcher.checkForDrum(note, velocity);
+                }
+            }
         }
 
     }
 
     private void SavePlaythrough()
     {
-        Debug.Log("Saving playthrough from tick " + currentTimeInTicks);
-        savingPlaythrough = true;
+        if (!savingPlaythrough && !hasSavedPlaythrough)
+        {
+            Debug.Log("Saving playthrough from tick " + currentTimeInTicks);
+            savingPlaythrough = true;
+        }
+        else if (hasSavedPlaythrough)
+        {
+            playingBack = true;
+        }
     }
 
     private void OnMIDIStartedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Started");
-        Debug.Log("Start logging accuracy here");
 
         SavePlaythrough();
     }
@@ -143,14 +166,16 @@ public class PlaybackManager : MonoBehaviour
         Debug.Log("(Playback Manager) MIDI Finished");
         ControllerRecorder.StopRecording();
         savingPlaythrough = false;
+        hasSavedPlaythrough = true;
         drumManager.clearNotes();
 
         int hitNotes = 0;
         int missedNotes;
 
+
         foreach (var dataPoint in savedPlaythrough)
         {
-            (var note, var noteTime, var closestNote, var hitNote) = dataPoint;
+            (var note, var velocity, var noteTime, var closestNote, var hitNote) = dataPoint;
             if (hitNote)
             {
                 hitNotes++;
@@ -163,9 +188,11 @@ public class PlaybackManager : MonoBehaviour
 
         double percentageMissed = (double)missedNotes / activeNoteSpawner.totalNotes * 100;
 
-        Debug.Log("Percentage missed: "+percentageMissed+"%. Percentage hit: "+(100-percentageMissed)+"%.");
-        
-        
+        Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
+
+        var json = JsonUtility.ToJson(savedPlaythrough);
+
+        Debug.Log(JsonUtility.FromJson<Queue<(int, int, long, long, bool)>>(json)); //testing .json saving. might not produce readable files
 
         //preliminary accuracy checker here
 
