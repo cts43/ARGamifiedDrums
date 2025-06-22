@@ -10,6 +10,7 @@ TagManager:
   - Moveable Scene
   - RightHandAnchor
   - BeatIndicatorText
+  - LeftHandAnchor
   layers:
   - Default
   - TransparentFX

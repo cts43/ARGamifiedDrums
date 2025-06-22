@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -5,13 +6,25 @@ public class PlaybackManager : MonoBehaviour
 {
 
     public GameObject noteSpawnerObj; //prefab for note spawner class
+    public GameObject ControllerRecorderObj;
+    private NoteSpawner activeNoteSpawner;
+    private ControllerRecorder ControllerRecorder;
+    public GameObject drumManagerObj;
+    private DrumManager drumManager;
+
     public string MIDIFilePath;
 
     public static PlaybackManager instance;
 
     public static bool rhythmLoaded = false;
+
+    public long currentTimeInTicks;
+
+    public static bool playing = false;
+    private bool motionRecording = false;
     private bool motionRecorded = false;
-    private NoteSpawner activeNoteSpawner;
+    private bool savingPlaythrough = false;
+    private Queue<(int,long,long,bool)> savedPlaythrough = new Queue<(int,long,long,bool)>();
 
     private void loadNewRhythm(string Path)
     {
@@ -19,6 +32,8 @@ public class PlaybackManager : MonoBehaviour
         {
             MIDIFilePath = Path;
             activeNoteSpawner.Initialise(MIDIFilePath);
+            activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
+            activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
             rhythmLoaded = true;
         }
     }
@@ -35,31 +50,131 @@ public class PlaybackManager : MonoBehaviour
     {
         //reload and play with recording on
         loadNewRhythm(MIDIFilePath);
-        //incomplete
-        motionRecorded = true;
+        playRhythm();
+        ControllerRecorder.Record();
     }
 
     private void playRecorded()
     {
-        if (motionRecorded && rhythmLoaded)
+        if (motionRecorded && rhythmLoaded && (!motionRecording))
         {
             //play with recorded motion
+            playRhythm();
+            ControllerRecorder.Play();
+        }
+    }
+
+    private void recordHit(int noteNumber, long timeHit, long closestNote, bool hitNote)
+    {
+        if (savingPlaythrough)
+        {
+            Debug.Log("Hit note: " + noteNumber + " Success: " + hitNote + " At: " + timeHit);
+            savedPlaythrough.Enqueue((noteNumber, timeHit,closestNote,hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
+        }
+    }
+
+    private void subscribeToDrumHits()
+    {
+        foreach (var drum in drumManager.GetComponentsInChildren<DrumHit>())
+        {
+            drum.HitDrum += recordHit;
         }
     }
 
     private void Start()
     {
-      activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
+        activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
+        ControllerRecorder = ControllerRecorderObj.GetComponent<ControllerRecorder>();
+        drumManager = drumManagerObj.GetComponent<DrumManager>();
+
+        ControllerRecorder.StartedRecording += OnStartedRecording;
+        ControllerRecorder.FinishedRecording += OnFinishedRecording;
+        subscribeToDrumHits();
     }
 
     private void Update()
     {
+        playing = activeNoteSpawner.playing;
         if (OVRInput.GetDown(OVRInput.RawButton.B))
         {
-            loadNewRhythm(MIDIFilePath);
-            playRhythm();
-
+            if (!playing)
+            {
+                if (!motionRecorded)
+                {
+                    playWithRecord();
+                }
+                else
+                {
+                    playRecorded();
+                }
+            }
         }
+        else if (OVRInput.GetDown(OVRInput.RawButton.Y))
+        {
+            if (!playing)
+            {
+                playWithRecord();
+            }
+        }
+
+        if (playing)
+        {
+            currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks(); //Update current time from active note spawner instance. unsure if necessary
+
+
+            if (savingPlaythrough)
+            {
+                
+            }
+        }
+
     }
+
+    private void SavePlaythrough()
+    {
+        Debug.Log("Saving playthrough from tick "+currentTimeInTicks);
+    }
+
+    private void OnMIDIStartedPlaying()
+    {
+        Debug.Log("(Playback Manager) MIDI Started");
+        Debug.Log("Start logging accuracy here");
+
+        savingPlaythrough = true;
+    }
+
+    private void OnMIDIFinishedPlaying()
+    {
+        Debug.Log("(Playback Manager) MIDI Finished");
+        ControllerRecorder.StopRecording();
+        drumManager.clearNotes();
+        foreach (var dataPoint in savedPlaythrough)
+        {
+            (var note, var noteTime, var closestNote, var hitNote) = dataPoint;
+            Debug.Log(hitNote);
+        }
+        
+
+        //preliminary accuracy checker here
+
+
+    }
+
+    private void OnStartedRecording()
+    {
+        Debug.Log("(Playback Manager) Motion Recording");
+        motionRecording = true;
+    }
+
+    private void OnFinishedRecording()
+    {
+        Debug.Log("(Playback Manager) Motion Recording Finished");
+        motionRecorded = true;
+        motionRecording = false;
+    }
+
+    //Should implement saving accuracy etc. using these signals + saving recorded motion to file
+
+
 
 }

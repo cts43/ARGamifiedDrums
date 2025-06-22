@@ -4292,7 +4292,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteSpawnerObj: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
+  ControllerRecorderObj: {fileID: 823286943}
+  drumManagerObj: {fileID: 1568977026}
   MIDIFilePath: MIDI Files/Basic 4-4.mid
+  currentTimeInTicks: 0
 --- !u!4 &736645346
 Transform:
   m_ObjectHideFlags: 0
@@ -5135,7 +5138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72c217261b327fe45844448ea94d1e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playbackObject: {fileID: 8849162135835232179, guid: 8e20e80cf92a0e64d8a8311120b569dc, type: 3}
+  playbackObject: {fileID: 2873981299412852974, guid: b949efb2a3a759f4d9355234564ba884, type: 3}
 --- !u!4 &823286945
 Transform:
   m_ObjectHideFlags: 0
@@ -10457,7 +10460,7 @@ GameObject:
   - component: {fileID: 1716620266}
   m_Layer: 0
   m_Name: LeftHandAnchor
-  m_TagString: Untagged
+  m_TagString: LeftHandAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12160,7 +12163,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966957412}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.0148199}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children:
