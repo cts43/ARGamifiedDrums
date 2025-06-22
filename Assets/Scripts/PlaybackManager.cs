@@ -144,12 +144,27 @@ public class PlaybackManager : MonoBehaviour
         ControllerRecorder.StopRecording();
         savingPlaythrough = false;
         drumManager.clearNotes();
+
+        int hitNotes = 0;
+        int missedNotes;
+
         foreach (var dataPoint in savedPlaythrough)
         {
             (var note, var noteTime, var closestNote, var hitNote) = dataPoint;
-            Debug.Log(hitNote);
+            if (hitNote)
+            {
+                hitNotes++;
+            }
         }
-        Debug.Log("Total Notes: "+activeNoteSpawner.totalNotes+" Attempted Notes: "+savedPlaythrough.Count);
+
+        missedNotes = activeNoteSpawner.totalNotes - hitNotes;
+
+        Debug.Log("Missed Notes: " + missedNotes);
+
+        double percentageMissed = (double)missedNotes / activeNoteSpawner.totalNotes * 100;
+
+        Debug.Log("Percentage missed: "+percentageMissed+"%. Percentage hit: "+(100-percentageMissed)+"%.");
+        
         
 
         //preliminary accuracy checker here
