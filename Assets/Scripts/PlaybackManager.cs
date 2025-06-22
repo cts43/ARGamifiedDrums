@@ -30,13 +30,13 @@ public class PlaybackManager : MonoBehaviour
 
     //Serialisable classes for saving playthrough to file -- needed for plotting graphs etc.
     [Serializable]
-    public class playthroughFrame
+    private class playthroughFrame
     {
-        int note;
-        int velocity;
-        long hitTime;
-        long closestNoteTime;
-        bool hitSuccessfully;
+        [SerializeField] private int note;
+        [SerializeField] private int velocity;
+        [SerializeField] private long hitTime;
+        [SerializeField] private long closestNoteTime;
+        [SerializeField] private bool hitSuccessfully;
         //Constructor
         public playthroughFrame(int note, int velocity, long hitTime, long closestNoteTime, bool hitSuccessfully)
         {
@@ -57,10 +57,15 @@ public class PlaybackManager : MonoBehaviour
         }
 
     }
-
+    [Serializable]
     private class playthroughData
     {
-        public List<playthroughFrame> frames = new List<playthroughFrame>();
+        [SerializeField] public List<playthroughFrame> frames;
+
+        public playthroughData(List<playthroughFrame> frames)
+        {
+            this.frames = frames;
+        }
     }
 
 
@@ -228,7 +233,18 @@ public class PlaybackManager : MonoBehaviour
 
         Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
 
-        var json = JsonUtility.ToJson(savedPlaythrough);
+        //TESTING SAVING AND LOADING FROM JSON
+
+        playthroughData dataToSave = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //List from queue, as queues are not serialisable
+
+        string json = JsonUtility.ToJson(dataToSave); //convert to json format
+
+        File.WriteAllText("Assets/file.json", json); //with any luck this file will have some content
+
+        Queue<playthroughFrame> fromJSON = new Queue<playthroughFrame>(JsonUtility.FromJson<playthroughData>(   File.ReadAllText("Assets/file.json")   ).frames); //back to queue from list loaded from json file.
+
+        (var newNote, var newVelocity, var newNoteTime, var newClosestNote, var newHitNote) = fromJSON.Dequeue();
+        Debug.Log("From QUEUE from JSON, first note time: "+newNoteTime); //print first note from .json to check if it works
 
 
     }

@@ -1523,7 +1523,7 @@ GameObject:
   - component: {fileID: 260457042}
   m_Layer: 0
   m_Name: MIDI Input Handler
-  m_TagString: Untagged
+  m_TagString: MIDI Input Handler
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1581,9 +1581,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableDebugActions: 1
+  acceptInputs: 1
   RTriggerMIDINote: 42
   drumManager: {fileID: 1568977027}
-  noteSpawner: {fileID: 0}
 --- !u!1 &284627998
 GameObject:
   m_ObjectHideFlags: 0
