@@ -19,13 +19,15 @@ public class ControllerRecorder : MonoBehaviour
     }
 }
 
+    private GameObject LeftHandAnchor;
     private GameObject RightHandAnchor;
 
     public GameObject playbackObject; //prefab object to use when playing back
-    private GameObject playbackInstance;
+    private GameObject DrumStickL;
+    private GameObject DrumStickR;
 
-    private Queue<recordedTransform> recordedTransforms = new Queue<recordedTransform>();
-    private Queue<recordedTransform> recordedTransformsCopy = new Queue<recordedTransform>();
+    private Queue<(recordedTransform, recordedTransform)> recordedTransforms = new Queue<(recordedTransform, recordedTransform)>();
+    private Queue<(recordedTransform,recordedTransform)> recordedTransformsCopy = new Queue<(recordedTransform,recordedTransform)>();
 
     private bool recording = false;
     private bool playing = false;
@@ -49,6 +51,7 @@ public class ControllerRecorder : MonoBehaviour
 
     private void Start()
     {
+        LeftHandAnchor = GameObject.FindGameObjectWithTag("LeftHandAnchor");
         RightHandAnchor = GameObject.FindGameObjectWithTag("RightHandAnchor");
     }
 
@@ -62,7 +65,7 @@ public class ControllerRecorder : MonoBehaviour
         if (!recording && hasStoredRecording())
         {
             Debug.Log("Playing stored recoring");
-            recordedTransformsCopy = new Queue<recordedTransform>(recordedTransforms);
+            recordedTransformsCopy = new Queue<(recordedTransform,recordedTransform)>(recordedTransforms);
             playing = true;
         }
         else
@@ -99,34 +102,41 @@ public class ControllerRecorder : MonoBehaviour
 
             if (!instantiated)
             {
-                playbackInstance = Instantiate(playbackObject); //create 'drumstick' if doesn't exist
+                DrumStickL = Instantiate(playbackObject); //create drum sticks if don't exist
+                DrumStickR = Instantiate(playbackObject);
                 instantiated = true;
             }
 
             if (justStartedRecording)
             {
                 RaiseStartedRecording();
-                recordedTransforms = new Queue<recordedTransform>(); //when recording starts, clear the queue
+                recordedTransforms = new Queue<(recordedTransform, recordedTransform)>(); //when recording starts, clear the queue
                 justStartedRecording = false;
             }
 
             //start recording input
+            recordedTransform recordedMotionL = new recordedTransform(LeftHandAnchor.transform.position, LeftHandAnchor.transform.eulerAngles);
+            recordedTransform recordedMotionR = new recordedTransform(RightHandAnchor.transform.position, RightHandAnchor.transform.eulerAngles);
+            recordedTransforms.Enqueue((recordedMotionL, recordedMotionR));
 
-            recordedTransform recordedMotion = new recordedTransform(RightHandAnchor.transform.position, RightHandAnchor.transform.eulerAngles);
-            recordedTransforms.Enqueue(recordedMotion);
-
-            playbackInstance.transform.position = new Vector3(recordedMotion.position.x, recordedMotion.position.y, recordedMotion.position.z);
-            playbackInstance.transform.rotation = Quaternion.Euler(new Vector3(recordedMotion.rotation.x, recordedMotion.rotation.y, recordedMotion.rotation.z));
+            DrumStickL.transform.position = new Vector3(recordedMotionL.position.x, recordedMotionL.position.y, recordedMotionL.position.z);
+            DrumStickL.transform.rotation = Quaternion.Euler(new Vector3(recordedMotionL.rotation.x, recordedMotionL.rotation.y, recordedMotionL.rotation.z));
+            
+            DrumStickR.transform.position = new Vector3(recordedMotionR.position.x, recordedMotionR.position.y, recordedMotionR.position.z);
+            DrumStickR.transform.rotation = Quaternion.Euler(new Vector3(recordedMotionR.rotation.x, recordedMotionR.rotation.y, recordedMotionR.rotation.z));
         }
 
         else if (playing)
         {
             if (recordedTransformsCopy.Count != 0)
             {
-                var playbackMotion = recordedTransformsCopy.Dequeue();
+                (var playbackMotionL, var playbackMotionR) = recordedTransformsCopy.Dequeue();
 
-                playbackInstance.transform.position = new Vector3(playbackMotion.position.x, playbackMotion.position.y, playbackMotion.position.z);
-                playbackInstance.transform.rotation = Quaternion.Euler(new Vector3(playbackMotion.rotation.x, playbackMotion.rotation.y, playbackMotion.rotation.z));
+                DrumStickL.transform.position = new Vector3(playbackMotionL.position.x, playbackMotionL.position.y, playbackMotionL.position.z);
+                DrumStickL.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionL.rotation.x, playbackMotionL.rotation.y, playbackMotionL.rotation.z));
+
+                DrumStickR.transform.position = new Vector3(playbackMotionR.position.x, playbackMotionR.position.y, playbackMotionR.position.z);
+                DrumStickR.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionR.rotation.x, playbackMotionR.rotation.y, playbackMotionR.rotation.z));
             }
             else
             {
