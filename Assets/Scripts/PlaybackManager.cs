@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class PlaybackManager : MonoBehaviour
@@ -23,8 +25,44 @@ public class PlaybackManager : MonoBehaviour
     private bool motionRecording = false;
     private bool motionRecorded = false;
     private bool savingPlaythrough = false;
-    private Queue<(int,int,long,long,bool)> savedPlaythrough = new Queue<(int,int,long,long,bool)>();
+    private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
     private bool hasSavedPlaythrough = false;
+
+    //Serialisable classes for saving playthrough to file -- needed for plotting graphs etc.
+    [Serializable]
+    public class playthroughFrame
+    {
+        int note;
+        int velocity;
+        long hitTime;
+        long closestNoteTime;
+        bool hitSuccessfully;
+        //Constructor
+        public playthroughFrame(int note, int velocity, long hitTime, long closestNoteTime, bool hitSuccessfully)
+        {
+            this.note = note;
+            this.velocity = velocity;
+            this.hitTime = hitTime;
+            this.closestNoteTime = closestNoteTime;
+            this.hitSuccessfully = hitSuccessfully;
+        }
+        //Deconstructor
+        public void Deconstruct(out int note, out int velocity, out long hitTime, out long closestNoteTime, out bool hitSuccessfully)
+        {
+            note = this.note;
+            velocity = this.velocity;
+            hitTime = this.hitTime;
+            closestNoteTime = this.closestNoteTime;
+            hitSuccessfully = this.hitSuccessfully;
+        }
+
+    }
+
+    private class playthroughData
+    {
+        public List<playthroughFrame> frames = new List<playthroughFrame>();
+    }
+
 
     private void loadNewRhythm(string Path)
     {
@@ -69,7 +107,7 @@ public class PlaybackManager : MonoBehaviour
         if (savingPlaythrough)
         {
             Debug.Log("Hit note: " + noteNumber + " with velocity: "+ velocity +" Success: " + hitNote + " At: " + timeHit);
-            savedPlaythrough.Enqueue((noteNumber,velocity, timeHit,closestNote,hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
+            savedPlaythrough.Enqueue(new playthroughFrame(noteNumber,velocity, timeHit,closestNote,hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
         }
     }
 
@@ -191,10 +229,6 @@ public class PlaybackManager : MonoBehaviour
         Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
 
         var json = JsonUtility.ToJson(savedPlaythrough);
-
-        Debug.Log(JsonUtility.FromJson<Queue<(int, int, long, long, bool)>>(json)); //testing .json saving. might not produce readable files
-
-        //preliminary accuracy checker here
 
 
     }
