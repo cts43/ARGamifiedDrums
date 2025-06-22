@@ -12,8 +12,6 @@ public class MidiEventCatcher : MonoBehaviour
     public int RTriggerMIDINote;
     public DrumManager drumManager;
 
-    public NoteSpawner noteSpawner;
-
     private void OnEnable()
     {
         MidiEventHandler.OnNoteOn += NoteOn; //Subscribe local functions to MidiEventHandler Events

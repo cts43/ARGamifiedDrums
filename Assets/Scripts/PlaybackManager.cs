@@ -120,19 +120,14 @@ public class PlaybackManager : MonoBehaviour
         if (playing)
         {
             currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks(); //Update current time from active note spawner instance. unsure if necessary
-
-
-            if (savingPlaythrough)
-            {
-                
-            }
         }
 
     }
 
     private void SavePlaythrough()
     {
-        Debug.Log("Saving playthrough from tick "+currentTimeInTicks);
+        Debug.Log("Saving playthrough from tick " + currentTimeInTicks);
+        savingPlaythrough = true;
     }
 
     private void OnMIDIStartedPlaying()
@@ -140,19 +135,21 @@ public class PlaybackManager : MonoBehaviour
         Debug.Log("(Playback Manager) MIDI Started");
         Debug.Log("Start logging accuracy here");
 
-        savingPlaythrough = true;
+        SavePlaythrough();
     }
 
     private void OnMIDIFinishedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Finished");
         ControllerRecorder.StopRecording();
+        savingPlaythrough = false;
         drumManager.clearNotes();
         foreach (var dataPoint in savedPlaythrough)
         {
             (var note, var noteTime, var closestNote, var hitNote) = dataPoint;
             Debug.Log(hitNote);
         }
+        Debug.Log("Total Notes: "+activeNoteSpawner.totalNotes+" Attempted Notes: "+savedPlaythrough.Count);
         
 
         //preliminary accuracy checker here

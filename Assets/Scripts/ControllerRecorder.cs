@@ -119,6 +119,7 @@ public class ControllerRecorder : MonoBehaviour
             recordedTransform recordedMotionR = new recordedTransform(RightHandAnchor.transform.position, RightHandAnchor.transform.eulerAngles);
             recordedTransforms.Enqueue((recordedMotionL, recordedMotionR));
 
+            //set drum stick prefab transforms
             DrumStickL.transform.position = new Vector3(recordedMotionL.position.x, recordedMotionL.position.y, recordedMotionL.position.z);
             DrumStickL.transform.rotation = Quaternion.Euler(new Vector3(recordedMotionL.rotation.x, recordedMotionL.rotation.y, recordedMotionL.rotation.z));
             
@@ -132,6 +133,7 @@ public class ControllerRecorder : MonoBehaviour
             {
                 (var playbackMotionL, var playbackMotionR) = recordedTransformsCopy.Dequeue();
 
+                //set transforms from queued recording
                 DrumStickL.transform.position = new Vector3(playbackMotionL.position.x, playbackMotionL.position.y, playbackMotionL.position.z);
                 DrumStickL.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionL.rotation.x, playbackMotionL.rotation.y, playbackMotionL.rotation.z));
 
