@@ -18,8 +18,6 @@ public class MidiEventCatcher : MonoBehaviour
     public Boolean acceptInputs = true;
     public int RTriggerMIDINote;
     public DrumManager drumManager;
-
-    public AudioClip drumSound;
     private AudioSource sound;
 
     private Dictionary<int, Dictionary<int, AudioClip>> drumClips = new Dictionary<int, Dictionary<int, AudioClip>>();
@@ -146,7 +144,7 @@ public class MidiEventCatcher : MonoBehaviour
             {
                 //Debug.Log("pressed right trigger");
                 checkForDrum(RTriggerMIDINote, 127);
-                playSound(RTriggerMIDINote, 1);
+                playSound(RTriggerMIDINote, 10);
             }
         }
     }
