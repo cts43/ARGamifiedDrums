@@ -119,20 +119,12 @@ public class MidiEventCatcher : MonoBehaviour
         
     }
 
-
-    private int mapRange(int value, int oldMin, int oldMax, int newMin, int newMax)
-    {
-        int oldDiff = (oldMax - oldMin);
-        int newDiff = (newMax - newMin);
-
-        return ((value - oldMin) * newDiff / oldDiff) + newMin;
-    }
-
     private void playSound(int note, int velocity)
     {
         Debug.Log("Note is" + note);
 
-        int scaledVelocity = mapRange(velocity,0,127,1,32); //scale velocity to be within 1-32
+        int scaledVelocity = (velocity * 31 / 128) + 1; //scale velocity to be within 1-32
+
         Debug.Log("Velocity for file load: "+scaledVelocity);
         scaledVelocity = Math.Clamp(scaledVelocity, 1, 32); //make sure resulting number is definitely within the range
         Debug.Log("Velocity after clamp: " + scaledVelocity);
