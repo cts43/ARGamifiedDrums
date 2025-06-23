@@ -28,6 +28,9 @@ public class PlaybackManager : MonoBehaviour
     private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
     private bool hasSavedPlaythrough = false;
 
+    private bool readyToSaveMotion = false;
+    private bool readyToSaveInput = false;
+
     //Serialisable classes for saving playthrough to file -- needed for plotting graphs etc.
     [Serializable]
     private class playthroughFrame
@@ -63,6 +66,17 @@ public class PlaybackManager : MonoBehaviour
         [SerializeField] public List<playthroughFrame> frames;
 
         public playthroughData(List<playthroughFrame> frames)
+        {
+            this.frames = frames;
+        }
+    }
+
+    [Serializable]
+    private class motionData
+    {
+        [SerializeField] public List<ControllerRecorder.controllerTransforms> frames;
+
+        public motionData(List<ControllerRecorder.controllerTransforms> frames)
         {
             this.frames = frames;
         }
@@ -111,7 +125,8 @@ public class PlaybackManager : MonoBehaviour
                     ControllerRecorder.Play();
                 }
             }
-            if (drumHits){
+            if (drumHits)
+            {
                 if (savedPlaythrough.Count > 0)
                 {
                     playingBack = true;
@@ -120,12 +135,12 @@ public class PlaybackManager : MonoBehaviour
         }
     }
 
-    private void recordHit(int noteNumber,int velocity, long timeHit, long closestNote, bool hitNote)
+    private void recordHit(int noteNumber, int velocity, long timeHit, long closestNote, bool hitNote)
     {
         if (savingPlaythrough)
         {
-            Debug.Log("Hit note: " + noteNumber + " with velocity: "+ velocity +" Success: " + hitNote + " At: " + timeHit);
-            savedPlaythrough.Enqueue(new playthroughFrame(noteNumber,velocity, timeHit,closestNote,hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
+            Debug.Log("Hit note: " + noteNumber + " with velocity: " + velocity + " Success: " + hitNote + " At: " + timeHit);
+            savedPlaythrough.Enqueue(new playthroughFrame(noteNumber, velocity, timeHit, closestNote, hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
         }
     }
 
@@ -152,7 +167,7 @@ public class PlaybackManager : MonoBehaviour
 
     private void Update()
     {
-        
+
         playing = activeNoteSpawner.playing;
         if (playing)
         {
@@ -169,7 +184,7 @@ public class PlaybackManager : MonoBehaviour
                 }
                 else
                 {
-                    playRecorded(true,true);
+                    playRecorded(true, true);
                 }
             }
         }
@@ -194,6 +209,8 @@ public class PlaybackManager : MonoBehaviour
                 }
             }
         }
+
+        TrySaveData();
 
     }
 
@@ -224,6 +241,7 @@ public class PlaybackManager : MonoBehaviour
         savingPlaythrough = false;
         hasSavedPlaythrough = true;
         drumManager.clearNotes();
+        readyToSaveInput = true;
 
         int hitNotes = 0;
         int missedNotes;
@@ -248,19 +266,20 @@ public class PlaybackManager : MonoBehaviour
 
         //TESTING SAVING AND LOADING FROM JSON
 
-        playthroughData dataToSave = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //List from queue, as queues are not serialisable
+        //     playthroughData dataToSave = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //List from queue, as queues are not serialisable
 
-        string json = JsonUtility.ToJson(dataToSave); //convert to json format
+        //     string json = JsonUtility.ToJson(dataToSave); //convert to json format
 
-        File.WriteAllText("Assets/file.json", json); //with any luck this file will have some content
+        //     File.WriteAllText("Assets/file.json", json); //with any luck this file will have some content
 
-        Queue<playthroughFrame> fromJSON = new Queue<playthroughFrame>(JsonUtility.FromJson<playthroughData>(   File.ReadAllText("Assets/file.json")   ).frames); //back to queue from list loaded from json file.
-    
-        (var newNote, var newVelocity, var newNoteTime, var newClosestNote, var newHitNote) = fromJSON.Dequeue();
-        Debug.Log("From QUEUE from JSON, first note time: "+newNoteTime); //print first note from .json to check if it works
+        //     Queue<playthroughFrame> fromJSON = new Queue<playthroughFrame>(JsonUtility.FromJson<playthroughData>(File.ReadAllText("Assets/file.json")).frames); //back to queue from list loaded from json file.
+
+        //     (var newNote, var newVelocity, var newNoteTime, var newClosestNote, var newHitNote) = fromJSON.Dequeue();
+        //     Debug.Log("From QUEUE from JSON, first note time: " + newNoteTime); //print first note from .json to check if it works
 
 
-    }  
+
+    }
 
     private void OnStartedRecording()
     {
@@ -273,12 +292,36 @@ public class PlaybackManager : MonoBehaviour
         Debug.Log("(Playback Manager) Motion Recording Finished");
         motionRecorded = true;
         motionRecording = false;
-        var recordedMotion = ControllerRecorder.getRecording();
-        
+
+        readyToSaveMotion = true;
+
     }
 
     //Should implement saving accuracy etc. using these signals + saving recorded motion to file
 
+    private void TrySaveData()
+    {
+        if (readyToSaveInput && readyToSaveMotion)
+        {
+            //recording motion + midi must have finished before this runs.
+
+            //these are wrapped in the playthroughData + motionData classes because I can't directly serialise a list
+            var recordedMotion = new motionData (new List<ControllerRecorder.controllerTransforms>(ControllerRecorder.getRecording())); //List from queue for serialisation.
+            var recordedInput = new playthroughData (new List<playthroughFrame>(savedPlaythrough)); //same here
+
+            var motionPath = "motion.json";
+            var inputPath = "inputs.json"; //need unique IDs here to store different sessions
+
+            string motionJson = JsonUtility.ToJson(recordedMotion);
+            string inputJson = JsonUtility.ToJson(recordedInput);
+
+            File.WriteAllText(motionPath,motionJson);
+            File.WriteAllText(inputPath, inputJson); //save to files.
+
+            readyToSaveInput = false;
+            readyToSaveMotion = false;
+        }
+    }
 
 
 }
