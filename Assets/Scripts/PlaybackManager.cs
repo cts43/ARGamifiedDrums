@@ -94,16 +94,29 @@ public class PlaybackManager : MonoBehaviour
         //reload and play with recording on
         loadNewRhythm(MIDIFilePath);
         playRhythm();
-        ControllerRecorder.Record();
+        ControllerRecorder.Record();//record controller motion
+        SavePlaythrough(); //save drum inputs/notes played
     }
 
-    private void playRecorded()
+    private void playRecorded(bool motion, bool drumHits)
     {
-        if (motionRecorded && rhythmLoaded && (!motionRecording))
+        if (rhythmLoaded)
         {
             //play with recorded motion
             playRhythm();
-            ControllerRecorder.Play();
+            if (motion)
+            {
+                if (motionRecorded && !motionRecording)
+                {
+                    ControllerRecorder.Play();
+                }
+            }
+            if (drumHits){
+                if (savedPlaythrough.Count > 0)
+                {
+                    playingBack = true;
+                }
+            }
         }
     }
 
@@ -156,7 +169,7 @@ public class PlaybackManager : MonoBehaviour
                 }
                 else
                 {
-                    playRecorded();
+                    playRecorded(true,true);
                 }
             }
         }
@@ -201,7 +214,7 @@ public class PlaybackManager : MonoBehaviour
     {
         Debug.Log("(Playback Manager) MIDI Started");
 
-        SavePlaythrough();
+        //SavePlaythrough();
     }
 
     private void OnMIDIFinishedPlaying()
@@ -242,7 +255,7 @@ public class PlaybackManager : MonoBehaviour
         File.WriteAllText("Assets/file.json", json); //with any luck this file will have some content
 
         Queue<playthroughFrame> fromJSON = new Queue<playthroughFrame>(JsonUtility.FromJson<playthroughData>(   File.ReadAllText("Assets/file.json")   ).frames); //back to queue from list loaded from json file.
-
+    
         (var newNote, var newVelocity, var newNoteTime, var newClosestNote, var newHitNote) = fromJSON.Dequeue();
         Debug.Log("From QUEUE from JSON, first note time: "+newNoteTime); //print first note from .json to check if it works
 
@@ -260,6 +273,8 @@ public class PlaybackManager : MonoBehaviour
         Debug.Log("(Playback Manager) Motion Recording Finished");
         motionRecorded = true;
         motionRecording = false;
+        var recordedMotion = ControllerRecorder.getRecording();
+        
     }
 
     //Should implement saving accuracy etc. using these signals + saving recorded motion to file

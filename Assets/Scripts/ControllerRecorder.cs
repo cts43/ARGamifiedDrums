@@ -2,22 +2,42 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ControllerRecorder : MonoBehaviour
 {
 
-    private struct recordedTransform
-{
-    public Vector3 position;
-    public Vector3 rotation;
+    [Serializable]
+    public struct recordedTransform
+    {
+        public Vector3 position;
+        public Vector3 rotation;
 
-    public recordedTransform(Vector3 Position, Vector3 Rotation)
-    { //custom struct for motion data per frame. position is transform.position, rotation is transform.eulerAngles
-        position = Position;
-        rotation = Rotation;
+        public recordedTransform(Vector3 Position, Vector3 Rotation)
+        { //custom struct for motion data per frame. position is transform.position, rotation is transform.eulerAngles
+            position = Position;
+            rotation = Rotation;
+        }
     }
-}
+    [Serializable]
+    public class controllerTransforms
+    {
+        public recordedTransform leftControllerMotion;
+        public recordedTransform rightControllerMotion;
+
+        public controllerTransforms(recordedTransform leftControllerMotion, recordedTransform rightControllerMotion)
+        {
+            this.leftControllerMotion = leftControllerMotion;
+            this.rightControllerMotion = rightControllerMotion;
+        }
+
+        public void Deconstruct(out recordedTransform leftControllerMotion, out recordedTransform rightControllerMotion)
+        {
+            leftControllerMotion = this.leftControllerMotion;
+            rightControllerMotion = this.rightControllerMotion;
+        }
+    }
 
     private GameObject LeftHandAnchor;
     private GameObject RightHandAnchor;
@@ -26,8 +46,8 @@ public class ControllerRecorder : MonoBehaviour
     private GameObject DrumStickL;
     private GameObject DrumStickR;
 
-    private Queue<(recordedTransform, recordedTransform)> recordedTransforms = new Queue<(recordedTransform, recordedTransform)>();
-    private Queue<(recordedTransform,recordedTransform)> recordedTransformsCopy = new Queue<(recordedTransform,recordedTransform)>();
+    private Queue<controllerTransforms> recordedTransforms = new Queue<controllerTransforms>();
+    private Queue<controllerTransforms> recordedTransformsCopy = new Queue<controllerTransforms>();
 
     private bool recording = false;
     private bool playing = false;
@@ -65,7 +85,7 @@ public class ControllerRecorder : MonoBehaviour
         if (!recording && hasStoredRecording())
         {
             Debug.Log("Playing stored recoring");
-            recordedTransformsCopy = new Queue<(recordedTransform,recordedTransform)>(recordedTransforms);
+            recordedTransformsCopy = new Queue<controllerTransforms>(recordedTransforms);
             playing = true;
         }
         else
@@ -110,19 +130,19 @@ public class ControllerRecorder : MonoBehaviour
             if (justStartedRecording)
             {
                 RaiseStartedRecording();
-                recordedTransforms = new Queue<(recordedTransform, recordedTransform)>(); //when recording starts, clear the queue
+                recordedTransforms = new Queue<controllerTransforms>(); //when recording starts, clear the queue
                 justStartedRecording = false;
             }
 
             //start recording input
             recordedTransform recordedMotionL = new recordedTransform(LeftHandAnchor.transform.position, LeftHandAnchor.transform.eulerAngles);
             recordedTransform recordedMotionR = new recordedTransform(RightHandAnchor.transform.position, RightHandAnchor.transform.eulerAngles);
-            recordedTransforms.Enqueue((recordedMotionL, recordedMotionR));
+            recordedTransforms.Enqueue(new controllerTransforms(recordedMotionL, recordedMotionR));
 
             //set drum stick prefab transforms
             DrumStickL.transform.position = new Vector3(recordedMotionL.position.x, recordedMotionL.position.y, recordedMotionL.position.z);
             DrumStickL.transform.rotation = Quaternion.Euler(new Vector3(recordedMotionL.rotation.x, recordedMotionL.rotation.y, recordedMotionL.rotation.z));
-            
+
             DrumStickR.transform.position = new Vector3(recordedMotionR.position.x, recordedMotionR.position.y, recordedMotionR.position.z);
             DrumStickR.transform.rotation = Quaternion.Euler(new Vector3(recordedMotionR.rotation.x, recordedMotionR.rotation.y, recordedMotionR.rotation.z));
         }
@@ -146,5 +166,10 @@ public class ControllerRecorder : MonoBehaviour
                 Debug.Log("Stopped playing");
             }
         }
+    }
+
+    public Queue<controllerTransforms> getRecording()
+    {
+        return recordedTransforms;
     }
 }
