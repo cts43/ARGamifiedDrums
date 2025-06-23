@@ -1584,6 +1584,7 @@ MonoBehaviour:
   acceptInputs: 1
   RTriggerMIDINote: 42
   drumManager: {fileID: 1568977027}
+  drumSound: {fileID: 8300000, guid: 59d92239ce307f74cb10293297688f8a, type: 3}
 --- !u!1 &284627998
 GameObject:
   m_ObjectHideFlags: 0

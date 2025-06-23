@@ -30,6 +30,7 @@ public class DrumHit : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
         DrumManager drumManager = GetComponentInParent<DrumManager>();
         waitFrames = drumManager.framesToHighlightOnHit;
         hitWindowInMs = drumManager.hitWindowInMs;

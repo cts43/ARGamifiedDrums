@@ -309,8 +309,8 @@ public class PlaybackManager : MonoBehaviour
             var recordedMotion = new motionData (new List<ControllerRecorder.controllerTransforms>(ControllerRecorder.getRecording())); //List from queue for serialisation.
             var recordedInput = new playthroughData (new List<playthroughFrame>(savedPlaythrough)); //same here
 
-            var motionPath = "motion.json";
-            var inputPath = "inputs.json"; //need unique IDs here to store different sessions
+            var motionPath = Path.Combine(Application.persistentDataPath,"motion.json");
+            var inputPath = Path.Combine(Application.persistentDataPath,"inputs.json"); //need unique IDs here to store different sessions
 
             string motionJson = JsonUtility.ToJson(recordedMotion);
             string inputJson = JsonUtility.ToJson(recordedInput);
