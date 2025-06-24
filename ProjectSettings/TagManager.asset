@@ -11,6 +11,7 @@ TagManager:
   - RightHandAnchor
   - BeatIndicatorText
   - LeftHandAnchor
+  - MIDI Input Handler
   layers:
   - Default
   - TransparentFX

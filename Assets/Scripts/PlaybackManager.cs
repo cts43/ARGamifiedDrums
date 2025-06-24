@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.IO;
 using UnityEngine;
 
 public class PlaybackManager : MonoBehaviour
@@ -24,7 +25,63 @@ public class PlaybackManager : MonoBehaviour
     private bool motionRecording = false;
     private bool motionRecorded = false;
     private bool savingPlaythrough = false;
-    private Queue<(int,long,long,bool)> savedPlaythrough = new Queue<(int,long,long,bool)>();
+    private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
+    private bool hasSavedPlaythrough = false;
+
+    private bool readyToSaveMotion = false;
+    private bool readyToSaveInput = false;
+
+    //Serialisable classes for saving playthrough to file -- needed for plotting graphs etc.
+    [Serializable]
+    private class playthroughFrame
+    {
+        [SerializeField] private int note;
+        [SerializeField] private int velocity;
+        [SerializeField] private long hitTime;
+        [SerializeField] private long closestNoteTime;
+        [SerializeField] private bool hitSuccessfully;
+        //Constructor
+        public playthroughFrame(int note, int velocity, long hitTime, long closestNoteTime, bool hitSuccessfully)
+        {
+            this.note = note;
+            this.velocity = velocity;
+            this.hitTime = hitTime;
+            this.closestNoteTime = closestNoteTime;
+            this.hitSuccessfully = hitSuccessfully;
+        }
+        //Deconstructor
+        public void Deconstruct(out int note, out int velocity, out long hitTime, out long closestNoteTime, out bool hitSuccessfully)
+        {
+            note = this.note;
+            velocity = this.velocity;
+            hitTime = this.hitTime;
+            closestNoteTime = this.closestNoteTime;
+            hitSuccessfully = this.hitSuccessfully;
+        }
+
+    }
+    [Serializable]
+    private class playthroughData
+    {
+        [SerializeField] public List<playthroughFrame> frames;
+
+        public playthroughData(List<playthroughFrame> frames)
+        {
+            this.frames = frames;
+        }
+    }
+
+    [Serializable]
+    private class motionData
+    {
+        [SerializeField] public List<ControllerRecorder.controllerTransforms> frames;
+
+        public motionData(List<ControllerRecorder.controllerTransforms> frames)
+        {
+            this.frames = frames;
+        }
+    }
+
 
     private void loadNewRhythm(string Path)
     {
@@ -51,25 +108,39 @@ public class PlaybackManager : MonoBehaviour
         //reload and play with recording on
         loadNewRhythm(MIDIFilePath);
         playRhythm();
-        ControllerRecorder.Record();
+        ControllerRecorder.Record();//record controller motion
+        SavePlaythrough(); //save drum inputs/notes played
     }
 
-    private void playRecorded()
+    private void playRecorded(bool motion, bool drumHits)
     {
-        if (motionRecorded && rhythmLoaded && (!motionRecording))
+        if (rhythmLoaded)
         {
             //play with recorded motion
             playRhythm();
-            ControllerRecorder.Play();
+            if (motion)
+            {
+                if (motionRecorded && !motionRecording)
+                {
+                    ControllerRecorder.Play();
+                }
+            }
+            if (drumHits)
+            {
+                if (savedPlaythrough.Count > 0)
+                {
+                    playingBack = true;
+                }
+            }
         }
     }
 
-    private void recordHit(int noteNumber, long timeHit, long closestNote, bool hitNote)
+    private void recordHit(int noteNumber, int velocity, long timeHit, long closestNote, bool hitNote)
     {
         if (savingPlaythrough)
         {
-            Debug.Log("Hit note: " + noteNumber + " Success: " + hitNote + " At: " + timeHit);
-            savedPlaythrough.Enqueue((noteNumber, timeHit,closestNote,hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
+            Debug.Log("Hit note: " + noteNumber + " with velocity: " + velocity + " Success: " + hitNote + " At: " + timeHit);
+            savedPlaythrough.Enqueue(new playthroughFrame(noteNumber, velocity, timeHit, closestNote, hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
         }
     }
 
@@ -92,9 +163,17 @@ public class PlaybackManager : MonoBehaviour
         subscribeToDrumHits();
     }
 
+    bool playingBack = false;
+
     private void Update()
     {
+
         playing = activeNoteSpawner.playing;
+        if (playing)
+        {
+            currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks(); //Update current time from active note spawner instance. unsure if necessary
+        }
+
         if (OVRInput.GetDown(OVRInput.RawButton.B))
         {
             if (!playing)
@@ -105,7 +184,7 @@ public class PlaybackManager : MonoBehaviour
                 }
                 else
                 {
-                    playRecorded();
+                    playRecorded(true, true);
                 }
             }
         }
@@ -117,45 +196,87 @@ public class PlaybackManager : MonoBehaviour
             }
         }
 
-        if (playing)
-        {
-            currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks(); //Update current time from active note spawner instance. unsure if necessary
-
-
-            if (savingPlaythrough)
+        if (playingBack)
+        { //testing playing back user inputs
+            if (savedPlaythrough.Count > 0)
             {
-                
+                (var note, var velocity, var time, var closest, var success) = savedPlaythrough.Peek();
+                if (activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks() >= time) //offset based on spawn window
+                {
+                    savedPlaythrough.Dequeue();
+                    MidiEventCatcher MIDIEventCatcher = GameObject.FindWithTag("MIDI Input Handler").GetComponent<MidiEventCatcher>();
+                    MIDIEventCatcher.checkForDrum(note, velocity);
+                }
             }
         }
+
+        TrySaveData();
 
     }
 
     private void SavePlaythrough()
     {
-        Debug.Log("Saving playthrough from tick "+currentTimeInTicks);
+        if (!savingPlaythrough && !hasSavedPlaythrough)
+        {
+            Debug.Log("Saving playthrough from tick " + currentTimeInTicks);
+            savingPlaythrough = true;
+        }
+        else if (hasSavedPlaythrough)
+        {
+            playingBack = true;
+        }
     }
 
     private void OnMIDIStartedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Started");
-        Debug.Log("Start logging accuracy here");
 
-        savingPlaythrough = true;
+        //SavePlaythrough();
     }
 
     private void OnMIDIFinishedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Finished");
         ControllerRecorder.StopRecording();
+        savingPlaythrough = false;
+        hasSavedPlaythrough = true;
         drumManager.clearNotes();
+        readyToSaveInput = true;
+
+        int hitNotes = 0;
+        int missedNotes;
+
+
         foreach (var dataPoint in savedPlaythrough)
         {
-            (var note, var noteTime, var closestNote, var hitNote) = dataPoint;
-            Debug.Log(hitNote);
+            (var note, var velocity, var noteTime, var closestNote, var hitNote) = dataPoint;
+            if (hitNote)
+            {
+                hitNotes++;
+            }
         }
-        
 
-        //preliminary accuracy checker here
+        missedNotes = activeNoteSpawner.totalNotes - hitNotes;
+
+        Debug.Log("Missed Notes: " + missedNotes);
+
+        double percentageMissed = (double)missedNotes / activeNoteSpawner.totalNotes * 100;
+
+        Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
+
+        //TESTING SAVING AND LOADING FROM JSON
+
+        //     playthroughData dataToSave = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //List from queue, as queues are not serialisable
+
+        //     string json = JsonUtility.ToJson(dataToSave); //convert to json format
+
+        //     File.WriteAllText("Assets/file.json", json); //with any luck this file will have some content
+
+        //     Queue<playthroughFrame> fromJSON = new Queue<playthroughFrame>(JsonUtility.FromJson<playthroughData>(File.ReadAllText("Assets/file.json")).frames); //back to queue from list loaded from json file.
+
+        //     (var newNote, var newVelocity, var newNoteTime, var newClosestNote, var newHitNote) = fromJSON.Dequeue();
+        //     Debug.Log("From QUEUE from JSON, first note time: " + newNoteTime); //print first note from .json to check if it works
+
 
 
     }
@@ -171,10 +292,36 @@ public class PlaybackManager : MonoBehaviour
         Debug.Log("(Playback Manager) Motion Recording Finished");
         motionRecorded = true;
         motionRecording = false;
+
+        readyToSaveMotion = true;
+
     }
 
     //Should implement saving accuracy etc. using these signals + saving recorded motion to file
 
+    private void TrySaveData()
+    {
+        if (readyToSaveInput && readyToSaveMotion)
+        {
+            //recording motion + midi must have finished before this runs.
+
+            //these are wrapped in the playthroughData + motionData classes because I can't directly serialise a list
+            var recordedMotion = new motionData (new List<ControllerRecorder.controllerTransforms>(ControllerRecorder.getRecording())); //List from queue for serialisation.
+            var recordedInput = new playthroughData (new List<playthroughFrame>(savedPlaythrough)); //same here
+
+            var motionPath = Path.Combine(Application.persistentDataPath,"motion.json");
+            var inputPath = Path.Combine(Application.persistentDataPath,"inputs.json"); //need unique IDs here to store different sessions
+
+            string motionJson = JsonUtility.ToJson(recordedMotion);
+            string inputJson = JsonUtility.ToJson(recordedInput);
+
+            File.WriteAllText(motionPath,motionJson);
+            File.WriteAllText(inputPath, inputJson); //save to files.
+
+            readyToSaveInput = false;
+            readyToSaveMotion = false;
+        }
+    }
 
 
 }

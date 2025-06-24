@@ -21,15 +21,16 @@ public class DrumHit : MonoBehaviour
 
     private Coroutine changeColourOnHit;
 
-    public event Action<int,long,long,bool> HitDrum;
-    public void RaiseHitDrum(int note, long timeHit,long closestNote, bool hitNote)
+    public event Action<int,int,long,long,bool> HitDrum;
+    public void RaiseHitDrum(int note, int velocity, long timeHit,long closestNote, bool hitNote)
     {
-        HitDrum?.Invoke(note,timeHit,closestNote,hitNote);
+        HitDrum?.Invoke(note,velocity,timeHit,closestNote,hitNote);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
         DrumManager drumManager = GetComponentInParent<DrumManager>();
         waitFrames = drumManager.framesToHighlightOnHit;
         hitWindowInMs = drumManager.hitWindowInMs;
@@ -83,7 +84,7 @@ public class DrumHit : MonoBehaviour
         return (currentTime,closestNoteTime,hitNote);
     }
 
-    public void OnDrumHit()
+    public void OnDrumHit(int velocity)
     {
         if (changeColourOnHit != null) //If still running
         {
@@ -95,7 +96,7 @@ public class DrumHit : MonoBehaviour
         if (PlaybackManager.playing)
         {
             (var timeHit,var closestNote,var hitNote) = checkIfHitNote();
-            RaiseHitDrum(note, timeHit, closestNote, hitNote); //send hit drum signal with int note number, velocity (not here yet), time hit
+            RaiseHitDrum(note, velocity, timeHit, closestNote, hitNote); //send hit drum signal with int note number, velocity (not here yet), time hit
             
         }
     }
