@@ -12,6 +12,7 @@ public class DrumHit : MonoBehaviour
     public Color changeColour;
 
     public int note;
+    public bool isKick = false;
 
     private int waitFrames = 10; //default 10
 

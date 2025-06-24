@@ -208,6 +208,13 @@ public class NoteSpawner : MonoBehaviour
             yield break;
         }
 
+        if (noteDrum.GetComponent<DrumHit>().isKick)
+        {
+            //if the drum is designated as a kick drum, then the kick note should be spawned - big line like in guitar hero? 
+            //would then line up with the other drums visually
+            //but recorded 'motion' could be animated leg
+        }
+
         GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
         spawnedNote.transform.Translate(startPos);
         spawnedNote.GetComponent<NoteIndicator>().ScheduledTimeInTicks = noteTimeInTicks;// + TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);

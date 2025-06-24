@@ -92,6 +92,8 @@ public class PlaybackManager : MonoBehaviour
             activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
             activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
             rhythmLoaded = true;
+
+            //should search for recorded motion and if exists also load that in
         }
     }
 
@@ -221,7 +223,11 @@ public class PlaybackManager : MonoBehaviour
             Debug.Log("Saving playthrough from tick " + currentTimeInTicks);
             savingPlaythrough = true;
         }
-        else if (hasSavedPlaythrough)
+    }
+
+    private void LoadPlaythrough()
+    {
+        if (hasSavedPlaythrough)
         {
             playingBack = true;
         }
