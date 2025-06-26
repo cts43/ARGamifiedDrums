@@ -12892,6 +12892,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Legs
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: aa349a850db029343b8071f745ed4393, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: aa349a850db029343b8071f745ed4393, type: 3}
+      propertyPath: m_TagString
+      value: Legs
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
