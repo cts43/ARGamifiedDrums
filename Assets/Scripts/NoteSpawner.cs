@@ -45,8 +45,11 @@ public class NoteSpawner : MonoBehaviour
 
     public bool showKickMotion = false;
     private Animator kickMotion;
-
     private long kickAnimationOffset = 330; // time in ms that the foot takes to hit the floor
+
+    long previousBeat = 0;
+    public AudioClip metronomeClip;
+    private AudioSource metronomeSource;
 
     public event Action StartedPlaying;
     public void RaiseStartedPlaying()
@@ -126,6 +129,8 @@ public class NoteSpawner : MonoBehaviour
 
         GameObject Legs = GameObject.FindWithTag("Legs");
         kickMotion = Legs.GetComponent<Animator>();
+
+        metronomeSource = gameObject.AddComponent<AudioSource>();
     }
 
     public void Initialise(string filePath, int window = 2)
@@ -165,7 +170,7 @@ public class NoteSpawner : MonoBehaviour
         BarBeatTicksTimeSpan time;
         try
         {
-            time = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap) - spawnWindowAsBarsBeats;
+            time = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap) + new BarBeatTicksTimeSpan(1,0) - spawnWindowAsBarsBeats; //add a bar for visual accuracy
         }
         catch (Exception)
         {
@@ -185,6 +190,7 @@ public class NoteSpawner : MonoBehaviour
             return -TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
         }
     }
+
 
     private GameObject GetDrum(int note)
     {
@@ -236,12 +242,15 @@ public class NoteSpawner : MonoBehaviour
 
             //big line doesn't necessarily work as drums will be in different positions.
             startPos = new Vector3(0, 0, 1); //right now kick drum is the same as the others but spawns from Z+1 instead of Y+1
-            StartCoroutine(playKickMotion(noteTimeInTicks));
+            if (showKickMotion)
+            {
+                StartCoroutine(playKickMotion(noteTimeInTicks));
+            }
         }
-        else
-        {
-            startPos = new Vector3(0, 1, 0);
-        }
+            else
+            {
+                startPos = new Vector3(0, 1, 0);
+            }
 
         GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
         spawnedNote.transform.Translate(startPos);
@@ -267,6 +276,25 @@ public class NoteSpawner : MonoBehaviour
 
     }
 
+    void FixedUpdate() //fixed update is set to run at 120Hz so better for fast updates like this.
+    {
+        if (playing) {
+            if (GetVisualTime().Beats != previousBeat)
+            {
+                if (GetVisualTime().Beats == 0)
+                {
+                    metronomeSource.pitch = 2;
+                }
+                else
+                {
+                    metronomeSource.pitch = 1;
+                }
+
+                previousBeat = GetVisualTime().Beats;
+                metronomeSource.PlayOneShot(metronomeClip);
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -279,6 +307,7 @@ public class NoteSpawner : MonoBehaviour
 
             while (notesList.Count > 0) //while rather than if to allow multiple notes on the same frame
             {
+
                 (var note, var velocity, var noteTime) = notesList.Peek();
 
                 if (GetCurrentMusicalTime() >= noteTime)
@@ -312,8 +341,8 @@ public class NoteSpawner : MonoBehaviour
             }
 
         }
-        
-        
+
+
         //show beats on label
         currentBeatLabel.text = GetVisualTime().ToString();
 

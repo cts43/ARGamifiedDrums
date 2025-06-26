@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Melanchall.DryWetMidi.Interaction;
 using UnityEngine;
 
 public class PlaybackManager : MonoBehaviour
@@ -31,6 +32,9 @@ public class PlaybackManager : MonoBehaviour
 
     private bool readyToSaveMotion = false;
     private bool readyToSaveInput = false;
+
+    private long previousBeat = 0;
+
 
     //Serialisable classes for saving playthrough to file -- needed for plotting graphs etc.
     [Serializable]
@@ -158,7 +162,7 @@ public class PlaybackManager : MonoBehaviour
 
     private void Start()
     {
-        
+
         activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
         ControllerRecorder = ControllerRecorderObj.GetComponent<ControllerRecorder>();
         drumManager = drumManagerObj.GetComponent<DrumManager>();
@@ -180,26 +184,26 @@ public class PlaybackManager : MonoBehaviour
         }
 
         if (OVRInput.GetDown(OVRInput.RawButton.B))
-        {
-            if (!playing)
             {
-                if (!motionRecorded)
+                if (!playing)
+                {
+                    if (!motionRecorded)
+                    {
+                        playWithRecord();
+                    }
+                    else
+                    {
+                        playRecorded(true, true);
+                    }
+                }
+            }
+            else if (OVRInput.GetDown(OVRInput.RawButton.Y))
+            {
+                if (!playing)
                 {
                     playWithRecord();
                 }
-                else
-                {
-                    playRecorded(true, true);
-                }
             }
-        }
-        else if (OVRInput.GetDown(OVRInput.RawButton.Y))
-        {
-            if (!playing)
-            {
-                playWithRecord();
-            }
-        }
 
         if (playingBack)
         { //testing playing back user inputs
