@@ -12,6 +12,7 @@ TagManager:
   - BeatIndicatorText
   - LeftHandAnchor
   - MIDI Input Handler
+  - Legs
   layers:
   - Default
   - TransparentFX
