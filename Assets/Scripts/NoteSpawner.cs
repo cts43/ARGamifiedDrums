@@ -118,8 +118,6 @@ public class NoteSpawner : MonoBehaviour
         var spawnWindowAsTimespan = new MetricTimeSpan(spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
         kickAnimationOffset = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 0, (int)kickAnimationOffset), tempoMap); //convert to ticks
-
-        Debug.Log("One bar as seconds: "+ TimeConverter.ConvertTo<MetricTimeSpan>(new BarBeatTicksTimeSpan(1,0),tempoMap));
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
