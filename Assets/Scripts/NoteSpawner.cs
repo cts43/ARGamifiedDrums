@@ -9,6 +9,7 @@ using System.IO;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
 using System.Linq;
+using Unity.VisualScripting;
 
 
 
@@ -44,6 +45,8 @@ public class NoteSpawner : MonoBehaviour
 
     public bool showKickMotion = false;
     private Animator kickMotion;
+
+    private long kickAnimationOffset = 330; // time in ms that the foot takes to hit the floor
 
     public event Action StartedPlaying;
     public void RaiseStartedPlaying()
@@ -111,6 +114,7 @@ public class NoteSpawner : MonoBehaviour
         //init spawn window as bars beats for easy operations
         var spawnWindowAsTimespan = new MetricTimeSpan(spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
+        kickAnimationOffset = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 0, (int)kickAnimationOffset), tempoMap); //convert to ticks
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -201,6 +205,16 @@ public class NoteSpawner : MonoBehaviour
         return null;
     }
 
+    IEnumerator playKickMotion(long scheduledTime)
+    {
+        while (GetCurrentOffsetMusicalTimeAsTicks() < scheduledTime-kickAnimationOffset) //where 1 is kick animation window
+        {
+            yield return null; //wait one frame and check again
+        }
+        kickMotion.Play("Kick", 0, 0); //finally play the animation
+    }
+
+
     IEnumerator SpawnNote(int note, int velocity, BarBeatTicksTimeSpan noteTime)
     {
 
@@ -222,7 +236,7 @@ public class NoteSpawner : MonoBehaviour
 
             //big line doesn't necessarily work as drums will be in different positions.
             startPos = new Vector3(0, 0, 1); //right now kick drum is the same as the others but spawns from Z+1 instead of Y+1
-            kickMotion.Play("Kick",0,0);
+            StartCoroutine(playKickMotion(noteTimeInTicks));
         }
         else
         {
