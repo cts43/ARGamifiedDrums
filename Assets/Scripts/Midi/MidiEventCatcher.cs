@@ -56,8 +56,6 @@ public class MidiEventCatcher : MonoBehaviour
                 //this would be folder+some file that starts with the right number
 
                 var audioClip = Resources.Load<AudioClip>(path);
-                Debug.Log(path);
-                Debug.Log(audioClip);
                 velocityDict.Add(i, audioClip);
             }
 
@@ -98,6 +96,7 @@ public class MidiEventCatcher : MonoBehaviour
             {
                 //Debug.Log("Found drum!");
                 drum.OnDrumHit(velocity);
+                playSound(note, velocity);
             }
         }
     }
@@ -107,7 +106,7 @@ public class MidiEventCatcher : MonoBehaviour
         if (acceptInputs)
         {
             Debug.Log("Note " + note + " on, velocity " + velocity);
-            context.Post(_ => { playSound(note,velocity); checkForDrum(note, velocity); }, null); //queue to run on the main thread
+            context.Post(_ => { checkForDrum(note, velocity); }, null); //queue to run on the main thread
             //sound should play here as above waits a frame before playing
         }
         else
@@ -144,7 +143,7 @@ public class MidiEventCatcher : MonoBehaviour
             {
                 //Debug.Log("pressed right trigger");
                 checkForDrum(RTriggerMIDINote, 127);
-                playSound(RTriggerMIDINote, 10);
+                //playSound(RTriggerMIDINote, 10);
             }
         }
     }

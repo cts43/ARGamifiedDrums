@@ -52,6 +52,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MIDIFilePath: 
   spawnWindow: 2
+  showKickMotion: 0
+  metronomeClip: {fileID: 8300000, guid: 175b8a961ecea73408b57bceabdcbf92, type: 3}
 --- !u!222 &8546012931645490403
 CanvasRenderer:
   m_ObjectHideFlags: 0

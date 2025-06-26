@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Melanchall.DryWetMidi.Interaction;
 using UnityEngine;
 
 public class PlaybackManager : MonoBehaviour
@@ -24,12 +25,16 @@ public class PlaybackManager : MonoBehaviour
     public static bool playing = false;
     private bool motionRecording = false;
     private bool motionRecorded = false;
+    private bool motionPlaying = false;
     private bool savingPlaythrough = false;
     private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
     private bool hasSavedPlaythrough = false;
 
     private bool readyToSaveMotion = false;
     private bool readyToSaveInput = false;
+
+    private long previousBeat = 0;
+
 
     //Serialisable classes for saving playthrough to file -- needed for plotting graphs etc.
     [Serializable]
@@ -92,6 +97,8 @@ public class PlaybackManager : MonoBehaviour
             activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
             activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
             rhythmLoaded = true;
+
+            //should search for recorded motion and if exists also load that in
         }
     }
 
@@ -123,6 +130,7 @@ public class PlaybackManager : MonoBehaviour
                 if (motionRecorded && !motionRecording)
                 {
                     ControllerRecorder.Play();
+                    motionPlaying = true;
                 }
             }
             if (drumHits)
@@ -154,6 +162,7 @@ public class PlaybackManager : MonoBehaviour
 
     private void Start()
     {
+
         activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
         ControllerRecorder = ControllerRecorderObj.GetComponent<ControllerRecorder>();
         drumManager = drumManagerObj.GetComponent<DrumManager>();
@@ -175,26 +184,26 @@ public class PlaybackManager : MonoBehaviour
         }
 
         if (OVRInput.GetDown(OVRInput.RawButton.B))
-        {
-            if (!playing)
             {
-                if (!motionRecorded)
+                if (!playing)
+                {
+                    if (!motionRecorded)
+                    {
+                        playWithRecord();
+                    }
+                    else
+                    {
+                        playRecorded(true, true);
+                    }
+                }
+            }
+            else if (OVRInput.GetDown(OVRInput.RawButton.Y))
+            {
+                if (!playing)
                 {
                     playWithRecord();
                 }
-                else
-                {
-                    playRecorded(true, true);
-                }
             }
-        }
-        else if (OVRInput.GetDown(OVRInput.RawButton.Y))
-        {
-            if (!playing)
-            {
-                playWithRecord();
-            }
-        }
 
         if (playingBack)
         { //testing playing back user inputs
@@ -210,6 +219,16 @@ public class PlaybackManager : MonoBehaviour
             }
         }
 
+        if (motionPlaying)
+        {
+            activeNoteSpawner.showKickMotion = true;
+
+        }
+        else
+        {
+            activeNoteSpawner.showKickMotion = false;
+        }
+
         TrySaveData();
 
     }
@@ -221,7 +240,11 @@ public class PlaybackManager : MonoBehaviour
             Debug.Log("Saving playthrough from tick " + currentTimeInTicks);
             savingPlaythrough = true;
         }
-        else if (hasSavedPlaythrough)
+    }
+
+    private void LoadPlaythrough()
+    {
+        if (hasSavedPlaythrough)
         {
             playingBack = true;
         }
@@ -230,6 +253,7 @@ public class PlaybackManager : MonoBehaviour
     private void OnMIDIStartedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Started");
+        //drumManager.GetComponentInChildren<Animator>().Play("Kick",0,0); testing kick animation
 
         //SavePlaythrough();
     }
@@ -242,6 +266,7 @@ public class PlaybackManager : MonoBehaviour
         hasSavedPlaythrough = true;
         drumManager.clearNotes();
         readyToSaveInput = true;
+        motionPlaying = false;
 
         int hitNotes = 0;
         int missedNotes;

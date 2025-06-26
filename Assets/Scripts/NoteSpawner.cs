@@ -9,6 +9,7 @@ using System.IO;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
 using System.Linq;
+using Unity.VisualScripting;
 
 
 
@@ -41,6 +42,14 @@ public class NoteSpawner : MonoBehaviour
     public int totalNotes { get; private set; }
 
     public bool playing { get; private set; } = false;
+
+    public bool showKickMotion = false;
+    private Animator kickMotion;
+    private long kickAnimationOffset = 330; // time in ms that the foot takes to hit the floor
+
+    long previousBeat = 0;
+    public AudioClip metronomeClip;
+    private AudioSource metronomeSource;
 
     public event Action StartedPlaying;
     public void RaiseStartedPlaying()
@@ -108,6 +117,7 @@ public class NoteSpawner : MonoBehaviour
         //init spawn window as bars beats for easy operations
         var spawnWindowAsTimespan = new MetricTimeSpan(spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
+        kickAnimationOffset = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 0, (int)kickAnimationOffset), tempoMap); //convert to ticks
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -116,6 +126,11 @@ public class NoteSpawner : MonoBehaviour
         //init text label that displays current musical time in Bars:Beats:Ticks
         GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
         currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
+
+        GameObject Legs = GameObject.FindWithTag("Legs");
+        kickMotion = Legs.GetComponent<Animator>();
+
+        metronomeSource = gameObject.AddComponent<AudioSource>();
     }
 
     public void Initialise(string filePath, int window = 2)
@@ -155,7 +170,7 @@ public class NoteSpawner : MonoBehaviour
         BarBeatTicksTimeSpan time;
         try
         {
-            time = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap) - spawnWindowAsBarsBeats;
+            time = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap) + new BarBeatTicksTimeSpan(1,0) - spawnWindowAsBarsBeats; //add a bar for visual accuracy
         }
         catch (Exception)
         {
@@ -176,6 +191,7 @@ public class NoteSpawner : MonoBehaviour
         }
     }
 
+
     private GameObject GetDrum(int note)
     {
         var drums = GameObject.FindGameObjectsWithTag("Drum");
@@ -195,6 +211,16 @@ public class NoteSpawner : MonoBehaviour
         return null;
     }
 
+    IEnumerator playKickMotion(long scheduledTime)
+    {
+        while (GetCurrentOffsetMusicalTimeAsTicks() < scheduledTime-kickAnimationOffset) //where 1 is kick animation window
+        {
+            yield return null; //wait one frame and check again
+        }
+        kickMotion.Play("Kick", 0, 0); //finally play the animation
+    }
+
+
     IEnumerator SpawnNote(int note, int velocity, BarBeatTicksTimeSpan noteTime)
     {
 
@@ -207,6 +233,24 @@ public class NoteSpawner : MonoBehaviour
             Debug.Log("Tried to spawn note for drum " + note + ", but doesn't exist!");
             yield break;
         }
+
+        if (noteDrum.GetComponent<DrumHit>().isKick)
+        {
+            //if the drum is designated as a kick drum, then the kick note should be spawned - big line like in guitar hero? 
+            //would then line up with the other drums visually
+            //but recorded 'motion' could be animated leg
+
+            //big line doesn't necessarily work as drums will be in different positions.
+            startPos = new Vector3(0, 0, 1); //right now kick drum is the same as the others but spawns from Z+1 instead of Y+1
+            if (showKickMotion)
+            {
+                StartCoroutine(playKickMotion(noteTimeInTicks));
+            }
+        }
+            else
+            {
+                startPos = new Vector3(0, 1, 0);
+            }
 
         GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
         spawnedNote.transform.Translate(startPos);
@@ -232,16 +276,38 @@ public class NoteSpawner : MonoBehaviour
 
     }
 
+    void FixedUpdate() //fixed update is set to run at 120Hz so better for fast updates like this.
+    {
+        if (playing) {
+            if (GetVisualTime().Beats != previousBeat)
+            {
+                if (GetVisualTime().Beats == 0)
+                {
+                    metronomeSource.pitch = 2;
+                }
+                else
+                {
+                    metronomeSource.pitch = 1;
+                }
+
+                previousBeat = GetVisualTime().Beats;
+                metronomeSource.PlayOneShot(metronomeClip);
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update()
     {
+
+        kickMotion.transform.gameObject.SetActive(showKickMotion); //legs are only shown when bool showKickMotion is true, set by PlaybackManager
 
         if (playing && notesList != null)
         {
 
             while (notesList.Count > 0) //while rather than if to allow multiple notes on the same frame
             {
+
                 (var note, var velocity, var noteTime) = notesList.Peek();
 
                 if (GetCurrentMusicalTime() >= noteTime)
@@ -270,12 +336,12 @@ public class NoteSpawner : MonoBehaviour
                 playing = false;
                 currentTick = 0;
                 LoadMIDI();
-                
+
                 RaiseFinishedPlaying();
             }
 
         }
-        
+
 
         //show beats on label
         currentBeatLabel.text = GetVisualTime().ToString();
