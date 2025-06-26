@@ -42,6 +42,9 @@ public class NoteSpawner : MonoBehaviour
 
     public bool playing { get; private set; } = false;
 
+    public bool showKickMotion = false;
+    private Animator kickMotion;
+
     public event Action StartedPlaying;
     public void RaiseStartedPlaying()
     {
@@ -116,6 +119,9 @@ public class NoteSpawner : MonoBehaviour
         //init text label that displays current musical time in Bars:Beats:Ticks
         GameObject currentBeatLabelObject = GameObject.FindWithTag("BeatIndicatorText");
         currentBeatLabel = currentBeatLabelObject.GetComponent<TextMeshProUGUI>();
+
+        GameObject Legs = GameObject.FindWithTag("Legs");
+        kickMotion = Legs.GetComponent<Animator>();
     }
 
     public void Initialise(string filePath, int window = 2)
@@ -213,6 +219,14 @@ public class NoteSpawner : MonoBehaviour
             //if the drum is designated as a kick drum, then the kick note should be spawned - big line like in guitar hero? 
             //would then line up with the other drums visually
             //but recorded 'motion' could be animated leg
+
+            //big line doesn't necessarily work as drums will be in different positions.
+            startPos = new Vector3(0, 0, 1); //right now kick drum is the same as the others but spawns from Z+1 instead of Y+1
+            kickMotion.Play("Kick",0,0);
+        }
+        else
+        {
+            startPos = new Vector3(0, 1, 0);
         }
 
         GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
@@ -243,6 +257,8 @@ public class NoteSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        kickMotion.transform.gameObject.SetActive(showKickMotion); //legs are only shown when bool showKickMotion is true, set by PlaybackManager
 
         if (playing && notesList != null)
         {
@@ -277,13 +293,13 @@ public class NoteSpawner : MonoBehaviour
                 playing = false;
                 currentTick = 0;
                 LoadMIDI();
-                
+
                 RaiseFinishedPlaying();
             }
 
         }
         
-
+        
         //show beats on label
         currentBeatLabel.text = GetVisualTime().ToString();
 

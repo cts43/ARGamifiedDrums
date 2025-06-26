@@ -24,6 +24,7 @@ public class PlaybackManager : MonoBehaviour
     public static bool playing = false;
     private bool motionRecording = false;
     private bool motionRecorded = false;
+    private bool motionPlaying = false;
     private bool savingPlaythrough = false;
     private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
     private bool hasSavedPlaythrough = false;
@@ -125,6 +126,7 @@ public class PlaybackManager : MonoBehaviour
                 if (motionRecorded && !motionRecording)
                 {
                     ControllerRecorder.Play();
+                    motionPlaying = true;
                 }
             }
             if (drumHits)
@@ -156,6 +158,7 @@ public class PlaybackManager : MonoBehaviour
 
     private void Start()
     {
+        
         activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
         ControllerRecorder = ControllerRecorderObj.GetComponent<ControllerRecorder>();
         drumManager = drumManagerObj.GetComponent<DrumManager>();
@@ -212,6 +215,16 @@ public class PlaybackManager : MonoBehaviour
             }
         }
 
+        if (motionPlaying)
+        {
+            activeNoteSpawner.showKickMotion = true;
+
+        }
+        else
+        {
+            activeNoteSpawner.showKickMotion = false;
+        }
+
         TrySaveData();
 
     }
@@ -236,6 +249,7 @@ public class PlaybackManager : MonoBehaviour
     private void OnMIDIStartedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Started");
+        //drumManager.GetComponentInChildren<Animator>().Play("Kick",0,0); testing kick animation
 
         //SavePlaythrough();
     }
@@ -248,6 +262,7 @@ public class PlaybackManager : MonoBehaviour
         hasSavedPlaythrough = true;
         drumManager.clearNotes();
         readyToSaveInput = true;
+        motionPlaying = false;
 
         int hitNotes = 0;
         int missedNotes;
