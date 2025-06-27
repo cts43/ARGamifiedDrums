@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Melanchall.DryWetMidi.Interaction;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class DrumHit : MonoBehaviour
 {
@@ -67,8 +68,29 @@ public class DrumHit : MonoBehaviour
             if (diff <= TimeConverter.ConvertFrom(hitWindowAsTimeSpan, note.TempoMap) / 2)
             {
                 hitNote = true;
-                Debug.Log("Successfully Hit Note at Tick " + currentTime+", closest note: "+closestNoteTime);
+                Debug.Log("Successfully Hit Note at Tick " + currentTime + ", closest note: " + closestNoteTime + " Diff: "+diff);
                 note.destroy(); //destroy hit note
+
+                var ScoreIndicator = GameObject.FindWithTag("Score").GetComponent<ScoreIndicator>();
+                Debug.Log(ScoreIndicator);
+
+                if (diff <= 50)
+                {
+                    Debug.Log("Perfect!");
+                    StartCoroutine(ScoreIndicator.ShowScore("Perfect"));
+
+                }
+                else if (diff <= 100)
+                {
+                    Debug.Log("Great!");
+                    StartCoroutine(ScoreIndicator.ShowScore("Great!"));
+                }
+                else
+                {
+                    Debug.Log("OK!");
+                    StartCoroutine(ScoreIndicator.ShowScore("OK!"));
+                }
+
                 break; //avoid double hits on close together notes
 
             }
