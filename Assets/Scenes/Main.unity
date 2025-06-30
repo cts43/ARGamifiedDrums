@@ -5654,7 +5654,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Controls:\nA - Align Drums\tB - Start Demonstration\t\tY - Recording Menu"
+  m_text: "Controls:\nA - Align Drums\tB - Start Demonstration\t\tX - Recording Menu"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ca665d26abf3f38469d6f872101bd4d0, type: 2}
   m_sharedMaterial: {fileID: -2501601743889027081, guid: ca665d26abf3f38469d6f872101bd4d0, type: 2}
