@@ -9263,7 +9263,7 @@ GameObject:
   - component: {fileID: 1306781132}
   m_Layer: 0
   m_Name: RightControllerAnchor
-  m_TagString: Untagged
+  m_TagString: RightControllerAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
