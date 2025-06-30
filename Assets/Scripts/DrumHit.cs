@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Melanchall.DryWetMidi.Interaction;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+
 
 public class DrumHit : MonoBehaviour
 {
@@ -23,7 +23,9 @@ public class DrumHit : MonoBehaviour
 
     private Coroutine changeColourOnHit;
 
-    public event Action<int,int,long,long,bool> HitDrum;
+    private ScoreIndicator scoreIndicator;
+
+    public event Action<int, int, long, long, bool> HitDrum;
     public void RaiseHitDrum(int note, int velocity, long timeHit,long closestNote, bool hitNote)
     {
         HitDrum?.Invoke(note,velocity,timeHit,closestNote,hitNote);
@@ -40,6 +42,8 @@ public class DrumHit : MonoBehaviour
         selfRenderer = GetComponent<Renderer>();
         ResetColour(); //set initial colour to one set in Inspector
         noteSpawner = GameObject.FindGameObjectWithTag("Note Spawner").GetComponent<NoteSpawner>();
+
+        scoreIndicator = GameObject.FindWithTag("Score").GetComponent<ScoreIndicator>();
     }
 
     private (long,long,bool) checkIfHitNote()
@@ -51,7 +55,7 @@ public class DrumHit : MonoBehaviour
         double? prevDiff = null;
         foreach (var note in GetComponentsInChildren<NoteIndicator>())
         {
-            double diff = System.Math.Abs(currentTime - note.ScheduledTimeInTicks);
+            long diff = System.Math.Abs(currentTime - note.ScheduledTimeInTicks);
 
             if (prevDiff != null)
             {
@@ -70,26 +74,38 @@ public class DrumHit : MonoBehaviour
                 hitNote = true;
                 Debug.Log("Successfully Hit Note at Tick " + currentTime + ", closest note: " + closestNoteTime + " Diff: "+diff);
                 note.destroy(); //destroy hit note
-
-                var ScoreIndicator = GameObject.FindWithTag("Score").GetComponent<ScoreIndicator>();
-                Debug.Log(ScoreIndicator);
+                Debug.Log(scoreIndicator);
 
                 if (diff <= 50)
                 {
                     Debug.Log("Perfect!");
-                    StartCoroutine(ScoreIndicator.ShowScore("Perfect"));
+                    StartCoroutine(scoreIndicator.ReplaceLabel("Perfect!"));
 
                 }
                 else if (diff <= 100)
                 {
                     Debug.Log("Great!");
-                    StartCoroutine(ScoreIndicator.ShowScore("Great!"));
+                    StartCoroutine(scoreIndicator.ReplaceLabel("Great!"));
                 }
                 else
                 {
                     Debug.Log("OK!");
-                    StartCoroutine(ScoreIndicator.ShowScore("OK!"));
+                    StartCoroutine(scoreIndicator.ReplaceLabel("OK!"));
                 }
+
+                double diffAsMs = (int)(TimeConverter.ConvertTo<MetricTimeSpan>(currentTime, note.TempoMap).TotalMilliseconds - TimeConverter.ConvertTo<MetricTimeSpan>(note.ScheduledTimeInTicks, note.TempoMap).TotalMilliseconds);
+                
+                string aheadVsBehind;
+
+                if (diffAsMs >= 0){
+                    aheadVsBehind = "ahead";
+                }
+                else {
+                    aheadVsBehind = "behind";
+                }
+
+                StartCoroutine(scoreIndicator.AddToLabel(diffAsMs.ToString()+"ms "+aheadVsBehind));
+
 
                 break; //avoid double hits on close together notes
 
@@ -101,6 +117,7 @@ public class DrumHit : MonoBehaviour
         {
             {
                 Debug.Log("Missed Note at Tick " + currentTime);
+                StartCoroutine(scoreIndicator.ReplaceLabel("Missed!"));
             }
         }
 
