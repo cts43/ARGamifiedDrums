@@ -344,7 +344,8 @@ public class NoteSpawner : MonoBehaviour
 
 
         //show beats on label
-        currentBeatLabel.text = GetVisualTime().ToString();
+        var newText = GetVisualTime().Bars.ToString() +":"+ (GetVisualTime().Beats+1).ToString() +":"+ GetVisualTime().Ticks.ToString();
+        currentBeatLabel.text = newText;
 
     }
 

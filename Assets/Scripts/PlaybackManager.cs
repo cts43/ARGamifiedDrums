@@ -33,8 +33,6 @@ public class PlaybackManager : MonoBehaviour
     private bool readyToSaveMotion = false;
     private bool readyToSaveInput = false;
 
-    private long previousBeat = 0;
-
 
     //Serialisable classes for saving playthrough to file -- needed for plotting graphs etc.
     [Serializable]
