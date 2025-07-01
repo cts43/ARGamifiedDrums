@@ -28,7 +28,7 @@ public class PlaybackManager : MonoBehaviour
     private bool motionPlaying = false;
     private bool savingPlaythrough = false;
     private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
-    private bool hasSavedPlaythrough = false;
+    private bool playthroughLoaded = false;
 
     private bool readyToSaveMotion = false;
     private bool readyToSaveInput = false;
@@ -233,7 +233,7 @@ public class PlaybackManager : MonoBehaviour
 
     private void SavePlaythrough()
     {
-        if (!savingPlaythrough && !hasSavedPlaythrough)
+        if (!savingPlaythrough && !playthroughLoaded)
         {
             Debug.Log("Saving playthrough from tick " + currentTimeInTicks);
             savingPlaythrough = true;
@@ -242,7 +242,7 @@ public class PlaybackManager : MonoBehaviour
 
     private void LoadPlaythrough()
     {
-        if (hasSavedPlaythrough)
+        if (playthroughLoaded)
         {
             playingBack = true;
         }
@@ -261,7 +261,7 @@ public class PlaybackManager : MonoBehaviour
         Debug.Log("(Playback Manager) MIDI Finished");
         ControllerRecorder.StopRecording();
         savingPlaythrough = false;
-        hasSavedPlaythrough = true;
+        playthroughLoaded = true;
         drumManager.clearNotes();
         readyToSaveInput = true;
         motionPlaying = false;
