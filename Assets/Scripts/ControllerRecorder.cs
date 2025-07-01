@@ -96,6 +96,11 @@ public class ControllerRecorder : MonoBehaviour
         {
             Debug.Log("Playing stored recoring");
             recordedControllerTransformsCopy = new Queue<transformPair>(recordedControllerTransforms);
+            for (int i = 0; i < 5; i++) //testing simple offset to account for hand vs controller tracking differences
+            {
+                recordedLeftHandTransforms.Dequeue();
+                recordedRightHandTransforms.Dequeue();
+            }
             playing = true;
         }
         else
