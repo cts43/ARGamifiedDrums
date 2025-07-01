@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Melanchall.DryWetMidi.Interaction;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
 
 
 public class DrumHit : MonoBehaviour
@@ -93,7 +94,12 @@ public class DrumHit : MonoBehaviour
                     StartCoroutine(scoreIndicator.ReplaceLabel("OK!"));
                 }
 
-                double diffAsMs = (int)(TimeConverter.ConvertTo<MetricTimeSpan>(currentTime, note.TempoMap).TotalMilliseconds - TimeConverter.ConvertTo<MetricTimeSpan>(note.ScheduledTimeInTicks, note.TempoMap).TotalMilliseconds);
+                // To avoid TimeConverter complaining about currentTime being negative, we add an arbitrary number of ticks here and then subtract them again from the double
+
+                long bufferTime = 480;
+                currentTime += bufferTime;
+
+                double diffAsMs = (int)((TimeConverter.ConvertTo<MetricTimeSpan>(currentTime, note.TempoMap).TotalMilliseconds - TimeConverter.ConvertTo<MetricTimeSpan>(bufferTime,note.TempoMap).TotalMilliseconds) - TimeConverter.ConvertTo<MetricTimeSpan>(note.ScheduledTimeInTicks, note.TempoMap).TotalMilliseconds);
                 
                 string aheadVsBehind;
 
