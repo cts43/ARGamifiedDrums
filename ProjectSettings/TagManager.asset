@@ -14,6 +14,7 @@ TagManager:
   - MIDI Input Handler
   - Legs
   - Score
+  - RightControllerAnchor
   layers:
   - Default
   - TransparentFX

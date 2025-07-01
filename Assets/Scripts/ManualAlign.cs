@@ -9,7 +9,7 @@ public class ManualAlign : MonoBehaviour
 
     private void Start()
     {
-        RightHandAnchor = GameObject.FindGameObjectWithTag("RightHandAnchor");
+        RightHandAnchor = GameObject.FindGameObjectWithTag("RightControllerAnchor");
         MoveableScene = GameObject.FindGameObjectWithTag("Moveable Scene");
     }
 
