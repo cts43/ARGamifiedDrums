@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using Unity.XR.CoreUtils;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class ControllerRecorder : MonoBehaviour
@@ -21,12 +23,12 @@ public class ControllerRecorder : MonoBehaviour
         }
     }
     [Serializable]
-    public class controllerTransforms
+    public class transformPair
     {
         public recordedTransform leftControllerMotion;
         public recordedTransform rightControllerMotion;
 
-        public controllerTransforms(recordedTransform leftControllerMotion, recordedTransform rightControllerMotion)
+        public transformPair(recordedTransform leftControllerMotion, recordedTransform rightControllerMotion)
         {
             this.leftControllerMotion = leftControllerMotion;
             this.rightControllerMotion = rightControllerMotion;
@@ -39,15 +41,28 @@ public class ControllerRecorder : MonoBehaviour
         }
     }
 
-    private GameObject LeftHandAnchor;
+    private GameObject LeftHandAnchor; //Controller anchors. Named this way for consistency with hierarchy but should probably rename to avoid confusion between hand+controller tracking
     private GameObject RightHandAnchor;
+
+    
+    private Transform[] leftHandJoints;
+    private Transform[] rightHandJoints;
+
+    public GameObject leftHandPrefab;
+    public GameObject rightHandPrefab;
+
+    private GameObject GhostHandL;
+    private GameObject GhostHandR;
 
     public GameObject playbackObject; //prefab object to use when playing back
     private GameObject DrumStickL;
     private GameObject DrumStickR;
 
-    private Queue<controllerTransforms> recordedTransforms = new Queue<controllerTransforms>();
-    private Queue<controllerTransforms> recordedTransformsCopy = new Queue<controllerTransforms>();
+    private Queue<transformPair> recordedControllerTransforms = new Queue<transformPair>();
+    private Queue<transformPair> recordedControllerTransformsCopy = new Queue<transformPair>();
+
+    private Queue<List<recordedTransform>> recordedLeftHandTransforms = new Queue<List<recordedTransform>>(); //since each hand has multiple transforms, must be a list of pairs for each frame
+    private Queue<List<recordedTransform>> recordedRightHandTransforms = new Queue<List<recordedTransform>>(); //since each hand has multiple transforms, must be a list of pairs for each frame
 
     private bool recording = false;
     private bool playing = false;
@@ -77,7 +92,7 @@ public class ControllerRecorder : MonoBehaviour
 
     public bool hasStoredRecording()
     {
-        return recordedTransforms.Count != 0;
+        return recordedControllerTransforms.Count != 0;
     }
 
     public void Play()
@@ -85,7 +100,7 @@ public class ControllerRecorder : MonoBehaviour
         if (!recording && hasStoredRecording())
         {
             Debug.Log("Playing stored recoring");
-            recordedTransformsCopy = new Queue<controllerTransforms>(recordedTransforms);
+            recordedControllerTransformsCopy = new Queue<transformPair>(recordedControllerTransforms);
             playing = true;
         }
         else
@@ -99,6 +114,10 @@ public class ControllerRecorder : MonoBehaviour
     {
         if (!playing)
         {
+
+            leftHandJoints = GameObject.FindGameObjectWithTag("LeftHandTracker").GetComponentsInChildren<Transform>(); //store pointers to transforms for every joint
+            rightHandJoints = GameObject.FindGameObjectWithTag("RightHandTracker").GetComponentsInChildren<Transform>();
+
             recording = !recording; //Toggle alignment when 'A' button pressed
             Debug.Log("Toggled Recording");
             justStartedRecording = true;
@@ -112,6 +131,7 @@ public class ControllerRecorder : MonoBehaviour
             recording = false;
             RaiseFinishedRecording();
             Debug.Log("Recording motion finished");
+            //Debug.Log("right: "+recordedRightHandTransforms.Count + " left: " + recordedLeftHandTransforms.Count); //checking whether hand transforms were recorded
         }
     }
 
@@ -124,20 +144,28 @@ public class ControllerRecorder : MonoBehaviour
             {
                 DrumStickL = Instantiate(playbackObject); //create drum sticks if don't exist
                 DrumStickR = Instantiate(playbackObject);
+                //drum sticks visible when recording is fine so here is OK but should move ghost hands to only when playing back - or *only* use the ghost hands and have the main OVR hands invisible
+                GhostHandL = Instantiate(leftHandPrefab);
+                GhostHandR = Instantiate(rightHandPrefab);
+
                 instantiated = true;
             }
+
 
             if (justStartedRecording)
             {
                 RaiseStartedRecording();
-                recordedTransforms = new Queue<controllerTransforms>(); //when recording starts, clear the queue
+                recordedControllerTransforms = new Queue<transformPair>(); //when recording starts, clear the queue
+                recordedLeftHandTransforms = new Queue<List<recordedTransform>>();
+                recordedRightHandTransforms = new Queue<List<recordedTransform>>();
                 justStartedRecording = false;
             }
 
+            //CONTROLLER RECORDING//////////////////////
             //start recording input
             recordedTransform recordedMotionL = new recordedTransform(LeftHandAnchor.transform.position, LeftHandAnchor.transform.eulerAngles);
             recordedTransform recordedMotionR = new recordedTransform(RightHandAnchor.transform.position, RightHandAnchor.transform.eulerAngles);
-            recordedTransforms.Enqueue(new controllerTransforms(recordedMotionL, recordedMotionR));
+            recordedControllerTransforms.Enqueue(new transformPair(recordedMotionL, recordedMotionR));
 
             //set drum stick prefab transforms
             DrumStickL.transform.position = new Vector3(recordedMotionL.position.x, recordedMotionL.position.y, recordedMotionL.position.z);
@@ -145,31 +173,91 @@ public class ControllerRecorder : MonoBehaviour
 
             DrumStickR.transform.position = new Vector3(recordedMotionR.position.x, recordedMotionR.position.y, recordedMotionR.position.z);
             DrumStickR.transform.rotation = Quaternion.Euler(new Vector3(recordedMotionR.rotation.x, recordedMotionR.rotation.y, recordedMotionR.rotation.z));
+            ////////////////////////////////////////////
+
+            //HAND RECORDING////////////////////////////
+            //
+
+            //build list of all transforms here
+            List<recordedTransform> leftHandTransforms = new List<recordedTransform>();
+            List<recordedTransform> rightHandTransforms = new List<recordedTransform>();
+            foreach (var joint in leftHandJoints)
+            {
+                recordedTransform transform = new recordedTransform(joint.position, joint.eulerAngles);
+                leftHandTransforms.Add(transform);
+            }
+            foreach (var joint in rightHandJoints)
+            {
+                recordedTransform transform = new recordedTransform(joint.position, joint.eulerAngles);
+                rightHandTransforms.Add(transform);
+            }
+
+            //then enqueue into recordedHandTransforms
+            recordedLeftHandTransforms.Enqueue(leftHandTransforms);
+            recordedRightHandTransforms.Enqueue(rightHandTransforms);
+            
         }
 
         else if (playing)
         {
-            if (recordedTransformsCopy.Count != 0)
+            if (recordedControllerTransformsCopy.Count > 0 || recordedLeftHandTransforms.Count > 0)
             {
-                (var playbackMotionL, var playbackMotionR) = recordedTransformsCopy.Dequeue();
+                //CONTROLLER/DRUMSTICK PLAYBACK
 
-                //set transforms from queued recording
-                DrumStickL.transform.position = new Vector3(playbackMotionL.position.x, playbackMotionL.position.y, playbackMotionL.position.z);
-                DrumStickL.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionL.rotation.x, playbackMotionL.rotation.y, playbackMotionL.rotation.z));
+                if (recordedControllerTransformsCopy.Count > 0)
+                {
 
-                DrumStickR.transform.position = new Vector3(playbackMotionR.position.x, playbackMotionR.position.y, playbackMotionR.position.z);
-                DrumStickR.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionR.rotation.x, playbackMotionR.rotation.y, playbackMotionR.rotation.z));
+                    (var playbackMotionL, var playbackMotionR) = recordedControllerTransformsCopy.Dequeue();
+
+                    //set transforms from queued recording
+                    DrumStickL.transform.position = new Vector3(playbackMotionL.position.x, playbackMotionL.position.y, playbackMotionL.position.z);
+                    DrumStickL.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionL.rotation.x, playbackMotionL.rotation.y, playbackMotionL.rotation.z));
+
+                    DrumStickR.transform.position = new Vector3(playbackMotionR.position.x, playbackMotionR.position.y, playbackMotionR.position.z);
+                    DrumStickR.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionR.rotation.x, playbackMotionR.rotation.y, playbackMotionR.rotation.z));
+                }
+
+                if (recordedLeftHandTransforms.Count > 0)
+                {
+                    Debug.Log("PLAYING HAND MOTION");
+                    //HAND MOTION PLAYBACK
+                    //don't really need to reassign this every frame but fine for testing
+                    Transform[] ghostHandLTransforms = GhostHandL.GetComponentsInChildren<Transform>();
+                    Transform[] ghostHandRTransforms = GhostHandR.GetComponentsInChildren<Transform>();
+
+                    List<recordedTransform> recordedLeftHandTransformFrame = recordedLeftHandTransforms.Dequeue();
+                    List<recordedTransform> recordedRightHandTransformFrame = recordedRightHandTransforms.Dequeue();
+
+                    Debug.Log(recordedLeftHandTransformFrame.Count);
+
+                    for (int i = 0; i < recordedLeftHandTransformFrame.Count; i++)
+                    {
+                        ghostHandLTransforms[i].position = recordedLeftHandTransformFrame[i].position;
+                        ghostHandLTransforms[i].rotation = Quaternion.Euler(recordedLeftHandTransformFrame[i].rotation);
+
+                        Debug.Log(ghostHandLTransforms[i].position + ", " + recordedLeftHandTransformFrame[i].position);
+                    }
+
+                    for (int i = 0; i < recordedRightHandTransformFrame.Count; i++)
+                    {
+                        ghostHandRTransforms[i].position = recordedRightHandTransformFrame[i].position;
+                        ghostHandRTransforms[i].rotation = Quaternion.Euler(recordedRightHandTransformFrame[i].rotation);
+                    }
+
+                }
+
+
             }
-            else
-            {
-                playing = false;
-                Debug.Log("Stopped playing");
-            }
+                else
+                {
+                    playing = false;
+                    Debug.Log("Stopped playing");
+                }
         }
     }
 
-    public Queue<controllerTransforms> getRecording()
+    public Queue<transformPair> getRecording()
     {
-        return recordedTransforms;
+        return recordedControllerTransforms;
     }
 }

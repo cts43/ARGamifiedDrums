@@ -77,9 +77,9 @@ public class PlaybackManager : MonoBehaviour
     [Serializable]
     private class motionData
     {
-        [SerializeField] public List<ControllerRecorder.controllerTransforms> frames;
+        [SerializeField] public List<ControllerRecorder.transformPair> frames;
 
-        public motionData(List<ControllerRecorder.controllerTransforms> frames)
+        public motionData(List<ControllerRecorder.transformPair> frames)
         {
             this.frames = frames;
         }
@@ -329,7 +329,7 @@ public class PlaybackManager : MonoBehaviour
             //recording motion + midi must have finished before this runs.
 
             //these are wrapped in the playthroughData + motionData classes because I can't directly serialise a list
-            var recordedMotion = new motionData (new List<ControllerRecorder.controllerTransforms>(ControllerRecorder.getRecording())); //List from queue for serialisation.
+            var recordedMotion = new motionData (new List<ControllerRecorder.transformPair>(ControllerRecorder.getRecording())); //List from queue for serialisation.
             var recordedInput = new playthroughData (new List<playthroughFrame>(savedPlaythrough)); //same here
 
             var motionPath = Path.Combine(Application.persistentDataPath,"motion.json");
