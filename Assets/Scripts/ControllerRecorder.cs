@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using Unity.XR.CoreUtils;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class ControllerRecorder : MonoBehaviour
@@ -219,7 +214,6 @@ public class ControllerRecorder : MonoBehaviour
 
                 if (recordedLeftHandTransforms.Count > 0)
                 {
-                    Debug.Log("PLAYING HAND MOTION");
                     //HAND MOTION PLAYBACK
                     //don't really need to reassign this every frame but fine for testing
                     Transform[] ghostHandLTransforms = GhostHandL.GetComponentsInChildren<Transform>();
@@ -228,20 +222,14 @@ public class ControllerRecorder : MonoBehaviour
                     List<recordedTransform> recordedLeftHandTransformFrame = recordedLeftHandTransforms.Dequeue();
                     List<recordedTransform> recordedRightHandTransformFrame = recordedRightHandTransforms.Dequeue();
 
-                    Debug.Log(recordedLeftHandTransformFrame.Count);
-
                     for (int i = 0; i < recordedLeftHandTransformFrame.Count; i++)
                     {
                         ghostHandLTransforms[i].position = recordedLeftHandTransformFrame[i].position;
                         ghostHandLTransforms[i].rotation = Quaternion.Euler(recordedLeftHandTransformFrame[i].rotation);
 
-                        Debug.Log(ghostHandLTransforms[i].position + ", " + recordedLeftHandTransformFrame[i].position);
-                    }
-
-                    for (int i = 0; i < recordedRightHandTransformFrame.Count; i++)
-                    {
                         ghostHandRTransforms[i].position = recordedRightHandTransformFrame[i].position;
                         ghostHandRTransforms[i].rotation = Quaternion.Euler(recordedRightHandTransformFrame[i].rotation);
+
                     }
 
                 }
