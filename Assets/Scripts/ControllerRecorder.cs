@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NUnit;
 using UnityEngine;
 
 public class ControllerRecorder : MonoBehaviour
@@ -56,8 +57,20 @@ public class ControllerRecorder : MonoBehaviour
     private Queue<transformPair> recordedControllerTransforms = new Queue<transformPair>();
     private Queue<transformPair> recordedControllerTransformsCopy = new Queue<transformPair>();
 
-    private Queue<List<recordedTransform>> recordedLeftHandTransforms = new Queue<List<recordedTransform>>(); //since each hand has multiple transforms, must be a list of pairs for each frame
-    private Queue<List<recordedTransform>> recordedRightHandTransforms = new Queue<List<recordedTransform>>(); //since each hand has multiple transforms, must be a list of pairs for each frame
+    private Queue<handMotionFrame> recordedLeftHandTransforms = new Queue<handMotionFrame>(); //since each hand has multiple transforms, must be a list of pairs for each frame
+    private Queue<handMotionFrame> recordedRightHandTransforms = new Queue<handMotionFrame>(); //since each hand has multiple transforms, must be a list of pairs for each frame
+
+    [Serializable]
+    public class handMotionFrame
+    {
+        public List<recordedTransform> frames;
+
+        public handMotionFrame(List<recordedTransform> frames)
+        {
+            this.frames = frames;
+        }
+    }
+
 
     private bool recording = false;
     private bool playing = false;
@@ -156,8 +169,8 @@ public class ControllerRecorder : MonoBehaviour
             {
                 RaiseStartedRecording();
                 recordedControllerTransforms = new Queue<transformPair>(); //when recording starts, clear the queue
-                recordedLeftHandTransforms = new Queue<List<recordedTransform>>();
-                recordedRightHandTransforms = new Queue<List<recordedTransform>>();
+                recordedLeftHandTransforms = new Queue<handMotionFrame>();
+                recordedRightHandTransforms = new Queue<handMotionFrame>();
                 justStartedRecording = false;
             }
 
@@ -193,8 +206,8 @@ public class ControllerRecorder : MonoBehaviour
             }
 
             //then enqueue into recordedHandTransforms
-            recordedLeftHandTransforms.Enqueue(leftHandTransforms);
-            recordedRightHandTransforms.Enqueue(rightHandTransforms);
+            recordedLeftHandTransforms.Enqueue(new handMotionFrame(leftHandTransforms));
+            recordedRightHandTransforms.Enqueue(new handMotionFrame(rightHandTransforms));
             
         }
 
@@ -224,8 +237,8 @@ public class ControllerRecorder : MonoBehaviour
                     Transform[] ghostHandLTransforms = GhostHandL.GetComponentsInChildren<Transform>();
                     Transform[] ghostHandRTransforms = GhostHandR.GetComponentsInChildren<Transform>();
 
-                    List<recordedTransform> recordedLeftHandTransformFrame = recordedLeftHandTransforms.Dequeue();
-                    List<recordedTransform> recordedRightHandTransformFrame = recordedRightHandTransforms.Dequeue();
+                    List<recordedTransform> recordedLeftHandTransformFrame = recordedLeftHandTransforms.Dequeue().frames;
+                    List<recordedTransform> recordedRightHandTransformFrame = recordedRightHandTransforms.Dequeue().frames;
 
                     for (int i = 0; i < recordedLeftHandTransformFrame.Count; i++)
                     {
@@ -249,8 +262,8 @@ public class ControllerRecorder : MonoBehaviour
         }
     }
 
-    public Queue<transformPair> getRecording()
+    public (Queue<transformPair>,Queue<handMotionFrame>,Queue<handMotionFrame>) getRecording()
     {
-        return recordedControllerTransforms;
+        return (recordedControllerTransforms, recordedLeftHandTransforms, recordedRightHandTransforms);
     }
 }

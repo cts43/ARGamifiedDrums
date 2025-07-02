@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Melanchall.DryWetMidi.Interaction;
+using Meta.XR.ImmersiveDebugger.UserInterface.Generic;
 using UnityEngine;
 
 public class PlaybackManager : MonoBehaviour
@@ -77,11 +78,15 @@ public class PlaybackManager : MonoBehaviour
     [Serializable]
     private class motionData
     {
-        [SerializeField] public List<ControllerRecorder.transformPair> frames;
+        [SerializeField] public List<ControllerRecorder.transformPair> controllerFrames;
+        [SerializeField] public List<ControllerRecorder.handMotionFrame> leftHandFrames;
+        [SerializeField] public List<ControllerRecorder.handMotionFrame> rightHandFrames;
 
-        public motionData(List<ControllerRecorder.transformPair> frames)
+        public motionData(List<ControllerRecorder.transformPair> controllerFrames, List<ControllerRecorder.handMotionFrame> leftHandFrames, List<ControllerRecorder.handMotionFrame> rightHandFrames)
         {
-            this.frames = frames;
+            this.controllerFrames = controllerFrames;
+            this.leftHandFrames = leftHandFrames;
+            this.rightHandFrames = rightHandFrames;
         }
     }
 
@@ -329,7 +334,10 @@ public class PlaybackManager : MonoBehaviour
             //recording motion + midi must have finished before this runs.
 
             //these are wrapped in the playthroughData + motionData classes because I can't directly serialise a list
-            var recordedMotion = new motionData (new List<ControllerRecorder.transformPair>(ControllerRecorder.getRecording())); //List from queue for serialisation.
+
+            var (controllerRecording, leftHandRecording, rightHandRecording) = ControllerRecorder.getRecording();
+            //this is crazy but if it works it works
+            var recordedMotion = new motionData (new List<ControllerRecorder.transformPair>(controllerRecording), new List<ControllerRecorder.handMotionFrame>(leftHandRecording), new List<ControllerRecorder.handMotionFrame>(rightHandRecording)); //List from queue for serialisation.
             var recordedInput = new playthroughData (new List<playthroughFrame>(savedPlaythrough)); //same here
 
             var motionPath = Path.Combine(Application.persistentDataPath,"motion.json");
