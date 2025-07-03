@@ -22,9 +22,9 @@ public class NoteSpawner : MonoBehaviour
     private Vector3 targetPos = new Vector3(0, 0, 0);
     private Vector3 startPos = new Vector3(0, 1, 0);
 
-    public long spawnWindow; //How long before a beat to spawn a note in seconds
+    public long spawnWindow = 0; //How long before a beat to spawn a note in seconds
 
-    private long spawnWindowinUs;
+    private long spawnWindowinUs = 0;
 
     private BarBeatTicksTimeSpan spawnWindowAsBarsBeats;
 

@@ -59,6 +59,8 @@ public class ControllerRecorder : MonoBehaviour
 
     private Queue<handMotionFrame> recordedLeftHandTransforms = new Queue<handMotionFrame>(); //since each hand has multiple transforms, must be a list of pairs for each frame
     private Queue<handMotionFrame> recordedRightHandTransforms = new Queue<handMotionFrame>(); //since each hand has multiple transforms, must be a list of pairs for each frame
+    private Queue<handMotionFrame> recordedLeftHandTransformsCopy = new Queue<handMotionFrame>();
+    private Queue<handMotionFrame> recordedRightHandTransformsCopy = new Queue<handMotionFrame>();
 
     [Serializable]
     public class handMotionFrame
@@ -109,6 +111,8 @@ public class ControllerRecorder : MonoBehaviour
         {
             Debug.Log("Playing stored recoring");
             recordedControllerTransformsCopy = new Queue<transformPair>(recordedControllerTransforms);
+            recordedLeftHandTransformsCopy = new Queue<handMotionFrame>(recordedLeftHandTransforms);
+            recordedRightHandTransformsCopy = new Queue<handMotionFrame>(recordedRightHandTransforms);
             for (int i = 0; i < 5; i++) //testing simple offset to account for hand vs controller tracking differences
             {
                 recordedLeftHandTransforms.Dequeue();
@@ -230,15 +234,15 @@ public class ControllerRecorder : MonoBehaviour
                     DrumStickR.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionR.rotation.x, playbackMotionR.rotation.y, playbackMotionR.rotation.z));
                 }
 
-                if (recordedLeftHandTransforms.Count > 0)
+                if (recordedLeftHandTransformsCopy.Count > 0)
                 {
                     //HAND MOTION PLAYBACK
                     //don't really need to reassign this every frame but fine for testing
                     Transform[] ghostHandLTransforms = GhostHandL.GetComponentsInChildren<Transform>();
                     Transform[] ghostHandRTransforms = GhostHandR.GetComponentsInChildren<Transform>();
 
-                    List<recordedTransform> recordedLeftHandTransformFrame = recordedLeftHandTransforms.Dequeue().frames;
-                    List<recordedTransform> recordedRightHandTransformFrame = recordedRightHandTransforms.Dequeue().frames;
+                    List<recordedTransform> recordedLeftHandTransformFrame = recordedLeftHandTransformsCopy.Dequeue().frames;
+                    List<recordedTransform> recordedRightHandTransformFrame = recordedRightHandTransformsCopy.Dequeue().frames;
 
                     for (int i = 0; i < recordedLeftHandTransformFrame.Count; i++)
                     {
