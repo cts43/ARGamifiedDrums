@@ -17,6 +17,8 @@ TagManager:
   - RightControllerAnchor
   - RightHandTracker
   - LeftHandTracker
+  - RecordingMenu
+  - PlaybackManager
   layers:
   - Default
   - TransparentFX

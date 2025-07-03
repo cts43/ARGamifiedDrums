@@ -15,6 +15,8 @@ public class PlaybackManager : MonoBehaviour
     public GameObject drumManagerObj;
     private DrumManager drumManager;
 
+    private GameObject RecordingMenu;
+
     public string MIDIFilePath;
 
     public static PlaybackManager instance;
@@ -108,8 +110,7 @@ public class PlaybackManager : MonoBehaviour
 
     }
 
-
-    private void loadNewMIDI(string Path)
+    public void loadNewMIDI(string Path)
     {
         if (!rhythmLoaded)
         {
@@ -198,6 +199,9 @@ public class PlaybackManager : MonoBehaviour
         ControllerRecorder.StartedRecording += OnStartedRecording;
         ControllerRecorder.FinishedRecording += OnFinishedRecording;
         subscribeToDrumHits();
+
+        RecordingMenu = GameObject.FindWithTag("RecordingMenu");
+        RecordingMenu.SetActive(false);
     }
 
     private void Update()
@@ -208,6 +212,26 @@ public class PlaybackManager : MonoBehaviour
         {
             currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks(); //Update current time from active note spawner instance. unsure if necessary
         }
+
+        if (OVRInput.GetDown(OVRInput.RawButton.X) && !playing)
+        {
+
+            if (!RecordingMenu.activeInHierarchy)
+            {
+                RecordingMenu.SetActive(true);
+            }
+            else
+            {
+                RecordingMenu.SetActive(false);
+            }
+        }
+
+        if (RecordingMenu.activeInHierarchy)
+        {
+            return; //don't allow other inputs if menu is open
+        }
+
+        
 
         if (OVRInput.GetDown(OVRInput.RawButton.B))
         {
@@ -322,7 +346,7 @@ public class PlaybackManager : MonoBehaviour
 
     //Should implement saving accuracy etc. using these signals + saving recorded motion to file
 
-    private void TrySaveData()
+    public void TrySaveData()
     {
         if (readyToSaveInput && readyToSaveMotion) //should probably just check if not playing/recording and if motion + input data exist
         {
@@ -349,8 +373,11 @@ public class PlaybackManager : MonoBehaviour
         }
     }
 
-    private void TryLoadData(string filename)
+    public void TryLoadData(string filename)
     {
+
+        Debug.Log("(Playback Manager) Loading recording from file: "+filename);
+
         var loadPath = Path.Combine(Application.persistentDataPath, filename);
 
         if (File.Exists(loadPath))
