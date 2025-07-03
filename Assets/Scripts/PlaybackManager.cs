@@ -198,7 +198,6 @@ public class PlaybackManager : MonoBehaviour
         ControllerRecorder.StartedRecording += OnStartedRecording;
         ControllerRecorder.FinishedRecording += OnFinishedRecording;
         subscribeToDrumHits();
-        TryLoadData("saved.json");
     }
 
     private void Update()
@@ -255,8 +254,6 @@ public class PlaybackManager : MonoBehaviour
         {
             activeNoteSpawner.showKickMotion = false;
         }
-
-        TrySaveData();
 
     }
 
