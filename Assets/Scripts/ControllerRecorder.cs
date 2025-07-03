@@ -40,7 +40,7 @@ public class ControllerRecorder : MonoBehaviour
     private GameObject LeftHandAnchor; //Controller anchors. Named this way for consistency with hierarchy but should probably rename to avoid confusion between hand+controller tracking
     private GameObject RightHandAnchor;
 
-    
+
     private Transform[] leftHandJoints;
     private Transform[] rightHandJoints;
 
@@ -154,10 +154,7 @@ public class ControllerRecorder : MonoBehaviour
 
     private void Update()
     {
-        if (recording)
-        {
-
-            if (!instantiated)
+        if (!instantiated)
             {
                 DrumStickL = Instantiate(playbackObject); //create drum sticks if don't exist
                 DrumStickR = Instantiate(playbackObject);
@@ -167,7 +164,9 @@ public class ControllerRecorder : MonoBehaviour
 
                 instantiated = true;
             }
-
+            
+        if (recording)
+        {
 
             if (justStartedRecording)
             {
@@ -212,7 +211,7 @@ public class ControllerRecorder : MonoBehaviour
             //then enqueue into recordedHandTransforms
             recordedLeftHandTransforms.Enqueue(new handMotionFrame(leftHandTransforms));
             recordedRightHandTransforms.Enqueue(new handMotionFrame(rightHandTransforms));
-            
+
         }
 
         else if (playing)
@@ -258,16 +257,23 @@ public class ControllerRecorder : MonoBehaviour
 
 
             }
-                else
-                {
-                    playing = false;
-                    Debug.Log("Stopped playing");
-                }
+            else
+            {
+                playing = false;
+                Debug.Log("Stopped playing");
+            }
         }
     }
 
-    public (Queue<transformPair>,Queue<handMotionFrame>,Queue<handMotionFrame>) getRecording()
+    public (Queue<transformPair>, Queue<handMotionFrame>, Queue<handMotionFrame>) getRecording()
     {
         return (recordedControllerTransforms, recordedLeftHandTransforms, recordedRightHandTransforms);
+    }
+
+    public void loadRecording(Queue<transformPair> controllerMotion, Queue<handMotionFrame> leftHandMotion, Queue<handMotionFrame> rightHandMotion)
+    {
+        recordedControllerTransforms = controllerMotion;
+        recordedLeftHandTransforms = leftHandMotion;
+        recordedRightHandTransforms = rightHandMotion;
     }
 }

@@ -30,6 +30,7 @@ public class PlaybackManager : MonoBehaviour
     private bool savingPlaythrough = false;
     private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
     private Queue<playthroughFrame> savedPlaythroughCopy = new Queue<playthroughFrame>();
+    private bool playingRecordedInputs = false;
     private bool playthroughLoaded = false;
 
     private bool readyToSaveMotion = false;
@@ -91,8 +92,24 @@ public class PlaybackManager : MonoBehaviour
         }
     }
 
+    //class that stores all motion + playthrough data to allow saving to single .json file
+    [Serializable]
+    private class recordingData
+    {
+        public motionData motion;
+        public playthroughData inputs;
 
-    private void loadNewRhythm(string Path)
+        public recordingData(motionData motion, playthroughData inputs)
+        {
+            this.motion = motion;
+            this.inputs = inputs;
+        }
+
+
+    }
+
+
+    private void loadNewMIDI(string Path)
     {
         if (!rhythmLoaded)
         {
@@ -106,7 +123,7 @@ public class PlaybackManager : MonoBehaviour
         }
     }
 
-    private void playRhythm()
+    private void playMIDI()
     {
         if (rhythmLoaded)
         {
@@ -117,18 +134,24 @@ public class PlaybackManager : MonoBehaviour
     private void playWithRecord()
     {
         //reload and play with recording on
-        loadNewRhythm(MIDIFilePath);
-        playRhythm();
+        loadNewMIDI(MIDIFilePath);
+        playMIDI();
         ControllerRecorder.Record();//record controller motion
         SavePlaythrough(); //save drum inputs/notes played
     }
 
     private void playRecorded(bool motion, bool drumHits)
     {
+
+        if (!rhythmLoaded)
+        {
+            loadNewMIDI(MIDIFilePath);
+        }
+
         if (rhythmLoaded)
         {
             //play with recorded motion
-            playRhythm();
+            playMIDI();
             if (motion)
             {
                 if (motionRecorded && !motionRecording)
@@ -142,7 +165,7 @@ public class PlaybackManager : MonoBehaviour
                 if (savedPlaythrough.Count > 0)
                 {
                     savedPlaythroughCopy = new Queue<playthroughFrame>(savedPlaythrough);
-                    playingBack = true;
+                    playingRecordedInputs = true;
                 }
             }
         }
@@ -152,7 +175,7 @@ public class PlaybackManager : MonoBehaviour
     {
         if (savingPlaythrough)
         {
-            Debug.Log("Hit note: " + noteNumber + " with velocity: " + velocity + " Success: " + hitNote + " At: " + timeHit);
+            //Debug.Log("Hit note: " + noteNumber + " with velocity: " + velocity + " Success: " + hitNote + " At: " + timeHit);
             savedPlaythrough.Enqueue(new playthroughFrame(noteNumber, velocity, timeHit, closestNote, hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
         }
     }
@@ -175,9 +198,8 @@ public class PlaybackManager : MonoBehaviour
         ControllerRecorder.StartedRecording += OnStartedRecording;
         ControllerRecorder.FinishedRecording += OnFinishedRecording;
         subscribeToDrumHits();
+        TryLoadData("saved.json");
     }
-
-    bool playingBack = false;
 
     private void Update()
     {
@@ -189,28 +211,28 @@ public class PlaybackManager : MonoBehaviour
         }
 
         if (OVRInput.GetDown(OVRInput.RawButton.B))
+        {
+            if (!playing)
             {
-                if (!playing)
-                {
-                    if (!motionRecorded)
-                    {
-                        playWithRecord();
-                    }
-                    else
-                    {
-                        playRecorded(true, true);
-                    }
-                }
-            }
-            else if (OVRInput.GetDown(OVRInput.RawButton.Y))
-            {
-                if (!playing)
+                if (!motionRecorded)
                 {
                     playWithRecord();
                 }
+                else
+                {
+                    playRecorded(true, true);
+                }
             }
+        }
+        else if (OVRInput.GetDown(OVRInput.RawButton.Y))
+        {
+            if (!playing)
+            {
+                playWithRecord();
+            }
+        }
 
-        if (playingBack)
+        if (playingRecordedInputs)
         { //testing playing back user inputs
             if (savedPlaythroughCopy.Count > 0)
             {
@@ -247,20 +269,9 @@ public class PlaybackManager : MonoBehaviour
         }
     }
 
-    private void LoadPlaythrough()
-    {
-        if (playthroughLoaded)
-        {
-            playingBack = true;
-        }
-    }
-
     private void OnMIDIStartedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Started");
-        //drumManager.GetComponentInChildren<Animator>().Play("Kick",0,0); testing kick animation
-
-        //SavePlaythrough();
     }
 
     private void OnMIDIFinishedPlaying()
@@ -294,21 +305,6 @@ public class PlaybackManager : MonoBehaviour
 
         Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
 
-        //TESTING SAVING AND LOADING FROM JSON
-
-        //     playthroughData dataToSave = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //List from queue, as queues are not serialisable
-
-        //     string json = JsonUtility.ToJson(dataToSave); //convert to json format
-
-        //     File.WriteAllText("Assets/file.json", json); //with any luck this file will have some content
-
-        //     Queue<playthroughFrame> fromJSON = new Queue<playthroughFrame>(JsonUtility.FromJson<playthroughData>(File.ReadAllText("Assets/file.json")).frames); //back to queue from list loaded from json file.
-
-        //     (var newNote, var newVelocity, var newNoteTime, var newClosestNote, var newHitNote) = fromJSON.Dequeue();
-        //     Debug.Log("From QUEUE from JSON, first note time: " + newNoteTime); //print first note from .json to check if it works
-
-
-
     }
 
     private void OnStartedRecording()
@@ -331,28 +327,56 @@ public class PlaybackManager : MonoBehaviour
 
     private void TrySaveData()
     {
-        if (readyToSaveInput && readyToSaveMotion)
+        if (readyToSaveInput && readyToSaveMotion) //should probably just check if not playing/recording and if motion + input data exist
         {
             //recording motion + midi must have finished before this runs.
 
             //these are wrapped in the playthroughData + motionData classes because I can't directly serialise a list
 
             var (controllerRecording, leftHandRecording, rightHandRecording) = ControllerRecorder.getRecording();
-            //this is crazy but if it works it works
-            var recordedMotion = new motionData (new List<ControllerRecorder.transformPair>(controllerRecording), new List<ControllerRecorder.handMotionFrame>(leftHandRecording), new List<ControllerRecorder.handMotionFrame>(rightHandRecording)); //List from queue for serialisation.
-            var recordedInput = new playthroughData (new List<playthroughFrame>(savedPlaythrough)); //same here
 
-            var motionPath = Path.Combine(Application.persistentDataPath,"motion.json");
-            var inputPath = Path.Combine(Application.persistentDataPath,"inputs.json"); //need unique IDs here to store different sessions
+            var recordedMotion = new motionData(new List<ControllerRecorder.transformPair>(controllerRecording), new List<ControllerRecorder.handMotionFrame>(leftHandRecording), new List<ControllerRecorder.handMotionFrame>(rightHandRecording)); //List from queue for serialisation.
+            var recordedInput = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //same here
 
-            string motionJson = JsonUtility.ToJson(recordedMotion);
-            string inputJson = JsonUtility.ToJson(recordedInput);
+            //saving each of these in a combined class recordingData to have the recording as a single file. Can still load motion / inputs individually if we want to but they get recorded together
+            var combinedRecording = new recordingData(recordedMotion, recordedInput);
 
-            File.WriteAllText(motionPath,motionJson);
-            File.WriteAllText(inputPath, inputJson); //save to files.
+            var savePath = Path.Combine(Application.persistentDataPath, "saved.json");
+
+            string combinedJson = JsonUtility.ToJson(combinedRecording);
+
+            File.WriteAllText(savePath, combinedJson);
 
             readyToSaveInput = false;
             readyToSaveMotion = false;
+        }
+    }
+
+    private void TryLoadData(string filename)
+    {
+        var loadPath = Path.Combine(Application.persistentDataPath, filename);
+
+        if (File.Exists(loadPath))
+        {
+
+            string loadedJson = File.ReadAllText(loadPath);
+
+            recordingData loadedData = JsonUtility.FromJson<recordingData>(loadedJson);
+            //set savedPlaythrough
+            savedPlaythrough = new Queue<playthroughFrame>(loadedData.inputs.frames);
+            //set ControllerRecorder hand and controller queues
+
+            var controllerMotion = new Queue<ControllerRecorder.transformPair>(loadedData.motion.controllerFrames);
+            var leftHandMotion = new Queue<ControllerRecorder.handMotionFrame>(loadedData.motion.leftHandFrames);
+            var rightHandMotion = new Queue<ControllerRecorder.handMotionFrame>(loadedData.motion.rightHandFrames); //back to queues from serialised Lists 
+
+            ControllerRecorder.loadRecording(controllerMotion, leftHandMotion, rightHandMotion);
+            motionRecorded = true;
+
+        }
+        else
+        {
+            Debug.Log("(Playback Manager) Recording file doesn't exist!");
         }
     }
 
