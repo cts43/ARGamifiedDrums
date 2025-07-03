@@ -29,6 +29,7 @@ public class PlaybackManager : MonoBehaviour
     private bool motionPlaying = false;
     private bool savingPlaythrough = false;
     private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
+    private Queue<playthroughFrame> savedPlaythroughCopy = new Queue<playthroughFrame>();
     private bool playthroughLoaded = false;
 
     private bool readyToSaveMotion = false;
@@ -140,6 +141,7 @@ public class PlaybackManager : MonoBehaviour
             {
                 if (savedPlaythrough.Count > 0)
                 {
+                    savedPlaythroughCopy = new Queue<playthroughFrame>(savedPlaythrough);
                     playingBack = true;
                 }
             }
@@ -210,12 +212,12 @@ public class PlaybackManager : MonoBehaviour
 
         if (playingBack)
         { //testing playing back user inputs
-            if (savedPlaythrough.Count > 0)
+            if (savedPlaythroughCopy.Count > 0)
             {
-                (var note, var velocity, var time, var closest, var success) = savedPlaythrough.Peek();
+                (var note, var velocity, var time, var closest, var success) = savedPlaythroughCopy.Peek();
                 if (activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks() >= time) //offset based on spawn window
                 {
-                    savedPlaythrough.Dequeue();
+                    savedPlaythroughCopy.Dequeue();
                     MidiEventCatcher MIDIEventCatcher = GameObject.FindWithTag("MIDI Input Handler").GetComponent<MidiEventCatcher>();
                     MIDIEventCatcher.checkForDrum(note, velocity);
                 }
