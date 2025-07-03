@@ -877,6 +877,7 @@ GameObject:
   - component: {fileID: 118639341}
   - component: {fileID: 118639343}
   - component: {fileID: 118639342}
+  - component: {fileID: 118639344}
   m_Layer: 3
   m_Name: UserInputDialogue
   m_TagString: Untagged
@@ -945,6 +946,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 118639340}
   m_CullTransparentMesh: 1
+--- !u!114 &118639344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118639340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb304653cf0c2d4493a6ffb1a82926c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &126259070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1373,6 +1386,7 @@ GameObject:
   - component: {fileID: 160053934}
   - component: {fileID: 160053936}
   - component: {fileID: 160053935}
+  - component: {fileID: 160053937}
   m_Layer: 3
   m_Name: MenuItem1
   m_TagString: Untagged
@@ -1498,6 +1512,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 160053933}
   m_CullTransparentMesh: 1
+--- !u!114 &160053937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160053933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebe978aa6a5ea274da736a7912994be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &160939262
 GameObject:
   m_ObjectHideFlags: 0
@@ -7921,6 +7947,7 @@ GameObject:
   - component: {fileID: 1022103159}
   - component: {fileID: 1022103161}
   - component: {fileID: 1022103160}
+  - component: {fileID: 1022103162}
   m_Layer: 3
   m_Name: MenuItem2
   m_TagString: Untagged
@@ -8046,6 +8073,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022103158}
   m_CullTransparentMesh: 1
+--- !u!114 &1022103162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1022103158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebe978aa6a5ea274da736a7912994be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1022121529
 GameObject:
   m_ObjectHideFlags: 0
@@ -9984,6 +10023,7 @@ GameObject:
   - component: {fileID: 1304925058}
   - component: {fileID: 1304925060}
   - component: {fileID: 1304925059}
+  - component: {fileID: 1304925061}
   m_Layer: 3
   m_Name: MenuItem3
   m_TagString: Untagged
@@ -10109,6 +10149,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1304925057}
   m_CullTransparentMesh: 1
+--- !u!114 &1304925061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1304925057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebe978aa6a5ea274da736a7912994be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1306390533
 GameObject:
   m_ObjectHideFlags: 0
@@ -15056,6 +15108,7 @@ GameObject:
   - component: {fileID: 2087603976}
   - component: {fileID: 2087603978}
   - component: {fileID: 2087603977}
+  - component: {fileID: 2087603979}
   m_Layer: 3
   m_Name: MenuItem4
   m_TagString: Untagged
@@ -15181,6 +15234,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2087603975}
   m_CullTransparentMesh: 1
+--- !u!114 &2087603979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087603975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebe978aa6a5ea274da736a7912994be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2099634873 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8712496212085480540, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
