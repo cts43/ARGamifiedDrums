@@ -110,18 +110,32 @@ public class PlaybackManager : MonoBehaviour
 
     }
 
-    public void loadNewMIDI(string Path)
+    public bool loadNewMIDI(string Path)
     {
         if (!rhythmLoaded)
         {
-            MIDIFilePath = Path;
-            activeNoteSpawner.Initialise(MIDIFilePath);
-            activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
-            activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
-            rhythmLoaded = true;
+
+            try
+            {
+
+                MIDIFilePath = Path;
+                activeNoteSpawner.Initialise(MIDIFilePath);
+                activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
+                activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
+                rhythmLoaded = true;
+
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
 
             //should search for recorded motion and if exists also load that in
-        }
+            }
+
+        return false;
     }
 
     private void playMIDI()
@@ -346,7 +360,7 @@ public class PlaybackManager : MonoBehaviour
 
     //Should implement saving accuracy etc. using these signals + saving recorded motion to file
 
-    public void TrySaveData()
+    public bool TrySaveData()
     {
         if (readyToSaveInput && readyToSaveMotion) //should probably just check if not playing/recording and if motion + input data exist
         {
@@ -354,26 +368,41 @@ public class PlaybackManager : MonoBehaviour
 
             //these are wrapped in the playthroughData + motionData classes because I can't directly serialise a list
 
-            var (controllerRecording, leftHandRecording, rightHandRecording) = ControllerRecorder.getRecording();
+            try
+            {
 
-            var recordedMotion = new motionData(new List<ControllerRecorder.transformPair>(controllerRecording), new List<ControllerRecorder.handMotionFrame>(leftHandRecording), new List<ControllerRecorder.handMotionFrame>(rightHandRecording)); //List from queue for serialisation.
-            var recordedInput = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //same here
+                var (controllerRecording, leftHandRecording, rightHandRecording) = ControllerRecorder.getRecording();
 
-            //saving each of these in a combined class recordingData to have the recording as a single file. Can still load motion / inputs individually if we want to but they get recorded together
-            var combinedRecording = new recordingData(recordedMotion, recordedInput);
+                var recordedMotion = new motionData(new List<ControllerRecorder.transformPair>(controllerRecording), new List<ControllerRecorder.handMotionFrame>(leftHandRecording), new List<ControllerRecorder.handMotionFrame>(rightHandRecording)); //List from queue for serialisation.
+                var recordedInput = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //same here
 
-            var savePath = Path.Combine(Application.persistentDataPath, "saved.json");
+                //saving each of these in a combined class recordingData to have the recording as a single file. Can still load motion / inputs individually if we want to but they get recorded together
+                var combinedRecording = new recordingData(recordedMotion, recordedInput);
 
-            string combinedJson = JsonUtility.ToJson(combinedRecording);
+                var savePath = Path.Combine(Application.persistentDataPath, "saved.json");
 
-            File.WriteAllText(savePath, combinedJson);
+                string combinedJson = JsonUtility.ToJson(combinedRecording);
 
-            readyToSaveInput = false;
-            readyToSaveMotion = false;
+                File.WriteAllText(savePath, combinedJson);
+
+                readyToSaveInput = false;
+                readyToSaveMotion = false;
+
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                return false; //return false if something failed. should maybe do more of a real check here
+            }
         }
+
+        //if it wasn't in the correct state to save, return false
+        return false;
     }
 
-    public void TryLoadData(string filename)
+    public bool TryLoadData(string filename)
     {
 
         Debug.Log("(Playback Manager) Loading recording from file: "+filename);
@@ -397,10 +426,13 @@ public class PlaybackManager : MonoBehaviour
             ControllerRecorder.loadRecording(controllerMotion, leftHandMotion, rightHandMotion);
             motionRecorded = true;
 
+            return true;
+
         }
         else
         {
             Debug.Log("(Playback Manager) Recording file doesn't exist!");
+            return false;
         }
     }
 

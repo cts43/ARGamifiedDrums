@@ -63,20 +63,38 @@ public class RecordingMenu : MonoBehaviour
 
     }
 
+    private void OnEnable()
+    {
+        acceptingInput = true; //always accept inputs when just been set active  
+    }
+
     private void OnButtonPress(string buttonID, string argument)
     {
         acceptingInput = true;
         if (buttonID == "LoadRecording")
         {
-            playbackManager.TryLoadData(argument);
+            if (playbackManager.TryLoadData(argument))
+            {
+                Debug.Log("LOADED");
+                this.gameObject.SetActive(false);
+            }
         }
         else if (buttonID == "SaveRecording")
         {
-            playbackManager.TrySaveData();
+            if (playbackManager.TrySaveData())
+            {
+                Debug.Log("SAVED");
+                this.gameObject.SetActive(false);
+            }
+
         }
         else if (buttonID == "LoadMIDI")
         {
-            playbackManager.loadNewMIDI(argument);
+            bool success = playbackManager.loadNewMIDI(argument);
+            if (success)
+            {
+                this.gameObject.SetActive(false);
+            }
         }
         else
         {

@@ -93,5 +93,30 @@ public class UserInputDialogue : MonoBehaviour
 
     public void showRecordingFiles()
     {
+        string path = Application.persistentDataPath;
+
+        var info = new DirectoryInfo(path);
+
+        List<FileInfo> validFiles = new List<FileInfo>();
+
+        foreach (var file in info.GetFiles())
+        {
+            Debug.Log(file.Extension);
+            if (file.Extension == ".json")
+            {
+                validFiles.Add(file);
+            }
+        }
+
+        Debug.Log(labels.Count()); //why is labels.count() 0 here? 
+
+        for (int i = 0; i < labels.Count(); i++)
+        {
+
+            if (i < validFiles.Count())
+            {
+                labels[i].text = validFiles[i].Name;
+            }
+        }
     }
 }
