@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -54,8 +55,14 @@ public class UserInputDialogue : MonoBehaviour
         {
             selectedString = labels[selectedLabel + topLabel].text;
             hasSelectedString = true;
-            Destroy(this.gameObject);
+            StartCoroutine(CloseMenu());
         }
+    }
+
+    private IEnumerator CloseMenu()
+    {
+        yield return null;
+        Destroy(this.gameObject);
     }
 
     public void showMIDIFiles()

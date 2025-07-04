@@ -381,6 +381,13 @@ public class PlaybackManager : MonoBehaviour
 
                 var savePath = Path.Combine(Application.persistentDataPath, "saved.json");
 
+                int i = 1;
+                while (File.Exists(savePath))
+                {
+                    savePath = savePath + " - " + i;
+                    i++;
+                }
+
                 string combinedJson = JsonUtility.ToJson(combinedRecording);
 
                 File.WriteAllText(savePath, combinedJson);
