@@ -1436,7 +1436,7 @@ MonoBehaviour:
   isRecordingPath: 0
   isMIDIPath: 0
   buttonID: SaveRecording
-  userInputDialogue: {fileID: 3617658324783567740, guid: 007bd36c9e4db5748a51274f42eaa32a, type: 3}
+  userInputDialoguePrefab: {fileID: 3617658324783567740, guid: 007bd36c9e4db5748a51274f42eaa32a, type: 3}
 --- !u!114 &183123972 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1274930656038644243, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
@@ -4904,7 +4904,7 @@ MonoBehaviour:
   noteSpawnerObj: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
   ControllerRecorderObj: {fileID: 823286943}
   drumManagerObj: {fileID: 1568977026}
-  MIDIFilePath: MIDI Files/Basic 4-4.mid
+  MIDIFilePath: 200 bpm.mid
   currentTimeInTicks: 0
 --- !u!4 &736645346
 Transform:
@@ -5476,7 +5476,7 @@ MonoBehaviour:
   isRecordingPath: 1
   isMIDIPath: 0
   buttonID: LoadRecording
-  userInputDialogue: {fileID: 3617658324783567740, guid: 007bd36c9e4db5748a51274f42eaa32a, type: 3}
+  userInputDialoguePrefab: {fileID: 3617658324783567740, guid: 007bd36c9e4db5748a51274f42eaa32a, type: 3}
 --- !u!1 &757262261
 GameObject:
   m_ObjectHideFlags: 0
@@ -9869,7 +9869,7 @@ MonoBehaviour:
   isRecordingPath: 0
   isMIDIPath: 1
   buttonID: LoadMIDI
-  userInputDialogue: {fileID: 3617658324783567740, guid: 007bd36c9e4db5748a51274f42eaa32a, type: 3}
+  userInputDialoguePrefab: {fileID: 3617658324783567740, guid: 007bd36c9e4db5748a51274f42eaa32a, type: 3}
 --- !u!1 &1336239162
 GameObject:
   m_ObjectHideFlags: 0
