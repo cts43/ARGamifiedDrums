@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Linq;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 
@@ -70,12 +72,18 @@ public class RecordingMenu : MonoBehaviour
 
     private void OnButtonPress(string buttonID, string argument)
     {
+        StartCoroutine(ButtonPress(buttonID,argument));
+    }
+
+    private IEnumerator ButtonPress(string buttonID, string argument)
+    {
         acceptingInput = true;
         if (buttonID == "LoadRecording")
         {
             if (playbackManager.TryLoadData(argument))
             {
                 Debug.Log("LOADED");
+                yield return null;
                 this.gameObject.SetActive(false);
             }
         }
@@ -84,15 +92,16 @@ public class RecordingMenu : MonoBehaviour
             if (playbackManager.TrySaveData())
             {
                 Debug.Log("SAVED");
+                yield return null;
                 this.gameObject.SetActive(false);
             }
 
         }
         else if (buttonID == "LoadMIDI")
         {
-            bool success = playbackManager.loadNewMIDI(argument);
-            if (success)
+            if (playbackManager.loadNewMIDI(argument))
             {
+                yield return null;
                 this.gameObject.SetActive(false);
             }
         }
@@ -100,6 +109,9 @@ public class RecordingMenu : MonoBehaviour
         {
             Debug.Log("Invalid button ID!");
         }
+
+        yield break;
+
     }
 
 }

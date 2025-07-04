@@ -76,7 +76,7 @@ public class UserInputDialogue : MonoBehaviour
             }
         }
 
-        Debug.Log(labels.Count()); //why is labels.count() 0 here? 
+        Debug.Log(labels.Count());
 
         for (int i = 0; i < labels.Count(); i++)
         {
@@ -108,7 +108,7 @@ public class UserInputDialogue : MonoBehaviour
             }
         }
 
-        Debug.Log(labels.Count()); //why is labels.count() 0 here? 
+        Debug.Log(labels.Count());
 
         for (int i = 0; i < labels.Count(); i++)
         {
