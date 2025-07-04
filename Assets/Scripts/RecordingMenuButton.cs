@@ -1,6 +1,5 @@
 using System;
-using Meta.XR.InputActions;
-using UnityEditor.ShaderGraph.Internal;
+using System.Collections;
 using UnityEngine;
 
 public class RecordingMenuButton : MonoBehaviour
@@ -13,36 +12,39 @@ public class RecordingMenuButton : MonoBehaviour
     public string buttonID;
     public Action<string,string> ButtonPress;
 
-    public GameObject userInputDialogue; 
+    public GameObject userInputDialoguePrefab; 
 
     public void RaiseButtonPress(string buttonID, string argument)
     {
         ButtonPress?.Invoke(buttonID, argument);
     }
 
-    public void Execute()
+    public IEnumerator Execute()
     {
         if (requiresUserInput)
         {
             //call delegate with string from user input
-            Instantiate(userInputDialogue);
-            UserInputDialogue inputGetter = userInputDialogue.GetComponent<UserInputDialogue>();
+            var dialogueInstance = Instantiate(userInputDialoguePrefab,transform.parent.parent);
+            UserInputDialogue inputGetter = dialogueInstance.GetComponent<UserInputDialogue>();
 
             string userInput;
 
             if (isRecordingPath)
             {
-                userInput = inputGetter.GetMIDIString();
+                inputGetter.showRecordingFiles();
             }
             else if (isMIDIPath)
             {
-                userInput = inputGetter.GetRecordingString();
+                inputGetter.showMIDIFiles();
             }
             else
             {
                 Debug.Log("Invalid button setting!");
-                return;
+                yield break;
             }
+            yield return new WaitUntil(() => inputGetter.hasSelectedString);
+
+            userInput = inputGetter.selectedString;
             
             RaiseButtonPress(buttonID,userInput);
         }

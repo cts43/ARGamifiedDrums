@@ -10,11 +10,30 @@ using UnityEngine.Networking;
 using System.Threading.Tasks;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEngine.Timeline;
 
 
 
 public class NoteSpawner : MonoBehaviour
 {
+
+    public class VisualBarsBeatsTicksTimeSpan
+    {
+        //custom Bars:Beats:Ticks timespan that allows negatives
+        public int Bars { private set; get; }
+        public int Beats { private set; get; }
+        public int Ticks { private set; get; } 
+        public bool negative { private set; get; }
+
+        public VisualBarsBeatsTicksTimeSpan(int Bars, int Beats, int Ticks, bool negative)
+        {
+            this.Bars = Bars;
+            this.Beats = Beats;
+            this.Ticks = Ticks;
+            this.negative = negative;
+        }
+    }
+                
     private long currentTick = 0;
     public string MIDIFilePath;
     private string localFilePath;
@@ -65,8 +84,9 @@ public class NoteSpawner : MonoBehaviour
 
     private async Task<string> LoadFileFromStreamingAssets(string path)
     {
+        string streamedPath = Path.Combine(Application.streamingAssetsPath, "MIDI Files/"+path);
         //File loading for Android builds adapted from Unity docs
-        UnityWebRequest request = UnityWebRequest.Get(path);
+        UnityWebRequest request = UnityWebRequest.Get(streamedPath);
         UnityWebRequestAsyncOperation operation = request.SendWebRequest();
 
         while (!operation.isDone)
@@ -83,7 +103,7 @@ public class NoteSpawner : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Cannot load file at " + MIDIFilePath);
+            Debug.LogError("Cannot load file at " + streamedPath);
             return null;
         }
     }
@@ -110,7 +130,6 @@ public class NoteSpawner : MonoBehaviour
     async void InitLoadMIDI()
     {
         //Load MIDI from file
-        MIDIFilePath = Path.Combine(Application.streamingAssetsPath, MIDIFilePath);
         localFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
         LoadMIDI();
 
@@ -164,19 +183,43 @@ public class NoteSpawner : MonoBehaviour
         else return new BarBeatTicksTimeSpan(0, 0, 0);
     }
 
-    public BarBeatTicksTimeSpan GetVisualTime()
+    public VisualBarsBeatsTicksTimeSpan GetVisualTime()
     {   //Returns real, musical time that notes hit their window. If exception because negative time, keep at 0 until can increment
 
-        BarBeatTicksTimeSpan time;
-        try
+        long timeAsTicks = 0;
+        long BarAsTicks = TimeConverter.ConvertFrom(new BarBeatTicksTimeSpan(1, 0), tempoMap);
+
+        timeAsTicks = currentTick + BarAsTicks - TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap); //add a bar for visual accuracy
+
+        var timeDiv = (TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision;
+        short TPQN = timeDiv.TicksPerQuarterNote;
+        TimeSignature timeSig = tempoMap.GetTimeSignatureAtTime(GetCurrentMusicalTime());
+
+        int ticksPerBar = (TPQN * timeSig.Numerator) / (4 / timeSig.Denominator);
+
+        int Bars = (int)timeAsTicks / ticksPerBar;
+        int remainder = (int)timeAsTicks % ticksPerBar;
+        int Beats = remainder / TPQN;
+        int Ticks = remainder % TPQN;
+        bool negative = (timeAsTicks < 0);
+
+        if (negative)
         {
-            time = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(currentTick, tempoMap) + new BarBeatTicksTimeSpan(1,0) - spawnWindowAsBarsBeats; //add a bar for visual accuracy
+            Bars = 1 - Bars;
+            Beats = 1 - Beats;
+            Ticks = 1 - Ticks;
         }
-        catch (Exception)
-        {
-            time = new BarBeatTicksTimeSpan(0,0,0);
-        }
-        return time;
+
+        Debug.Log(Bars + " " + Beats + " " + Ticks);
+
+        return new VisualBarsBeatsTicksTimeSpan(Math.Abs(Bars), Math.Abs(Beats), Math.Abs(Ticks), negative);
+
+
+
+        //calculate beats bars ticks
+
+
+
     }
 
     public long GetCurrentOffsetMusicalTimeAsTicks()
@@ -344,8 +387,18 @@ public class NoteSpawner : MonoBehaviour
 
 
         //show beats on label
-        var newText = GetVisualTime().Bars.ToString() +":"+ (GetVisualTime().Beats+1).ToString() +":"+ GetVisualTime().Ticks.ToString();
-        currentBeatLabel.text = newText;
+        if (playing)
+        {
+            VisualBarsBeatsTicksTimeSpan VisualTime = GetVisualTime();
+            string sign = "+";
+            if (VisualTime.negative)
+            {
+                sign = "-";
+            }
+
+            var newText = sign+VisualTime.Bars.ToString() + ":" + (VisualTime.Beats + 1).ToString() + ":" + VisualTime.Ticks.ToString();
+            currentBeatLabel.text = newText;
+        }
 
     }
 

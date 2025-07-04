@@ -9,6 +9,8 @@ public class RecordingMenu : MonoBehaviour
     PlaybackManager playbackManager;
     int selectedLabel = 0;
 
+    private bool acceptingInput = true;
+
     private void Start()
     {
         playbackManager = GameObject.FindWithTag("PlaybackManager").GetComponent<PlaybackManager>();
@@ -29,29 +31,33 @@ public class RecordingMenu : MonoBehaviour
 
     private void Update()
     {
-        if (OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
+        if (acceptingInput)
         {
-            if (selectedLabel > 0)
+            if (OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
             {
-                labels[selectedLabel].outlineWidth = 0;
-                selectedLabel -= 1;
-                HighlightLabel(selectedLabel);
+                if (selectedLabel > 0)
+                {
+                    labels[selectedLabel].outlineWidth = 0;
+                    selectedLabel -= 1;
+                    HighlightLabel(selectedLabel);
+                }
             }
-        }
-        else if (OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
-        {
-            if (selectedLabel < labels.Count() - 1)
+            else if (OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
             {
-                labels[selectedLabel].outlineWidth = 0;
-                selectedLabel += 1;
-                HighlightLabel(selectedLabel);
+                if (selectedLabel < labels.Count() - 1)
+                {
+                    labels[selectedLabel].outlineWidth = 0;
+                    selectedLabel += 1;
+                    HighlightLabel(selectedLabel);
+                }
             }
-        }
 
-        if (OVRInput.GetDown(OVRInput.RawButton.B))
-        {
-            RecordingMenuButton Button = labels[selectedLabel].GetComponentInChildren<RecordingMenuButton>();
-            Button.Execute();
+            if (OVRInput.GetDown(OVRInput.RawButton.B))
+            {
+                RecordingMenuButton Button = labels[selectedLabel].GetComponentInChildren<RecordingMenuButton>();
+                StartCoroutine(Button.Execute());
+                acceptingInput = false;
+            }
         }
 
 
@@ -59,6 +65,7 @@ public class RecordingMenu : MonoBehaviour
 
     private void OnButtonPress(string buttonID, string argument)
     {
+        acceptingInput = true;
         if (buttonID == "LoadRecording")
         {
             playbackManager.TryLoadData(argument);
