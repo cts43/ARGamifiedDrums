@@ -119,6 +119,7 @@ public class ControllerRecorder : MonoBehaviour
                 recordedRightHandTransforms.Dequeue();
             }
             playing = true;
+
         }
         else
         {
@@ -129,16 +130,13 @@ public class ControllerRecorder : MonoBehaviour
 
     public void Record()
     {
-        if (!playing)
-        {
+        playing = false;
+        leftHandJoints = GameObject.FindGameObjectWithTag("LeftHandTracker").GetComponentsInChildren<Transform>(); //store pointers to transforms for every joint
+        rightHandJoints = GameObject.FindGameObjectWithTag("RightHandTracker").GetComponentsInChildren<Transform>();
 
-            leftHandJoints = GameObject.FindGameObjectWithTag("LeftHandTracker").GetComponentsInChildren<Transform>(); //store pointers to transforms for every joint
-            rightHandJoints = GameObject.FindGameObjectWithTag("RightHandTracker").GetComponentsInChildren<Transform>();
-
-            recording = !recording; //Toggle alignment when 'A' button pressed
-            Debug.Log("Toggled Recording");
-            justStartedRecording = true;
-        }
+        recording = true;
+        Debug.Log("Recording started");
+        justStartedRecording = true;
     }
 
     public void StopRecording()
@@ -148,6 +146,11 @@ public class ControllerRecorder : MonoBehaviour
             recording = false;
             RaiseFinishedRecording();
             Debug.Log("Recording motion finished");
+            Destroy(DrumStickL);
+            Destroy(DrumStickR);
+            Destroy(GhostHandL);
+            Destroy(GhostHandR);
+            instantiated = false;
             //Debug.Log("right: "+recordedRightHandTransforms.Count + " left: " + recordedLeftHandTransforms.Count); //checking whether hand transforms were recorded
         }
     }

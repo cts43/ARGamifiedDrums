@@ -169,6 +169,7 @@ public class NoteSpawner : MonoBehaviour
     {
         if (!playing)
         {
+            currentTick = 0;
             playing = true;
             RaiseStartedPlaying();
         }
@@ -209,8 +210,6 @@ public class NoteSpawner : MonoBehaviour
             Beats = 1 - Beats;
             Ticks = 1 - Ticks;
         }
-
-        Debug.Log(Bars + " " + Beats + " " + Ticks);
 
         return new VisualBarsBeatsTicksTimeSpan(Math.Abs(Bars), Math.Abs(Beats), Math.Abs(Ticks), negative);
 
@@ -254,7 +253,7 @@ public class NoteSpawner : MonoBehaviour
         return null;
     }
 
-    IEnumerator playKickMotion(long scheduledTime)
+    IEnumerator playKickMotion(long scheduledTime) //refactor this. bad
     {
         while (GetCurrentOffsetMusicalTimeAsTicks() < scheduledTime-kickAnimationOffset) //where 1 is kick animation window
         {

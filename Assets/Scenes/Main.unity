@@ -6349,7 +6349,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Controls:   A - Align Drums\tB - Start Demonstration\tY - New Recording\t\n               
+  m_text: "Controls:   A - Align Drums\tB - Play Recording  \tY - New Recording\t\n               
     (Controller) X - Recording Menu"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ca665d26abf3f38469d6f872101bd4d0, type: 2}
