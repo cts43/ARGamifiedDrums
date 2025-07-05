@@ -270,11 +270,17 @@ public class ControllerRecorder : MonoBehaviour
 
                     for (int i = 0; i < recordedLeftHandTransformFrame.Count; i++)
                     {
-                        ghostHandLTransforms[i].localPosition = recordedLeftHandTransformFrame[i].position;
-                        ghostHandLTransforms[i].localRotation = Quaternion.Euler(recordedLeftHandTransformFrame[i].rotation);
 
-                        ghostHandRTransforms[i].localPosition = recordedRightHandTransformFrame[i].position;
-                        ghostHandRTransforms[i].localRotation = Quaternion.Euler(recordedRightHandTransformFrame[i].rotation);
+                        //to world position
+                        Vector3 worldPositionL = moveableScene.transform.TransformPoint(recordedLeftHandTransformFrame[i].position);
+                        Quaternion worldRotationL = moveableScene.transform.rotation * Quaternion.Euler(recordedLeftHandTransformFrame[i].rotation);
+                        Vector3 worldPositionR = moveableScene.transform.TransformPoint(recordedRightHandTransformFrame[i].position);
+                        Quaternion worldRotationR = moveableScene.transform.rotation * Quaternion.Euler(recordedRightHandTransformFrame[i].rotation);
+
+                        ghostHandLTransforms[i].position = worldPositionL;
+                        ghostHandLTransforms[i].rotation = worldRotationL;
+                        ghostHandRTransforms[i].position = worldPositionR;
+                        ghostHandRTransforms[i].rotation = worldRotationR;
 
                     }
 
