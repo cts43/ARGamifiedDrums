@@ -30,6 +30,7 @@ public class RecordingMenu : MonoBehaviour
         foreach (RecordingMenuButton button in GetComponentsInChildren<RecordingMenuButton>())
         {
             button.ButtonPress += OnButtonPress;
+            button.ClosedMenu += OnSubMenuClosed;
         }
     }
 
@@ -96,6 +97,15 @@ public class RecordingMenu : MonoBehaviour
 
         inputActions.Controller.DPad.performed += OnDirectionPressed;
         inputActions.Controller.Select.performed += OnSelectPressed; //subscribe controller inputs
+        inputActions.Controller.Back.performed += OnBackPressed;
+    }
+
+    private void OnBackPressed(InputAction.CallbackContext context)
+    {
+        if (acceptingInput && gameObject.activeInHierarchy)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void OnDisable()
@@ -103,6 +113,7 @@ public class RecordingMenu : MonoBehaviour
         acceptingInput = false;
         inputActions.Controller.DPad.performed -= OnDirectionPressed;
         inputActions.Controller.Select.performed -= OnSelectPressed;
+        inputActions.Controller.Back.performed -= OnBackPressed;
         inputActions.Disable();
     }
 
@@ -164,4 +175,11 @@ public class RecordingMenu : MonoBehaviour
         yield break;
 
     }
+
+    private void OnSubMenuClosed()
+    {
+        acceptingInput = true;
+        Debug.Log("cdjaf");
+    }
+
 }

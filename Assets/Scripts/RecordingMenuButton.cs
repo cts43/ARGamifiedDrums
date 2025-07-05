@@ -11,6 +11,7 @@ public class RecordingMenuButton : MonoBehaviour
 
     public string buttonID;
     public Action<string,string> ButtonPress;
+    public Action ClosedMenu;
 
     public GameObject userInputDialoguePrefab; 
 
@@ -24,7 +25,7 @@ public class RecordingMenuButton : MonoBehaviour
         if (requiresUserInput)
         {
             //call delegate with string from user input
-            var dialogueInstance = Instantiate(userInputDialoguePrefab,transform.parent.parent);
+            var dialogueInstance = Instantiate(userInputDialoguePrefab, transform.parent.parent);
             UserInputDialogue inputGetter = dialogueInstance.GetComponent<UserInputDialogue>();
 
             string userInput;
@@ -42,16 +43,24 @@ public class RecordingMenuButton : MonoBehaviour
                 Debug.Log("Invalid button setting!");
                 yield break;
             }
-            yield return new WaitUntil(() => inputGetter.hasSelectedString);
-
-            userInput = inputGetter.selectedString;
+            yield return new WaitUntil(() =>  inputGetter.closed);
             
-            RaiseButtonPress(buttonID,userInput);
+            if (!inputGetter.hasSelectedString)
+            {
+                Debug.Log("nah");
+                ClosedMenu?.Invoke();
+            }
+            else
+            {
+                Debug.Log("yuh");
+                userInput = inputGetter.selectedString;
+                RaiseButtonPress(buttonID, userInput);
+            }
         }
         else
         {
             //call without/with null param
-            RaiseButtonPress(buttonID,null);
+            RaiseButtonPress(buttonID, null);
         }
     }
 

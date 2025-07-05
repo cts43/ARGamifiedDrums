@@ -21,6 +21,7 @@ public class UserInputDialogue : MonoBehaviour
 
     private controllerActions inputActions;
     private bool acceptingInput = true;
+    public bool closed { private set; get; } = false;
 
     private float timeoutSeconds = 0.2f;
     private void HighlightLabel(int index)
@@ -36,9 +37,15 @@ public class UserInputDialogue : MonoBehaviour
 
         inputActions.Controller.DPad.performed += OnDirectionPressed;
         inputActions.Controller.Select.performed += OnSelectPressed;
+        inputActions.Controller.Back.performed += OnBackPressed;
 
         labels = GetComponentsInChildren<TextMeshProUGUI>();
         HighlightLabel(selectedLabel);
+    }
+
+    private void OnBackPressed(InputAction.CallbackContext context)
+    {
+        StartCoroutine(CloseMenu());
     }
 
     private void OnDirectionPressed(InputAction.CallbackContext context)
@@ -106,7 +113,9 @@ public class UserInputDialogue : MonoBehaviour
         yield return null;
         inputActions.Controller.DPad.performed -= OnDirectionPressed;
         inputActions.Controller.Select.performed -= OnSelectPressed; //unsubscribe methods
+        inputActions.Controller.Back.performed -= OnBackPressed;
         inputActions.Disable();
+        closed = true;
         Destroy(this.gameObject);
     }
 
