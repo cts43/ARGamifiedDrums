@@ -324,7 +324,8 @@ public class PlaybackManager : MonoBehaviour
     private void OnMIDIFinishedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Finished");
-        ControllerRecorder.StopRecording();
+
+        ControllerRecorder.Reset();
         savingPlaythrough = false;
         playthroughLoaded = true;
         drumManager.clearNotes();

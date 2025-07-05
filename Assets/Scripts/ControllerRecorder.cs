@@ -74,7 +74,7 @@ public class ControllerRecorder : MonoBehaviour
     }
 
 
-    private bool recording = false;
+    public bool recording { get; private set; } = false;
     private bool playing = false;
 
     private bool justStartedRecording = false;
@@ -139,20 +139,20 @@ public class ControllerRecorder : MonoBehaviour
         justStartedRecording = true;
     }
 
-    public void StopRecording()
+    public void Reset()
     {
         if (recording)
         {
             recording = false;
             RaiseFinishedRecording();
             Debug.Log("Recording motion finished");
-            Destroy(DrumStickL);
-            Destroy(DrumStickR);
-            Destroy(GhostHandL);
-            Destroy(GhostHandR);
-            instantiated = false;
             //Debug.Log("right: "+recordedRightHandTransforms.Count + " left: " + recordedLeftHandTransforms.Count); //checking whether hand transforms were recorded
         }
+        Destroy(DrumStickL);
+        Destroy(DrumStickR);
+        Destroy(GhostHandL);
+        Destroy(GhostHandR);
+        instantiated = false;
     }
 
     private void Update()
