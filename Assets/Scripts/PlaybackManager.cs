@@ -115,30 +115,27 @@ public class PlaybackManager : MonoBehaviour
 
     public bool loadNewMIDI(string Path)
     {
-        if (!rhythmLoaded)
+
+        try
         {
 
-            try
-            {
+            MIDIFilePath = Path;
+            activeNoteSpawner.Initialise(MIDIFilePath);
+            activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
+            activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
+            rhythmLoaded = true;
 
-                MIDIFilePath = Path;
-                activeNoteSpawner.Initialise(MIDIFilePath);
-                activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
-                activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
-                rhythmLoaded = true;
+            return true;
 
-                return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
 
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+        //should search for recorded motion and if exists also load that in
+        
 
-            //should search for recorded motion and if exists also load that in
-            }
-
-        return false;
     }
 
     private void playMIDI()
@@ -392,7 +389,7 @@ public class PlaybackManager : MonoBehaviour
                 int i = 1;
                 while (File.Exists(savePath))
                 {
-                    savePath = savePath + " - " + i;
+                    savePath = Path.Combine(Application.persistentDataPath, "saved" + " - " + i + ".json");
                     i++;
                 }
 

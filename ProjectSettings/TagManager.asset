@@ -20,6 +20,7 @@ TagManager:
   - RecordingMenu
   - PlaybackManager
   - SubMenu
+  - StatusIndicator
   layers:
   - Default
   - TransparentFX

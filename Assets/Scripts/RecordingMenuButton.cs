@@ -44,15 +44,13 @@ public class RecordingMenuButton : MonoBehaviour
                 yield break;
             }
             yield return new WaitUntil(() =>  inputGetter.closed);
-            
+
             if (!inputGetter.hasSelectedString)
             {
-                Debug.Log("nah");
                 ClosedMenu?.Invoke();
             }
             else
             {
-                Debug.Log("yuh");
                 userInput = inputGetter.selectedString;
                 RaiseButtonPress(buttonID, userInput);
             }

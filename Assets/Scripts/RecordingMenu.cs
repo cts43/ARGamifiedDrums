@@ -20,9 +20,12 @@ public class RecordingMenu : MonoBehaviour
 
     private bool acceptingInput = false;
 
+    StatusIndicator statusIndicator;
+
     private void Start()
     {
 
+        statusIndicator = GameObject.FindWithTag("StatusIndicator").GetComponent<StatusIndicator>();
         playbackManager = GameObject.FindWithTag("PlaybackManager").GetComponent<PlaybackManager>();
         labels = GetComponentsInChildren<TextMeshProUGUI>();
         HighlightLabel(selectedLabel);
@@ -129,12 +132,13 @@ public class RecordingMenu : MonoBehaviour
         {
             if (playbackManager.TryLoadData(argument))
             {
-                Debug.Log("LOADED");
+                statusIndicator.ShowStatus("Loaded recording "+argument+"!");
                 yield return null;
                 this.gameObject.SetActive(false);
             }
             else
             {
+                statusIndicator.ShowStatus("Failed to load!");
                 Debug.Log("Failed to load or open load menu");
             }
         }
@@ -142,13 +146,14 @@ public class RecordingMenu : MonoBehaviour
         {
             if (playbackManager.TrySaveData())
             {
-                Debug.Log("SAVED");
+                statusIndicator.ShowStatus("Saved recording!");
                 yield return null;
                 this.gameObject.SetActive(false);
             }
             else
             {
-                Debug.Log("Failed to save MIDI"); //need an actual indicator for this
+                statusIndicator.ShowStatus("Failed to save recording!");
+                Debug.Log("Failed to save MIDI");
             }
 
         }
@@ -156,16 +161,19 @@ public class RecordingMenu : MonoBehaviour
         {
             if (playbackManager.loadNewMIDI(argument))
             {
+                statusIndicator.ShowStatus("Loaded MIDI " + argument + "!");
                 yield return null;
                 this.gameObject.SetActive(false);
             }
             else
             {
+                statusIndicator.ShowStatus("Failed to load MIDI!");
                 Debug.Log("Failed to load MIDI or open load menu");
             }
         }
         else
         {
+            statusIndicator.ShowStatus("Internal Error");
             Debug.Log("Invalid button ID!");
         }
 
@@ -179,7 +187,6 @@ public class RecordingMenu : MonoBehaviour
     private void OnSubMenuClosed()
     {
         acceptingInput = true;
-        Debug.Log("cdjaf");
     }
 
 }
