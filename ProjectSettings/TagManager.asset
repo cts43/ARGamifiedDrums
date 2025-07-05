@@ -19,6 +19,7 @@ TagManager:
   - LeftHandTracker
   - RecordingMenu
   - PlaybackManager
+  - SubMenu
   layers:
   - Default
   - TransparentFX

@@ -4905,7 +4905,6 @@ MonoBehaviour:
   ControllerRecorderObj: {fileID: 823286943}
   drumManagerObj: {fileID: 1568977026}
   MIDIFilePath: 200 bpm.mid
-  currentTimeInTicks: 0
 --- !u!4 &736645346
 Transform:
   m_ObjectHideFlags: 0

@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 567242119276337053}
   m_Layer: 3
   m_Name: UserInputDialogue
-  m_TagString: Untagged
+  m_TagString: SubMenu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

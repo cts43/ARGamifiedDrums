@@ -4,6 +4,7 @@ using System.IO;
 using Melanchall.DryWetMidi.Interaction;
 using Meta.XR.ImmersiveDebugger.UserInterface.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlaybackManager : MonoBehaviour
 {
@@ -23,7 +24,9 @@ public class PlaybackManager : MonoBehaviour
 
     public static bool rhythmLoaded = false;
 
-    public long currentTimeInTicks;
+    public long currentTimeInTicks { get; private set; }
+
+    private controllerActions inputActions;
 
     public static bool playing = false;
     private bool motionRecording = false;
@@ -206,6 +209,9 @@ public class PlaybackManager : MonoBehaviour
     private void Start()
     {
 
+        inputActions = new controllerActions();
+        inputActions.Enable();
+
         activeNoteSpawner = Instantiate(noteSpawnerObj).GetComponent<NoteSpawner>();
         ControllerRecorder = ControllerRecorderObj.GetComponent<ControllerRecorder>();
         drumManager = drumManagerObj.GetComponent<DrumManager>();
@@ -216,25 +222,27 @@ public class PlaybackManager : MonoBehaviour
 
         RecordingMenu = GameObject.FindWithTag("RecordingMenu");
         RecordingMenu.SetActive(false);
+
     }
 
     private void Update()
     {
 
         playing = activeNoteSpawner.playing;
+        bool subMenuOpen = GameObject.FindWithTag("SubMenu") != null;
         if (playing)
         {
             currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks(); //Update current time from active note spawner instance. unsure if necessary
         }
 
-        if (OVRInput.GetDown(OVRInput.RawButton.X) && !playing)
+        if (inputActions.Controller.OpenMenu.triggered && !playing)
         {
 
             if (!RecordingMenu.activeInHierarchy)
             {
                 RecordingMenu.SetActive(true);
             }
-            else
+            else if (!subMenuOpen)
             {
                 RecordingMenu.SetActive(false);
             }

@@ -1,23 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.InputSystem;
 
 public class UserInputDialogue : MonoBehaviour
 {
 
     TextMeshProUGUI[] labels;
+    List<string> items = new List<string>();
     int selectedLabel = 0;
     int topLabel = 0;
-    public bool hasSelectedString { private set; get; } = false; 
+    public bool hasSelectedString { private set; get; } = false;
 
     public string selectedString { private set; get; }
 
+    private controllerActions inputActions;
+    private bool acceptingInput = true;
+
+    private float timeoutSeconds = 0.2f;
     private void HighlightLabel(int index)
     {
         labels[index].outlineWidth = 0.2f;
@@ -26,42 +31,82 @@ public class UserInputDialogue : MonoBehaviour
 
     private void Awake()
     {
+        inputActions = new controllerActions();
+        inputActions.Enable();
+
+        inputActions.Controller.DPad.performed += OnDirectionPressed;
+        inputActions.Controller.Select.performed += OnSelectPressed;
+
         labels = GetComponentsInChildren<TextMeshProUGUI>();
         HighlightLabel(selectedLabel);
     }
 
-    private void Update()
+    private void OnDirectionPressed(InputAction.CallbackContext context)
     {
-        if (OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
-        {
-            if (selectedLabel > 0)
-            {
-                labels[selectedLabel].outlineWidth = 0;
-                selectedLabel -= 1;
-                HighlightLabel(selectedLabel);
-            }
-        }
-        else if (OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
-        {
-            if (selectedLabel < labels.Count() - 1)
-            {
-                labels[selectedLabel].outlineWidth = 0;
-                selectedLabel += 1;
-                HighlightLabel(selectedLabel);
-            }
-        }
+        Vector2 DPadValue = context.ReadValue<Vector2>();
 
-        if (OVRInput.GetDown(OVRInput.RawButton.B))
+        if (acceptingInput)
+        {
+            if (DPadValue.y > 0)
+            {
+                if (selectedLabel > 0)
+                {
+                    labels[selectedLabel].outlineWidth = 0;
+                    selectedLabel -= 1;
+                    HighlightLabel(selectedLabel);
+                }
+                else if (selectedLabel < 1 && topLabel > 0)
+                {
+                    topLabel -= 1;
+                    refreshVisibleItems();
+                }
+            }
+            else if (DPadValue.y < 0)
+            {
+                if (selectedLabel < labels.Count() - 1)
+                {
+                    if (labels[selectedLabel + 1].text.Length > 0)
+                    {
+                        labels[selectedLabel].outlineWidth = 0;
+                        selectedLabel += 1;
+                        HighlightLabel(selectedLabel);
+                    }
+                }
+                else if (selectedLabel < items.Count() && selectedLabel > topLabel + labels.Count() - 2)
+                {
+                    topLabel += 1;
+                    refreshVisibleItems();
+
+                }
+            }
+            StartCoroutine(InputAcceptTimeOut());
+        }
+    }
+
+    private IEnumerator InputAcceptTimeOut()
+    {
+        acceptingInput = false;
+        yield return new WaitForSeconds(timeoutSeconds);
+        acceptingInput = true;
+    }
+
+    private void OnSelectPressed(InputAction.CallbackContext context)
+    {
+        if (acceptingInput)
         {
             selectedString = labels[selectedLabel + topLabel].text;
             hasSelectedString = true;
             StartCoroutine(CloseMenu());
+
         }
     }
 
     private IEnumerator CloseMenu()
     {
         yield return null;
+        inputActions.Controller.DPad.performed -= OnDirectionPressed;
+        inputActions.Controller.Select.performed -= OnSelectPressed; //unsubscribe methods
+        inputActions.Disable();
         Destroy(this.gameObject);
     }
 
@@ -76,25 +121,14 @@ public class UserInputDialogue : MonoBehaviour
 
         foreach (var file in info.GetFiles())
         {
-            Debug.Log(file.Extension);
             if (file.Extension == ".mid")
             {
                 validMidiFiles.Add(file);
+                items.Add(file.Name);
             }
         }
 
-        Debug.Log(labels.Count());
-
-        for (int i = 0; i < labels.Count(); i++)
-        {
-
-            Debug.Log(i + "" + validMidiFiles.Count());
-
-            if (i < validMidiFiles.Count())
-            {
-                labels[i].text = validMidiFiles[i].Name;
-            }
-        }
+        refreshVisibleItems();
 
     }
 
@@ -112,10 +146,9 @@ public class UserInputDialogue : MonoBehaviour
             if (file.Extension == ".json")
             {
                 validFiles.Add(file);
+                items.Add(file.Name);
             }
         }
-
-        Debug.Log(labels.Count());
 
         for (int i = 0; i < labels.Count(); i++)
         {
@@ -126,4 +159,20 @@ public class UserInputDialogue : MonoBehaviour
             }
         }
     }
+
+    private void refreshVisibleItems()
+    {
+        for (int i = 0; i < labels.Count(); i++)
+        {
+            try
+            {
+                labels[i].text = items[i + topLabel];
+            }
+            catch(Exception)
+            {
+                labels[i].text = "";
+            }
+        }
+    }
 }
+

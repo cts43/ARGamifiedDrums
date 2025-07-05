@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class RecordingMenu : MonoBehaviour
 {
@@ -11,10 +14,15 @@ public class RecordingMenu : MonoBehaviour
     PlaybackManager playbackManager;
     int selectedLabel = 0;
 
-    private bool acceptingInput = true;
+    private float timeoutSeconds = 0.2f;
+
+    private controllerActions inputActions;
+
+    private bool acceptingInput = false;
 
     private void Start()
     {
+
         playbackManager = GameObject.FindWithTag("PlaybackManager").GetComponent<PlaybackManager>();
         labels = GetComponentsInChildren<TextMeshProUGUI>();
         HighlightLabel(selectedLabel);
@@ -31,11 +39,14 @@ public class RecordingMenu : MonoBehaviour
         labels[index].outlineColor = new Color32(0, 200, 0, 200);
     }
 
-    private void Update()
+    private void OnDirectionPressed(InputAction.CallbackContext context)
     {
-        if (acceptingInput)
+        Vector2 DPadValue = context.ReadValue<Vector2>();
+
+        if (acceptingInput && gameObject.activeInHierarchy)
         {
-            if (OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
+
+            if (DPadValue.y > 0)
             {
                 if (selectedLabel > 0)
                 {
@@ -44,7 +55,7 @@ public class RecordingMenu : MonoBehaviour
                     HighlightLabel(selectedLabel);
                 }
             }
-            else if (OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
+            else if (DPadValue.y < 0)
             {
                 if (selectedLabel < labels.Count() - 1)
                 {
@@ -54,25 +65,50 @@ public class RecordingMenu : MonoBehaviour
                 }
             }
 
-            if (OVRInput.GetDown(OVRInput.RawButton.B))
-            {
-                RecordingMenuButton Button = labels[selectedLabel].GetComponentInChildren<RecordingMenuButton>();
-                StartCoroutine(Button.Execute());
-                acceptingInput = false;
-            }
+            StartCoroutine(InputAcceptTimeOut());
         }
 
+    }
 
+    private void OnSelectPressed(InputAction.CallbackContext context)
+    {
+        if (acceptingInput && gameObject.activeInHierarchy)
+        {
+            RecordingMenuButton Button = labels[selectedLabel].GetComponentInChildren<RecordingMenuButton>();
+            StartCoroutine(Button.Execute());
+            acceptingInput = false;
+
+        }
+    }
+
+    private IEnumerator InputAcceptTimeOut()
+    {
+        acceptingInput = false;
+        yield return new WaitForSeconds(timeoutSeconds);
+        acceptingInput = true;
     }
 
     private void OnEnable()
     {
-        acceptingInput = true; //always accept inputs when just been set active  
+        acceptingInput = true; //always accept inputs when just been set active
+        inputActions = new controllerActions();
+        inputActions.Enable();
+
+        inputActions.Controller.DPad.performed += OnDirectionPressed;
+        inputActions.Controller.Select.performed += OnSelectPressed; //subscribe controller inputs
+    }
+
+    private void OnDisable()
+    {
+        acceptingInput = false;
+        inputActions.Controller.DPad.performed -= OnDirectionPressed;
+        inputActions.Controller.Select.performed -= OnSelectPressed;
+        inputActions.Disable();
     }
 
     private void OnButtonPress(string buttonID, string argument)
     {
-        StartCoroutine(ButtonPress(buttonID,argument));
+        StartCoroutine(ButtonPress(buttonID, argument));
     }
 
     private IEnumerator ButtonPress(string buttonID, string argument)
@@ -86,6 +122,10 @@ public class RecordingMenu : MonoBehaviour
                 yield return null;
                 this.gameObject.SetActive(false);
             }
+            else
+            {
+                Debug.Log("Failed to load or open load menu");
+            }
         }
         else if (buttonID == "SaveRecording")
         {
@@ -94,6 +134,10 @@ public class RecordingMenu : MonoBehaviour
                 Debug.Log("SAVED");
                 yield return null;
                 this.gameObject.SetActive(false);
+            }
+            else
+            {
+                Debug.Log("Failed to save MIDI"); //need an actual indicator for this
             }
 
         }
@@ -104,14 +148,20 @@ public class RecordingMenu : MonoBehaviour
                 yield return null;
                 this.gameObject.SetActive(false);
             }
+            else
+            {
+                Debug.Log("Failed to load MIDI or open load menu");
+            }
         }
         else
         {
             Debug.Log("Invalid button ID!");
         }
 
+        yield return null;
+        acceptingInput = true;
+
         yield break;
 
     }
-
 }
