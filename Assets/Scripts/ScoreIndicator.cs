@@ -7,12 +7,6 @@ public class ScoreIndicator : MonoBehaviour
 
     public int clearTime = 100;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
-
     public IEnumerator ReplaceLabel(string stringToReplace)
     {
         var label = GetComponentInChildren<TextMeshProUGUI>();

@@ -15,6 +15,12 @@ TagManager:
   - Legs
   - Score
   - RightControllerAnchor
+  - RightHandTracker
+  - LeftHandTracker
+  - RecordingMenu
+  - PlaybackManager
+  - SubMenu
+  - StatusIndicator
   layers:
   - Default
   - TransparentFX
