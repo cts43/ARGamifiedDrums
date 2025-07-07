@@ -190,10 +190,5 @@ public class UserInputDialogue : MonoBehaviour
             }
         }
     }
-
-    private void Update()
-    {
-        Debug.Log("SELECTED:" + selectedLabel + "TOP LABEL:" + topLabel);    
-    }
 }
 
