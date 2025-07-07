@@ -15,14 +15,15 @@ public class PlaybackManager : MonoBehaviour
     private ControllerRecorder ControllerRecorder;
     public GameObject drumManagerObj;
     private DrumManager drumManager;
-
     private GameObject RecordingMenu;
+
+    private StatusIndicator statusIndicator;
 
     public string MIDIFilePath;
 
     public static PlaybackManager instance;
 
-    public static bool rhythmLoaded = false;
+    public static bool MIDILoaded = false;
 
     public long currentTimeInTicks { get; private set; }
 
@@ -121,7 +122,7 @@ public class PlaybackManager : MonoBehaviour
             activeNoteSpawner.Initialise(MIDIFilePath);
             activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
             activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
-            rhythmLoaded = true;
+            MIDILoaded = true;
 
             return true;
 
@@ -138,7 +139,7 @@ public class PlaybackManager : MonoBehaviour
 
     private void playMIDI()
     {
-        if (rhythmLoaded)
+        if (MIDILoaded)
         {
             activeNoteSpawner.Play();
         }
@@ -148,27 +149,33 @@ public class PlaybackManager : MonoBehaviour
     {
         //reload and play with recording on
 
-        
-        loadNewMIDI(MIDIFilePath);
-        Debug.Log("New MIDI Loaded");
-        motionPlaying = false;
-        motionRecorded = false;
-        motionRecording = true;
-        playingRecordedInputs = false;
-        playMIDI();
-        ControllerRecorder.Record();//record controller motion
-        SavePlaythrough(); //save drum inputs/notes played
+        if (MIDILoaded)
+        {
+            loadNewMIDI(MIDIFilePath);
+            Debug.Log("New MIDI Loaded");
+            motionPlaying = false;
+            motionRecorded = false;
+            motionRecording = true;
+            playingRecordedInputs = false;
+            playMIDI();
+            ControllerRecorder.Record();//record controller motion
+            SavePlaythrough(); //save drum inputs/notes played
+        }
+        else
+        {
+            statusIndicator.ShowStatus("No MIDI file loaded!");
+        }
     }
 
     private void playRecorded(bool motion, bool drumHits) //arguments decide whether the recorded notes hit should be played back. vital for demonstating while the player is playing
     {
 
-        if (!rhythmLoaded)
+        if (!MIDILoaded)
         {
             loadNewMIDI(MIDIFilePath);
         }
 
-        if (rhythmLoaded)
+        if (MIDILoaded)
         {
             //play with recorded motion
             playMIDI();
@@ -225,6 +232,8 @@ public class PlaybackManager : MonoBehaviour
         RecordingMenu = GameObject.FindWithTag("RecordingMenu");
         RecordingMenu.SetActive(false);
 
+        statusIndicator = GameObject.FindWithTag("StatusIndicator").GetComponent<StatusIndicator>();
+
     }
 
     private void Update()
@@ -268,6 +277,7 @@ public class PlaybackManager : MonoBehaviour
                 else
                 {
                     Debug.Log("No recording loaded!");
+                    statusIndicator.ShowStatus("No recording loaded!");
                 }
             }
         }
