@@ -7,6 +7,8 @@ using System.Reflection.Emit;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Networking;
+using Unity.SharpZipLib.Utils;
 
 public class UserInputDialogue : MonoBehaviour
 {
@@ -122,9 +124,9 @@ public class UserInputDialogue : MonoBehaviour
     public void showMIDIFiles()
     {
 
-        string path = Path.Combine(Application.streamingAssetsPath, "MIDI Files");
+        Debug.Log(FileManager.Instance);
 
-        var info = new DirectoryInfo(path);
+        var info = new DirectoryInfo(FileManager.Instance.GetMIDIPath());
 
         List<FileInfo> validMidiFiles = new List<FileInfo>();
 
