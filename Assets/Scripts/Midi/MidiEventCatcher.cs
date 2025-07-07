@@ -27,7 +27,7 @@ public class MidiEventCatcher : MonoBehaviour
 
     private void LoadDrumSamples()
     {
-        int[] notes = { 35, 38, 42 }; //kick, snare, hat
+        int[] notes = { 36, 38, 46 }; //kick, snare, hat
 
         foreach (int note in notes)
         {
@@ -39,7 +39,7 @@ public class MidiEventCatcher : MonoBehaviour
             {
                 //for every note in the samples folder (files are labelled 1-32 and then some name)
 
-                if (note == 35)
+                if (note == 36)
                 {
                     drumName = "Kick";
                 }

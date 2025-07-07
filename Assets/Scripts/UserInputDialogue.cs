@@ -7,6 +7,8 @@ using System.Reflection.Emit;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Networking;
+using Unity.SharpZipLib.Utils;
 
 public class UserInputDialogue : MonoBehaviour
 {
@@ -62,7 +64,7 @@ public class UserInputDialogue : MonoBehaviour
                     selectedLabel -= 1;
                     HighlightLabel(selectedLabel);
                 }
-                else if (selectedLabel < 1 && topLabel > 0)
+                else if (topLabel > 0)
                 {
                     topLabel -= 1;
                     refreshVisibleItems();
@@ -70,20 +72,22 @@ public class UserInputDialogue : MonoBehaviour
             }
             else if (DPadValue.y < 0)
             {
-                if (selectedLabel < labels.Count() - 1)
+                int itemsIndex = topLabel + selectedLabel;
+
+                if (itemsIndex < items.Count - 1)
                 {
-                    if (labels[selectedLabel + 1].text.Length > 0)
+                    if (items[itemsIndex + 1].Length > 0 && selectedLabel < labels.Length - 1)
                     {
                         labels[selectedLabel].outlineWidth = 0;
                         selectedLabel += 1;
                         HighlightLabel(selectedLabel);
                     }
-                }
-                else if (selectedLabel < items.Count() && selectedLabel > topLabel + labels.Count() - 2)
-                {
-                    topLabel += 1;
-                    refreshVisibleItems();
+                    else
+                    {
+                        topLabel += 1;
+                        refreshVisibleItems();
 
+                    }
                 }
             }
             StartCoroutine(InputAcceptTimeOut());
@@ -101,9 +105,12 @@ public class UserInputDialogue : MonoBehaviour
     {
         if (acceptingInput)
         {
-            selectedString = labels[selectedLabel + topLabel].text;
+            int itemsIndex = selectedLabel + topLabel;
+            selectedString = items[itemsIndex];
             hasSelectedString = true;
+            Debug.Log("Selected " + items[itemsIndex]);
             StartCoroutine(CloseMenu());
+
 
         }
     }
@@ -122,9 +129,9 @@ public class UserInputDialogue : MonoBehaviour
     public void showMIDIFiles()
     {
 
-        string path = Path.Combine(Application.streamingAssetsPath, "MIDI Files");
+        Debug.Log(FileManager.Instance);
 
-        var info = new DirectoryInfo(path);
+        var info = new DirectoryInfo(FileManager.Instance.GetMIDIPath());
 
         List<FileInfo> validMidiFiles = new List<FileInfo>();
 
@@ -177,7 +184,7 @@ public class UserInputDialogue : MonoBehaviour
             {
                 labels[i].text = items[i + topLabel];
             }
-            catch(Exception)
+            catch (Exception)
             {
                 labels[i].text = "";
             }

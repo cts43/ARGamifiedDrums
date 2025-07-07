@@ -35,8 +35,6 @@ public class NoteSpawner : MonoBehaviour
     }
                 
     private long currentTick = 0;
-    public string MIDIFilePath;
-    private string localFilePath;
 
     private Vector3 targetPos = new Vector3(0, 0, 0);
     private Vector3 startPos = new Vector3(0, 1, 0);
@@ -53,6 +51,8 @@ public class NoteSpawner : MonoBehaviour
     private TextMeshProUGUI currentBeatLabel;
 
     private TempoMap tempoMap;
+
+    string loadedMIDIFile;
 
     private Queue<(int, int, BarBeatTicksTimeSpan)> notesList;
 
@@ -82,39 +82,18 @@ public class NoteSpawner : MonoBehaviour
         FinishedPlaying?.Invoke();
     }
 
-    private async Task<string> LoadFileFromStreamingAssets(string path)
+    private void LoadMIDI(string filename)
     {
-        string streamedPath = Path.Combine(Application.streamingAssetsPath, "MIDI Files/"+path);
-        //File loading for Android builds adapted from Unity docs
-        UnityWebRequest request = UnityWebRequest.Get(streamedPath);
-        UnityWebRequestAsyncOperation operation = request.SendWebRequest();
+        
+        string path = Path.Combine(FileManager.Instance.GetMIDIPath(), filename);
 
-        while (!operation.isDone)
-        {
-            await Task.Yield();
-        }
-        if (request.result == UnityWebRequest.Result.Success)
-        {
-            //Debug.Log(request.downloadHandler.text); the binary file contents
-            string newPath = Path.Combine(Application.persistentDataPath, "received.mid");
-            File.WriteAllBytes(newPath, request.downloadHandler.data); //write file to received.mid
+        Debug.Log(path);
 
-            return newPath;
-        }
-        else
-        {
-            Debug.LogError("Cannot load file at " + streamedPath);
-            return null;
-        }
-    }
-
-    private void LoadMIDI()
-    {
         //first clear existing note queue if exists
         notesList = new Queue<(int, int, BarBeatTicksTimeSpan)>();
 
         MIDIReader MIDIReader = GameObject.FindWithTag("MIDI Reader").GetComponent<MIDIReader>();
-        (Queue<(int, int, BarBeatTicksTimeSpan)> notes, TempoMap TempoMap) = MIDIReader.LoadMIDIFile(localFilePath); //returns tuple collection of notes + tempo map
+        (Queue<(int, int, BarBeatTicksTimeSpan)> notes, TempoMap TempoMap) = MIDIReader.LoadMIDIFile(path); //returns tuple collection of notes + tempo map
 
         //queue every note onto our local queue. This way when we call this again old notes are not discarded.
         foreach (var note in notes)
@@ -125,13 +104,14 @@ public class NoteSpawner : MonoBehaviour
         tempoMap = TempoMap;
         finalNoteTime = notesList.Last().Item3; //last item in queue's note time should be the final note
         totalNotes = notesList.Count;
+
+        loadedMIDIFile = filename;
     }
 
-    async void InitLoadMIDI()
+    private void InitLoadMIDI(string filename)
     {
         //Load MIDI from file
-        localFilePath = await LoadFileFromStreamingAssets(MIDIFilePath);
-        LoadMIDI();
+        LoadMIDI(filename);
 
         //init spawn window as bars beats for easy operations
         var spawnWindowAsTimespan = new MetricTimeSpan(spawnWindowinUs); //time in microseconds
@@ -155,14 +135,13 @@ public class NoteSpawner : MonoBehaviour
     public void Initialise(string filePath, int window = 2)
     {
         visualNotePrefab = Resources.Load<GameObject>(visualNotePrefabPath);
-        MIDIFilePath = filePath;
         spawnWindow = window;
 
         spawnWindowinUs = spawnWindow * 1000000;
 
         //
 
-        InitLoadMIDI();
+        InitLoadMIDI(filePath);
     }
 
     public void Play()
@@ -377,7 +356,7 @@ public class NoteSpawner : MonoBehaviour
             {
                 playing = false;
                 currentTick = 0;
-                LoadMIDI();
+                LoadMIDI(loadedMIDIFile);
 
                 RaiseFinishedPlaying();
             }
