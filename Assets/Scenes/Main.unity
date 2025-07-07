@@ -2723,7 +2723,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drumColour: {r: 0, g: 0, b: 0, a: 0}
   changeColour: {r: 1, g: 0, b: 0, a: 1}
-  note: 35
+  note: 36
   isKick: 1
 --- !u!114 &416534652 stripped
 MonoBehaviour:
@@ -8849,7 +8849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drumColour: {r: 0, g: 0, b: 0, a: 0}
   changeColour: {r: 1, g: 0, b: 0, a: 1}
-  note: 42
+  note: 46
   isKick: 0
 --- !u!136 &1248980090
 CapsuleCollider:

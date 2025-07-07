@@ -36,8 +36,6 @@ public class PlaybackManager : MonoBehaviour
     private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
     private Queue<playthroughFrame> savedPlaythroughCopy = new Queue<playthroughFrame>();
     private bool playingRecordedInputs = false;
-    private bool playthroughLoaded = false;
-
     private bool readyToSaveMotion = false;
     private bool readyToSaveInput = false;
 
@@ -162,7 +160,7 @@ public class PlaybackManager : MonoBehaviour
         SavePlaythrough(); //save drum inputs/notes played
     }
 
-    private void playRecorded(bool motion, bool drumHits)
+    private void playRecorded(bool motion, bool drumHits) //arguments decide whether the recorded notes hit should be played back. vital for demonstating while the player is playing
     {
 
         if (!rhythmLoaded)
@@ -327,7 +325,6 @@ public class PlaybackManager : MonoBehaviour
 
         ControllerRecorder.Reset();
         savingPlaythrough = false;
-        playthroughLoaded = true;
         drumManager.clearNotes();
         readyToSaveInput = true;
         motionPlaying = false;
