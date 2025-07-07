@@ -5902,6 +5902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72c217261b327fe45844448ea94d1e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handDrumstickOffsetFrames: 5
   leftHandPrefab: {fileID: 1732268206786806, guid: d28ec6c17b738b94d87e7e5dc7c5bb1a, type: 3}
   rightHandPrefab: {fileID: 1581749144712736, guid: 19b48b930aac9ba4b99ebb30bf13b7f1, type: 3}
   playbackObject: {fileID: 2873981299412852974, guid: b949efb2a3a759f4d9355234564ba884, type: 3}

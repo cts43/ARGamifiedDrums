@@ -8,6 +8,8 @@ using UnityEngine;
 public class ControllerRecorder : MonoBehaviour
 {
 
+    public int handDrumstickOffsetFrames = 10;
+
     [Serializable]
     public struct recordedTransform
     {
@@ -132,12 +134,6 @@ public class ControllerRecorder : MonoBehaviour
             recordedControllerTransformsCopy = new Queue<transformPair>(recordedControllerTransforms);
             recordedLeftHandTransformsCopy = new Queue<handMotionFrame>(recordedLeftHandTransforms);
             recordedRightHandTransformsCopy = new Queue<handMotionFrame>(recordedRightHandTransforms);
-
-            for (int i = 0; i < 5; i++) //testing simple offset to account for hand vs controller tracking differences
-            {
-                recordedLeftHandTransforms.Dequeue();
-                recordedRightHandTransforms.Dequeue();
-            }
             playing = true;
 
         }
@@ -175,7 +171,12 @@ public class ControllerRecorder : MonoBehaviour
             recording = false;
             RaiseFinishedRecording();
             Debug.Log("Recording motion finished");
-            //Debug.Log("right: "+recordedRightHandTransforms.Count + " left: " + recordedLeftHandTransforms.Count); //checking whether hand transforms were recorded
+
+            for (int i = 0; i < handDrumstickOffsetFrames; i++) //testing simple offset to account for hand vs controller tracking differences. only do this after a recording
+            {
+                recordedLeftHandTransforms.Dequeue();
+                recordedRightHandTransforms.Dequeue();
+            }
         }
         moveableSceneTransform = GameObject.FindGameObjectWithTag("Moveable Scene").transform;
         moveableSceneRotation = moveableSceneTransform.rotation;
