@@ -268,7 +268,7 @@ public class ControllerRecorder : MonoBehaviour
                     List<recordedTransform> recordedLeftHandTransformFrame = recordedLeftHandTransformsCopy.Dequeue().frames;
                     List<recordedTransform> recordedRightHandTransformFrame = recordedRightHandTransformsCopy.Dequeue().frames;
 
-                    for (int i = 0; i < recordedLeftHandTransformFrame.Count; i++)
+                    for (int i = 0; i < recordedLeftHandTransformFrame.Count-1; i++)
                     {
 
                         //to world position
