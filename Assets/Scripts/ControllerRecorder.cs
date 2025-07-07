@@ -53,9 +53,6 @@ public class ControllerRecorder : MonoBehaviour
     private GameObject leftHand;
     private GameObject rightHand;
 
-    private recordedTransform OGLeftHandTransform;
-    private recordedTransform OGRightHandTransform;
-
     private GameObject GhostHandL;
     private GameObject GhostHandR;
 
@@ -152,9 +149,6 @@ public class ControllerRecorder : MonoBehaviour
 
         //moveableScene.transform.InverseTransformPoint(leftHandRoot.position)
         //(Quaternion.Inverse(moveableScene.transform.rotation) * leftHandRoot.rotation).eulerAngles
-
-        OGLeftHandTransform = new recordedTransform(moveableSceneTransform.InverseTransformPoint(leftHand.transform.position), (Quaternion.Inverse(moveableSceneRotation) * leftHand.transform.rotation).eulerAngles);
-        OGRightHandTransform = new recordedTransform(moveableSceneTransform.InverseTransformPoint(rightHand.transform.position), (Quaternion.Inverse(moveableSceneRotation) * rightHand.transform.rotation).eulerAngles);
 
         leftHandJoints = leftHand.GetComponentsInChildren<Transform>(); //store pointers to transforms for every joint
         rightHandJoints = rightHand.GetComponentsInChildren<Transform>();
