@@ -259,8 +259,10 @@ public class ControllerRecorder : MonoBehaviour
                 rightHandTransforms.Add(transform);
             }
             
+            //for the root of each hand use same method as drum sticks
             var LeftRootTransform = new recordedTransform(moveableSceneTransform.InverseTransformPoint(leftHand.transform.position), (Quaternion.Inverse(moveableSceneRotation) * leftHand.transform.rotation).eulerAngles);
             var RightRootTransform = new recordedTransform(moveableSceneTransform.InverseTransformPoint(rightHand.transform.position), (Quaternion.Inverse(moveableSceneRotation) * rightHand.transform.rotation).eulerAngles);
+        
 
             //then enqueue into recordedHandTransforms
             recordedLeftHandTransforms.Enqueue(new handMotionFrame(leftHandTransforms,LeftRootTransform));

@@ -21,8 +21,6 @@ public class PlaybackManager : MonoBehaviour
 
     public string MIDIFilePath;
 
-    public static PlaybackManager instance;
-
     public static bool MIDILoaded = false;
 
     public long currentTimeInTicks { get; private set; }
@@ -120,8 +118,6 @@ public class PlaybackManager : MonoBehaviour
 
             MIDIFilePath = Path;
             activeNoteSpawner.Initialise(MIDIFilePath);
-            activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
-            activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
             MIDILoaded = true;
 
             return true;
@@ -131,8 +127,6 @@ public class PlaybackManager : MonoBehaviour
         {
             return false;
         }
-
-        //should search for recorded motion and if exists also load that in
         
 
     }
@@ -217,7 +211,6 @@ public class PlaybackManager : MonoBehaviour
 
     private void Start()
     {
-
         inputActions = new controllerActions();
         inputActions.Enable();
 
@@ -225,6 +218,8 @@ public class PlaybackManager : MonoBehaviour
         ControllerRecorder = ControllerRecorderObj.GetComponent<ControllerRecorder>();
         drumManager = drumManagerObj.GetComponent<DrumManager>();
 
+        activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
+        activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
         ControllerRecorder.StartedRecording += OnStartedRecording;
         ControllerRecorder.FinishedRecording += OnFinishedRecording;
         subscribeToDrumHits();
