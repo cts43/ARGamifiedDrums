@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class ControllerRecorder : MonoBehaviour
@@ -50,6 +51,8 @@ public class ControllerRecorder : MonoBehaviour
     private GameObject GhostHandL;
     private GameObject GhostHandR;
 
+    private GameObject moveableScene;
+
     public GameObject playbackObject; //prefab object to use when playing back
     private GameObject DrumStickL;
     private GameObject DrumStickR;
@@ -74,7 +77,7 @@ public class ControllerRecorder : MonoBehaviour
     }
 
 
-    private bool recording = false;
+    public bool recording { get; private set; } = false;
     private bool playing = false;
 
     private bool justStartedRecording = false;
@@ -98,6 +101,7 @@ public class ControllerRecorder : MonoBehaviour
     {
         LeftHandAnchor = GameObject.FindGameObjectWithTag("LeftHandAnchor");
         RightHandAnchor = GameObject.FindGameObjectWithTag("RightHandAnchor");
+        moveableScene = GameObject.FindWithTag("Moveable Scene");
     }
 
     public bool hasStoredRecording()
@@ -119,6 +123,7 @@ public class ControllerRecorder : MonoBehaviour
                 recordedRightHandTransforms.Dequeue();
             }
             playing = true;
+
         }
         else
         {
@@ -129,19 +134,16 @@ public class ControllerRecorder : MonoBehaviour
 
     public void Record()
     {
-        if (!playing)
-        {
+        playing = false;
+        leftHandJoints = GameObject.FindGameObjectWithTag("LeftHandTracker").GetComponentsInChildren<Transform>(); //store pointers to transforms for every joint
+        rightHandJoints = GameObject.FindGameObjectWithTag("RightHandTracker").GetComponentsInChildren<Transform>();
 
-            leftHandJoints = GameObject.FindGameObjectWithTag("LeftHandTracker").GetComponentsInChildren<Transform>(); //store pointers to transforms for every joint
-            rightHandJoints = GameObject.FindGameObjectWithTag("RightHandTracker").GetComponentsInChildren<Transform>();
-
-            recording = !recording; //Toggle alignment when 'A' button pressed
-            Debug.Log("Toggled Recording");
-            justStartedRecording = true;
-        }
+        recording = true;
+        Debug.Log("Recording started");
+        justStartedRecording = true;
     }
 
-    public void StopRecording()
+    public void Reset()
     {
         if (recording)
         {
@@ -150,17 +152,22 @@ public class ControllerRecorder : MonoBehaviour
             Debug.Log("Recording motion finished");
             //Debug.Log("right: "+recordedRightHandTransforms.Count + " left: " + recordedLeftHandTransforms.Count); //checking whether hand transforms were recorded
         }
+        Destroy(DrumStickL);
+        Destroy(DrumStickR);
+        Destroy(GhostHandL);
+        Destroy(GhostHandR);
+        instantiated = false;
     }
 
     private void Update()
     {
         if (!instantiated)
             {
-                DrumStickL = Instantiate(playbackObject); //create drum sticks if don't exist
-                DrumStickR = Instantiate(playbackObject);
+                DrumStickL = Instantiate(playbackObject,moveableScene.transform); //create drum sticks if don't exist
+                DrumStickR = Instantiate(playbackObject,moveableScene.transform);
                 //drum sticks visible when recording is fine so here is OK but should move ghost hands to only when playing back - or *only* use the ghost hands and have the main OVR hands invisible
-                GhostHandL = Instantiate(leftHandPrefab);
-                GhostHandR = Instantiate(rightHandPrefab);
+                GhostHandL = Instantiate(leftHandPrefab,moveableScene.transform);
+                GhostHandR = Instantiate(rightHandPrefab,moveableScene.transform);
 
                 instantiated = true;
             }
@@ -179,32 +186,50 @@ public class ControllerRecorder : MonoBehaviour
 
             //CONTROLLER RECORDING//////////////////////
             //start recording input
-            recordedTransform recordedMotionL = new recordedTransform(LeftHandAnchor.transform.position, LeftHandAnchor.transform.eulerAngles);
-            recordedTransform recordedMotionR = new recordedTransform(RightHandAnchor.transform.position, RightHandAnchor.transform.eulerAngles);
+            // world space -> local position relative to moveableScene logic -> not mine!! <<- Rewrite or cite
+            
+            Vector3 localPosL = moveableScene.transform.InverseTransformPoint(LeftHandAnchor.transform.position);
+            Vector3 localRotL = (Quaternion.Inverse(moveableScene.transform.rotation) * LeftHandAnchor.transform.rotation).eulerAngles;
+            
+
+            Vector3 localPosR = moveableScene.transform.InverseTransformPoint(RightHandAnchor.transform.position);
+            Vector3 localRotR = (Quaternion.Inverse(moveableScene.transform.rotation) * RightHandAnchor.transform.rotation).eulerAngles;
+
+            recordedTransform recordedMotionL = new recordedTransform(localPosL, localRotL);
+            recordedTransform recordedMotionR = new recordedTransform(localPosR, localRotR);
+
             recordedControllerTransforms.Enqueue(new transformPair(recordedMotionL, recordedMotionR));
 
             //set drum stick prefab transforms
-            DrumStickL.transform.position = new Vector3(recordedMotionL.position.x, recordedMotionL.position.y, recordedMotionL.position.z);
-            DrumStickL.transform.rotation = Quaternion.Euler(new Vector3(recordedMotionL.rotation.x, recordedMotionL.rotation.y, recordedMotionL.rotation.z));
+            DrumStickL.transform.localPosition = localPosL;
+            DrumStickL.transform.localEulerAngles = localRotL;
 
-            DrumStickR.transform.position = new Vector3(recordedMotionR.position.x, recordedMotionR.position.y, recordedMotionR.position.z);
-            DrumStickR.transform.rotation = Quaternion.Euler(new Vector3(recordedMotionR.rotation.x, recordedMotionR.rotation.y, recordedMotionR.rotation.z));
+            DrumStickR.transform.localPosition = localPosR;
+            DrumStickR.transform.localEulerAngles = localRotR;
             ////////////////////////////////////////////
 
             //HAND RECORDING////////////////////////////
-            //
+            // world space -> local position relative to moveableScene logic -> not mine!! <<- Rewrite or cite
 
             //build list of all transforms here
             List<recordedTransform> leftHandTransforms = new List<recordedTransform>();
             List<recordedTransform> rightHandTransforms = new List<recordedTransform>();
             foreach (var joint in leftHandJoints)
             {
-                recordedTransform transform = new recordedTransform(joint.position, joint.eulerAngles);
+
+                Vector3 relativePosition = moveableScene.transform.InverseTransformPoint(joint.position);
+                Vector3 relativeRotation = (Quaternion.Inverse(moveableScene.transform.rotation) * joint.rotation).eulerAngles;
+
+                recordedTransform transform = new recordedTransform(relativePosition, relativeRotation);
                 leftHandTransforms.Add(transform);
             }
             foreach (var joint in rightHandJoints)
             {
-                recordedTransform transform = new recordedTransform(joint.position, joint.eulerAngles);
+
+                Vector3 relativePosition = moveableScene.transform.InverseTransformPoint(joint.position);
+                Vector3 relativeRotation = (Quaternion.Inverse(moveableScene.transform.rotation) * joint.rotation).eulerAngles;
+
+                recordedTransform transform = new recordedTransform(relativePosition, relativeRotation);
                 rightHandTransforms.Add(transform);
             }
 
@@ -226,11 +251,11 @@ public class ControllerRecorder : MonoBehaviour
                     (var playbackMotionL, var playbackMotionR) = recordedControllerTransformsCopy.Dequeue();
 
                     //set transforms from queued recording
-                    DrumStickL.transform.position = new Vector3(playbackMotionL.position.x, playbackMotionL.position.y, playbackMotionL.position.z);
-                    DrumStickL.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionL.rotation.x, playbackMotionL.rotation.y, playbackMotionL.rotation.z));
+                    DrumStickL.transform.localPosition = new Vector3(playbackMotionL.position.x, playbackMotionL.position.y, playbackMotionL.position.z);
+                    DrumStickL.transform.localRotation = Quaternion.Euler(new Vector3(playbackMotionL.rotation.x, playbackMotionL.rotation.y, playbackMotionL.rotation.z));
 
-                    DrumStickR.transform.position = new Vector3(playbackMotionR.position.x, playbackMotionR.position.y, playbackMotionR.position.z);
-                    DrumStickR.transform.rotation = Quaternion.Euler(new Vector3(playbackMotionR.rotation.x, playbackMotionR.rotation.y, playbackMotionR.rotation.z));
+                    DrumStickR.transform.localPosition = new Vector3(playbackMotionR.position.x, playbackMotionR.position.y, playbackMotionR.position.z);
+                    DrumStickR.transform.localRotation = Quaternion.Euler(new Vector3(playbackMotionR.rotation.x, playbackMotionR.rotation.y, playbackMotionR.rotation.z));
                 }
 
                 if (recordedLeftHandTransformsCopy.Count > 0)
@@ -245,11 +270,17 @@ public class ControllerRecorder : MonoBehaviour
 
                     for (int i = 0; i < recordedLeftHandTransformFrame.Count; i++)
                     {
-                        ghostHandLTransforms[i].position = recordedLeftHandTransformFrame[i].position;
-                        ghostHandLTransforms[i].rotation = Quaternion.Euler(recordedLeftHandTransformFrame[i].rotation);
 
-                        ghostHandRTransforms[i].position = recordedRightHandTransformFrame[i].position;
-                        ghostHandRTransforms[i].rotation = Quaternion.Euler(recordedRightHandTransformFrame[i].rotation);
+                        //to world position
+                        Vector3 worldPositionL = moveableScene.transform.TransformPoint(recordedLeftHandTransformFrame[i].position);
+                        Quaternion worldRotationL = moveableScene.transform.rotation * Quaternion.Euler(recordedLeftHandTransformFrame[i].rotation);
+                        Vector3 worldPositionR = moveableScene.transform.TransformPoint(recordedRightHandTransformFrame[i].position);
+                        Quaternion worldRotationR = moveableScene.transform.rotation * Quaternion.Euler(recordedRightHandTransformFrame[i].rotation);
+
+                        ghostHandLTransforms[i].position = worldPositionL;
+                        ghostHandLTransforms[i].rotation = worldRotationL;
+                        ghostHandRTransforms[i].position = worldPositionR;
+                        ghostHandRTransforms[i].rotation = worldRotationR;
 
                     }
 

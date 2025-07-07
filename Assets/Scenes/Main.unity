@@ -154,6 +154,7 @@ Transform:
   - {fileID: 948199352}
   - {fileID: 1966957416}
   - {fileID: 1919749987}
+  - {fileID: 823286945}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &11728314
@@ -2722,7 +2723,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drumColour: {r: 0, g: 0, b: 0, a: 0}
   changeColour: {r: 1, g: 0, b: 0, a: 1}
-  note: 35
+  note: 36
   isKick: 1
 --- !u!114 &416534652 stripped
 MonoBehaviour:
@@ -5912,12 +5913,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 823286943}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.21879, y: 0, z: 15.68044}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.72392005, y: -0.8125, z: 15.33526}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 963107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &826857161
 GameObject:
@@ -6349,7 +6350,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Controls:   A - Align Drums\tB - Start Demonstration\tY - New Recording\t\n               
+  m_text: "Controls:   A - Align Drums\tB - Play Recording  \tY - New Recording\t\n               
     (Controller) X - Recording Menu"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ca665d26abf3f38469d6f872101bd4d0, type: 2}
@@ -8848,7 +8849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drumColour: {r: 0, g: 0, b: 0, a: 0}
   changeColour: {r: 1, g: 0, b: 0, a: 1}
-  note: 42
+  note: 46
   isKick: 0
 --- !u!136 &1248980090
 CapsuleCollider:
@@ -16558,5 +16559,4 @@ SceneRoots:
   - {fileID: 969679139}
   - {fileID: 959314935}
   - {fileID: 963107}
-  - {fileID: 823286945}
   - {fileID: 736645346}

@@ -36,8 +36,6 @@ public class PlaybackManager : MonoBehaviour
     private Queue<playthroughFrame> savedPlaythrough = new Queue<playthroughFrame>();
     private Queue<playthroughFrame> savedPlaythroughCopy = new Queue<playthroughFrame>();
     private bool playingRecordedInputs = false;
-    private bool playthroughLoaded = false;
-
     private bool readyToSaveMotion = false;
     private bool readyToSaveInput = false;
 
@@ -149,13 +147,20 @@ public class PlaybackManager : MonoBehaviour
     private void playWithRecord()
     {
         //reload and play with recording on
+
+        
         loadNewMIDI(MIDIFilePath);
+        Debug.Log("New MIDI Loaded");
+        motionPlaying = false;
+        motionRecorded = false;
+        motionRecording = true;
+        playingRecordedInputs = false;
         playMIDI();
         ControllerRecorder.Record();//record controller motion
         SavePlaythrough(); //save drum inputs/notes played
     }
 
-    private void playRecorded(bool motion, bool drumHits)
+    private void playRecorded(bool motion, bool drumHits) //arguments decide whether the recorded notes hit should be played back. vital for demonstating while the player is playing
     {
 
         if (!rhythmLoaded)
@@ -256,13 +261,13 @@ public class PlaybackManager : MonoBehaviour
         {
             if (!playing)
             {
-                if (!motionRecorded)
+                if (motionRecorded)
                 {
-                    playWithRecord();
+                    playRecorded(true, true);
                 }
                 else
                 {
-                    playRecorded(true, true);
+                    Debug.Log("No recording loaded!");
                 }
             }
         }
@@ -302,7 +307,7 @@ public class PlaybackManager : MonoBehaviour
 
     private void SavePlaythrough()
     {
-        if (!savingPlaythrough && !playthroughLoaded)
+        if (!savingPlaythrough)
         {
             Debug.Log("Saving playthrough from tick " + currentTimeInTicks);
             savingPlaythrough = true;
@@ -317,33 +322,37 @@ public class PlaybackManager : MonoBehaviour
     private void OnMIDIFinishedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Finished");
-        ControllerRecorder.StopRecording();
+
+        ControllerRecorder.Reset();
         savingPlaythrough = false;
-        playthroughLoaded = true;
         drumManager.clearNotes();
         readyToSaveInput = true;
         motionPlaying = false;
-
+        currentTimeInTicks = 0;
         int hitNotes = 0;
         int missedNotes;
 
-
-        foreach (var dataPoint in savedPlaythrough)
+        if (savedPlaythrough.Count > 0)
         {
-            (var note, var velocity, var noteTime, var closestNote, var hitNote) = dataPoint;
-            if (hitNote)
+
+            foreach (var dataPoint in savedPlaythrough)
             {
-                hitNotes++;
+                (var note, var velocity, var noteTime, var closestNote, var hitNote) = dataPoint;
+                if (hitNote)
+                {
+                    hitNotes++;
+                }
             }
+            missedNotes = activeNoteSpawner.totalNotes - hitNotes;
+
+            Debug.Log("Missed Notes: " + missedNotes);
+
+            double percentageMissed = (double)missedNotes / activeNoteSpawner.totalNotes * 100;
+
+            Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
         }
 
-        missedNotes = activeNoteSpawner.totalNotes - hitNotes;
-
-        Debug.Log("Missed Notes: " + missedNotes);
-
-        double percentageMissed = (double)missedNotes / activeNoteSpawner.totalNotes * 100;
-
-        Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
+        
 
     }
 
