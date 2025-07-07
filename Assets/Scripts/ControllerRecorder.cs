@@ -166,9 +166,9 @@ public class ControllerRecorder : MonoBehaviour
 
     public void Reset()
     {
+        Debug.Log("(Controller Recorder) Resetting..");
         if (recording)
         {
-            recording = false;
             RaiseFinishedRecording();
             Debug.Log("Recording motion finished");
 
@@ -178,6 +178,8 @@ public class ControllerRecorder : MonoBehaviour
                 recordedRightHandTransforms.Dequeue();
             }
         }
+        playing = false;
+        recording = false;
         moveableSceneTransform = GameObject.FindGameObjectWithTag("Moveable Scene").transform;
         moveableSceneRotation = moveableSceneTransform.rotation;
         Destroy(DrumStickL);
@@ -190,12 +192,14 @@ public class ControllerRecorder : MonoBehaviour
     {
         if (playing || recording)
         {
-            if (DrumStickL == null || DrumStickR == null)
+            if (DrumStickL == null)
             {
                 DrumStickL = Instantiate(playbackObject, moveableSceneTransform); //create drum sticks if don't exist
+            }
+            if (DrumStickR == null)
+            {
                 DrumStickR = Instantiate(playbackObject, moveableSceneTransform);
-
-            }   
+            }
         }
             
         if (recording)
@@ -273,11 +277,13 @@ public class ControllerRecorder : MonoBehaviour
         else if (playing)
         {
 
-            if (GhostHandL == null || GhostHandR == null)
+            if (GhostHandL == null)
             {
                 GhostHandL = Instantiate(leftHandPrefab, moveableSceneTransform);
+            }
+            if (GhostHandR == null)
+            {
                 GhostHandR = Instantiate(rightHandPrefab, moveableSceneTransform);
-
             }
 
             if (recordedControllerTransformsCopy.Count > 0 || recordedLeftHandTransforms.Count > 0)
@@ -314,7 +320,7 @@ public class ControllerRecorder : MonoBehaviour
                     GhostHandR.transform.localPosition = rightRootPos.position;
                     GhostHandR.transform.localRotation = Quaternion.Euler(rightRootPos.rotation);
 
-                    int indexBound = Mathf.Min( Mathf.Min(ghostHandLTransforms.Length,ghostHandRTransforms.Length) , Mathf.Min(leftFrames.Count,rightFrames.Count) );
+                    int indexBound = Mathf.Min(Mathf.Min(ghostHandLTransforms.Length, ghostHandRTransforms.Length), Mathf.Min(leftFrames.Count, rightFrames.Count));
                     //use shortest array length for max index value to prevent out of bounds
 
                     for (int i = 1; i < indexBound; i++)
