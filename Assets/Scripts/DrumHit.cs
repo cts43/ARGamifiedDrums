@@ -100,7 +100,9 @@ public class DrumHit : MonoBehaviour
                 currentTime += bufferTime;
 
                 double diffAsMs = (int)((TimeConverter.ConvertTo<MetricTimeSpan>(currentTime, note.TempoMap).TotalMilliseconds - TimeConverter.ConvertTo<MetricTimeSpan>(bufferTime,note.TempoMap).TotalMilliseconds) - TimeConverter.ConvertTo<MetricTimeSpan>(note.ScheduledTimeInTicks, note.TempoMap).TotalMilliseconds);
-                
+
+                currentTime -= bufferTime;
+
                 string aheadVsBehind;
 
                 if (diffAsMs >= 0){

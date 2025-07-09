@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using Melanchall.DryWetMidi.Interaction;
 using Meta.XR.ImmersiveDebugger.UserInterface.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlaybackManager : MonoBehaviour
 {
+
+    public static PlaybackManager Instance;
 
     public GameObject noteSpawnerObj; //prefab for note spawner class
     public GameObject ControllerRecorderObj;
@@ -106,8 +109,6 @@ public class PlaybackManager : MonoBehaviour
             this.motion = motion;
             this.inputs = inputs;
         }
-
-
     }
 
     public bool loadNewMIDI(string Path)
@@ -127,7 +128,7 @@ public class PlaybackManager : MonoBehaviour
         {
             return false;
         }
-        
+
 
     }
 
@@ -151,6 +152,7 @@ public class PlaybackManager : MonoBehaviour
             motionRecorded = false;
             motionRecording = true;
             playingRecordedInputs = false;
+            savedPlaythrough = new Queue<playthroughFrame>();
             playMIDI();
             ControllerRecorder.Record();//record controller motion
             SavePlaythrough(); //save drum inputs/notes played
@@ -211,6 +213,12 @@ public class PlaybackManager : MonoBehaviour
 
     private void Start()
     {
+
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
         inputActions = new controllerActions();
         inputActions.Enable();
 
@@ -228,6 +236,8 @@ public class PlaybackManager : MonoBehaviour
         RecordingMenu.SetActive(false);
 
         statusIndicator = GameObject.FindWithTag("StatusIndicator").GetComponent<StatusIndicator>();
+
+        loadNewMIDI(MIDIFilePath); //load MIDI file initially
 
     }
 
@@ -259,7 +269,7 @@ public class PlaybackManager : MonoBehaviour
             return; //don't allow other inputs if menu is open
         }
 
-        
+
 
         if (OVRInput.GetDown(OVRInput.RawButton.B))
         {
@@ -286,16 +296,7 @@ public class PlaybackManager : MonoBehaviour
 
         if (playingRecordedInputs)
         { //testing playing back user inputs
-            if (savedPlaythroughCopy.Count > 0)
-            {
-                (var note, var velocity, var time, var closest, var success) = savedPlaythroughCopy.Peek();
-                if (activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks() >= time) //offset based on spawn window
-                {
-                    savedPlaythroughCopy.Dequeue();
-                    MidiEventCatcher MIDIEventCatcher = GameObject.FindWithTag("MIDI Input Handler").GetComponent<MidiEventCatcher>();
-                    MIDIEventCatcher.checkForDrum(note, velocity);
-                }
-            }
+            playbackRecordedInputs();
         }
 
         if (motionPlaying)
@@ -308,6 +309,25 @@ public class PlaybackManager : MonoBehaviour
             activeNoteSpawner.showKickMotion = false;
         }
 
+    }
+
+    private void playbackRecordedInputs()
+    {   //to be called inside Update(). iterate through recorded notes as in NoteSpawner
+        while (savedPlaythroughCopy.Count > 0)
+        {
+            (var note, var velocity, var time, _, _) = savedPlaythroughCopy.Peek();
+            if (activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks() >= time) //offset based on spawn window
+            {
+                Debug.Log("Note time: "+ time+ " Playback time: "+ activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks());
+                savedPlaythroughCopy.Dequeue();
+                MidiEventCatcher MIDIEventCatcher = GameObject.FindWithTag("MIDI Input Handler").GetComponent<MidiEventCatcher>();
+                MIDIEventCatcher.checkForDrum(note, velocity);
+            }
+            else
+            {
+                break;
+            }
+        }
     }
 
     private void SavePlaythrough()
@@ -333,6 +353,7 @@ public class PlaybackManager : MonoBehaviour
         drumManager.clearNotes();
         readyToSaveInput = true;
         motionPlaying = false;
+        playingRecordedInputs = false;
         currentTimeInTicks = 0;
         int hitNotes = 0;
         int missedNotes;
@@ -357,7 +378,7 @@ public class PlaybackManager : MonoBehaviour
             Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
         }
 
-        
+
 
     }
 
@@ -398,7 +419,9 @@ public class PlaybackManager : MonoBehaviour
                 //saving each of these in a combined class recordingData to have the recording as a single file. Can still load motion / inputs individually if we want to but they get recorded together
                 var combinedRecording = new recordingData(recordedMotion, recordedInput);
 
-                var savePath = Path.Combine(Application.persistentDataPath, "saved.json");
+                string date = System.DateTime.Now.ToString("yyyyMMdd-HH-mm");
+
+                string savePath = Path.Combine(Application.persistentDataPath, date+".json");
 
                 int i = 1;
                 while (File.Exists(savePath))
@@ -431,7 +454,7 @@ public class PlaybackManager : MonoBehaviour
     public bool TryLoadData(string filename)
     {
 
-        Debug.Log("(Playback Manager) Loading recording from file: "+filename);
+        Debug.Log("(Playback Manager) Loading recording from file: " + filename);
 
         var loadPath = Path.Combine(Application.persistentDataPath, filename);
 
@@ -460,6 +483,11 @@ public class PlaybackManager : MonoBehaviour
             Debug.Log("(Playback Manager) Recording file doesn't exist!");
             return false;
         }
+    }
+
+    public bool IsPlayingRecordedInputs()
+    {
+        return playingRecordedInputs;
     }
 
 

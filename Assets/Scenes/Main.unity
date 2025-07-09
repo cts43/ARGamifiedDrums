@@ -1892,7 +1892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableDebugActions: 1
   acceptInputs: 1
-  RTriggerMIDINote: 42
+  RTriggerMIDINote: 38
   drumManager: {fileID: 1568977027}
 --- !u!1 &284627998
 GameObject:
@@ -4905,7 +4905,7 @@ MonoBehaviour:
   noteSpawnerObj: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
   ControllerRecorderObj: {fileID: 823286943}
   drumManagerObj: {fileID: 1568977026}
-  MIDIFilePath: 200 bpm.mid
+  MIDIFilePath: Basic 4-4.mid
 --- !u!4 &736645346
 Transform:
   m_ObjectHideFlags: 0
@@ -14525,6 +14525,14 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Legs
       objectReference: {fileID: 0}
+    - target: {fileID: 6148737315974723067, guid: 0254624ef45104940bdd9d8242195621, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148737315974723067, guid: 0254624ef45104940bdd9d8242195621, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 510b15380609f19498f74189d7c79e3e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

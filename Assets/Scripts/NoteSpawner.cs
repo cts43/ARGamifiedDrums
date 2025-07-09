@@ -202,14 +202,10 @@ public class NoteSpawner : MonoBehaviour
 
     public long GetCurrentOffsetMusicalTimeAsTicks()
     {
-        if (playing)
-        {
-            return currentTick - TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
-        }
-        else
-        {
-            return -TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
-        }
+        //long BarAsTicks = TimeConverter.ConvertFrom(new BarBeatTicksTimeSpan(1, 0), tempoMap);
+        long spawnWindowAsTicks = TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
+
+        return currentTick - spawnWindowAsTicks;
     }
 
 

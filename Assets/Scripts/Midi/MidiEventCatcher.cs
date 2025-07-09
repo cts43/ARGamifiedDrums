@@ -137,6 +137,16 @@ public class MidiEventCatcher : MonoBehaviour
 
     private void Update()
     {
+
+        if (PlaybackManager.Instance.IsPlayingRecordedInputs())
+        {
+            acceptInputs = false;
+        }
+        else
+        {
+            acceptInputs = true;
+        }
+
         if (enableDebugActions && acceptInputs) //Use Right trigger to activate given drum, for outside of headset debug purposes
         {
             if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
