@@ -64,7 +64,7 @@ public class NoteSpawner : MonoBehaviour
 
     public bool showKickMotion = false;
     private Animator kickMotion;
-    private long kickAnimationOffset = 330; // time in ms that the foot takes to hit the floor
+    private long kickAnimationOffset = 200; // time in ms that the foot takes to hit the floor
 
     long previousBeat = 0;
     public AudioClip metronomeClip;
@@ -230,7 +230,8 @@ public class NoteSpawner : MonoBehaviour
 
     IEnumerator playKickMotion(long scheduledTime) //refactor this. bad
     {
-        while (GetCurrentOffsetMusicalTimeAsTicks() < scheduledTime-kickAnimationOffset) //where 1 is kick animation window
+        long spawnWindowAsTicks = TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
+        while (GetCurrentOffsetMusicalTimeAsTicks() < scheduledTime - kickAnimationOffset) //where 1 is kick animation window
         {
             yield return null; //wait one frame and check again
         }
