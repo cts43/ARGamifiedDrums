@@ -265,18 +265,20 @@ public class NoteSpawner : MonoBehaviour
                 StartCoroutine(playKickMotion(noteTimeInTicks));
             }
         }
-            else
-            {
-                startPos = new Vector3(0, 1, 0);
-            }
+        else
+        {
+            startPos = new Vector3(0, 1, 0);
+        }
 
         GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
+        Debug.Log(spawnedNote);
         spawnedNote.transform.Translate(startPos);
         spawnedNote.GetComponent<NoteIndicator>().ScheduledTimeInTicks = noteTimeInTicks;// + TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
         spawnedNote.GetComponent<NoteIndicator>().TempoMap = tempoMap;
         Vector3 distanceFromTarget = targetPos - startPos;
 
         Vector3 speedToMove = distanceFromTarget / spawnWindow;
+        Debug.Log(speedToMove);
 
         while (true)
         {
@@ -330,9 +332,10 @@ public class NoteSpawner : MonoBehaviour
 
                 if (GetCurrentMusicalTime() >= noteTime)
                 {
+                    
                     (var noteNumber, var noteVelocity, var currentNoteTime) = notesList.Dequeue(); //remove note from queue and spawn
-                    //Debug.Log($"Spawning note {noteNumber} at time {currentNoteTime}");
-                    StartCoroutine(SpawnNote(noteNumber, noteVelocity, currentNoteTime)); //time as long for spawner
+                    Debug.Log($"Spawning note {noteNumber} at time {currentNoteTime}");
+                    StartCoroutine(SpawnNote(noteNumber, noteVelocity, currentNoteTime));
                 }
                 else
                 {

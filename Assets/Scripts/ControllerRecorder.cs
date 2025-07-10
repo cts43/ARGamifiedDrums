@@ -59,7 +59,8 @@ public class ControllerRecorder : MonoBehaviour
     private Transform moveableSceneTransform;
     private Quaternion moveableSceneRotation;
 
-    public GameObject playbackObject; //prefab object to use when playing back
+    public GameObject DrumStickLPrefab;
+    public GameObject DrumStickRPrefab; //prefab object to use when playing back
     private GameObject DrumStickL;
     private GameObject DrumStickR;
 
@@ -188,11 +189,11 @@ public class ControllerRecorder : MonoBehaviour
         {
             if (DrumStickL == null)
             {
-                DrumStickL = Instantiate(playbackObject, moveableSceneTransform); //create drum sticks if don't exist
+                DrumStickL = Instantiate(DrumStickLPrefab, moveableSceneTransform); //create drum sticks if don't exist
             }
             if (DrumStickR == null)
             {
-                DrumStickR = Instantiate(playbackObject, moveableSceneTransform);
+                DrumStickR = Instantiate(DrumStickRPrefab, moveableSceneTransform);
             }
         }
             
@@ -210,26 +211,31 @@ public class ControllerRecorder : MonoBehaviour
 
             //CONTROLLER RECORDING//////////////////////
             //start recording input
-            // world space -> local position relative to moveableScene logic -> not mine!! <<- Rewrite or cite
+
+            //using the OVRInput class instead of object Anchor positions as it seems more reliable, doesn't accidentally start tracking hand position as we specify the device.
+            Vector3 leftControllerPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch);
+            Quaternion leftControllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTouch);
+            Vector3 rightControllerPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
+            Quaternion rightControllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTouch);
             
-            Vector3 localPosL = moveableSceneTransform.InverseTransformPoint(LeftHandAnchor.transform.position);
-            Vector3 localRotL = (Quaternion.Inverse(moveableSceneRotation) * LeftHandAnchor.transform.rotation).eulerAngles;
+            Vector3 localPosL = moveableSceneTransform.InverseTransformPoint(leftControllerPosition);
+            Vector3 localRotL = (Quaternion.Inverse(moveableSceneRotation) * leftControllerRotation).eulerAngles;
             
 
-            Vector3 localPosR = moveableSceneTransform.InverseTransformPoint(RightHandAnchor.transform.position);
-            Vector3 localRotR = (Quaternion.Inverse(moveableSceneRotation) * RightHandAnchor.transform.rotation).eulerAngles;
+            Vector3 localPosR = moveableSceneTransform.InverseTransformPoint(rightControllerPosition);
+            Vector3 localRotR = (Quaternion.Inverse(moveableSceneRotation) * rightControllerRotation).eulerAngles;
 
             recordedTransform recordedMotionL = new recordedTransform(localPosL, localRotL);
             recordedTransform recordedMotionR = new recordedTransform(localPosR, localRotR);
 
             recordedControllerTransforms.Enqueue(new transformPair(recordedMotionL, recordedMotionR));
 
-            //set drum stick prefab transforms
-            DrumStickL.transform.localPosition = localPosL;
-            DrumStickL.transform.localEulerAngles = localRotL;
+            //set drum stick prefab transforms for visual while recording
+            DrumStickL.transform.position = leftControllerPosition;
+            DrumStickL.transform.rotation = leftControllerRotation;
 
-            DrumStickR.transform.localPosition = localPosR;
-            DrumStickR.transform.localEulerAngles = localRotR;
+            DrumStickR.transform.position = rightControllerPosition;
+            DrumStickR.transform.rotation = rightControllerRotation;
             ////////////////////////////////////////////
 
             //HAND RECORDING////////////////////////////
