@@ -21,6 +21,7 @@ TagManager:
   - PlaybackManager
   - SubMenu
   - StatusIndicator
+  - LeftControllerAnchor
   layers:
   - Default
   - TransparentFX

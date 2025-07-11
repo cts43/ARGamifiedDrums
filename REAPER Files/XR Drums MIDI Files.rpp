@@ -1,0 +1,1035 @@
+<REAPER_PROJECT 0.1 "7.39/win64" 1752244742
+  RIPPLE 2 1
+  GROUPOVERRIDE 0 0 0
+  AUTOXFADE 129
+  ENVATTACH 1
+  POOLEDENVATTACH 0
+  MIXERUIFLAGS 11 48
+  ENVFADESZ10 40
+  PEAKGAIN 1
+  FEEDBACK 0
+  PANLAW 1.41421356
+  PROJOFFS 0 0 0
+  MAXPROJLEN 0 600
+  GRID 134271 8 1 8 1 0 0 0
+  TIMEMODE 1 5 -1 30 0 0 -1
+  VIDEO_CONFIG 0 0 256
+  PANMODE 3
+  CURSOR 55
+  ZOOM 8.95768041226395 0 0
+  VZOOMEX 6.74928761 0
+  USE_REC_CFG 0
+  RECMODE 1
+  SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
+  LOOP 0
+  LOOPGRAN 0 4
+  RECORD_PATH "" ""
+  <RECORD_CFG
+    ZXZhdxgAAA==
+  >
+  <APPLYFX_CFG
+  >
+  RENDER_FILE ""
+  RENDER_PATTERN untitled
+  RENDER_FMT 0 2 48000
+  RENDER_1X 0
+  RENDER_RANGE 5 0 0 18 1000
+  RENDER_RESAMPLE 10 10 1
+  RENDER_ADDTOPROJ 0
+  RENDER_STEMS 8
+  RENDER_DITHER 0
+  TIMELOCKMODE 0
+  TEMPOENVLOCKMODE 0
+  ITEMMIX 0
+  DEFPITCHMODE 589824 0
+  TAKELANE 1
+  SAMPLERATE 96000 1 0
+  <RENDER_CFG
+    ZXZhdxgAAQ==
+  >
+  LOCK 1
+  <METRONOME 6 2
+    VOL 0.342646 0.058979
+    BEATLEN 4
+    FREQ 800 1600 1
+    SAMPLES "" "" "" ""
+    SPLIGNORE 0 0
+    SPLDEF 2 660 "" 0 ""
+    SPLDEF 3 440 "" 0 ""
+    PATTERN 0 169
+    PATTERNSTR ABBB
+    MULT 1
+  >
+  GLOBAL_AUTO -1
+  TEMPO 60 4 4 0
+  PLAYRATE 1 0 0.25 4
+  SELECTION 76 76
+  SELECTION2 76 76
+  MASTERAUTOMODE 0
+  MASTERTRACKHEIGHT 0 0
+  MASTERPEAKCOL 16576
+  MASTERMUTESOLO 2
+  MASTERTRACKVIEW 0 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0
+  MASTERHWOUT 0 0 1 0 0 0 0 -1
+  MASTER_NCH 2 2
+  MASTER_VOLUME 1 0 -1 -1 1
+  MASTER_PANMODE 3
+  MASTER_FX 1
+  MASTER_SEL 0
+  <MASTERPLAYSPEEDENV
+    EGUID {3A1008D9-7991-415B-9244-238B5AF62715}
+    ACT 0 -1
+    VIS 0 1 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 0 -1 -1
+  >
+  <TEMPOENVEX
+    EGUID {4F1ABA7A-1535-4C99-9E7D-C6CBE6779CA5}
+    ACT 1 -1
+    VIS 1 0 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 1 -1 -1
+    PT 0.000000000000 60.0000000000 1 262148 0 1 0 "" 0 169 0 ABBB
+    PT 64.000000000000 120.0000000000 1 0 1
+  >
+  MARKER 1 0 "60BPM Hat" 1 0 1 R {A3ADC795-82B0-406D-84A2-1D4C07DD65CD} 0
+  MARKER 1 16 "" 1
+  MARKER 2 16 "60BPM Kick & Hat" 1 0 1 R {0BB1225C-F420-4325-ABF2-97E2427EF07C} 0
+  MARKER 2 32 "" 1
+  MARKER 3 32 "60BPM Snare & Hat" 1 0 1 R {EBBCEB25-4904-403D-BE08-AD8BF50CC00D} 0
+  MARKER 3 48 "" 1
+  MARKER 4 48 "60BPM Combined" 1 0 1 R {2EE48713-AB5E-4605-A13C-817B540C0ED8} 0
+  MARKER 4 64 "" 1
+  MARKER 5 64 "120BPM Combined" 1 0 1 R {705C419D-4290-495D-9FB5-7721B2A2FAE7} 0
+  MARKER 5 76 "" 1
+  <PROJBAY
+  >
+  <TRACK {8D7BA4D3-C5C5-4EAF-8827-D2A934B2BCA9}
+    NAME "Basic 4-4"
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    SEL 1
+    REC 0 0 1 0 0 0 0 0
+    VU 2
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {8D7BA4D3-C5C5-4EAF-8827-D2A934B2BCA9}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 0 0 0
+      <VST "VST3: SSL Native Channel Strip 2 (SSL)" "SSL Native Channel Strip 2.vst3" 0 "" 1959982166{5653544E43533273736C206E61746976} ""
+        VvTSdO5e7f4EAAAAAQAAAAAAAAACAAAAAAAAAAQAAAAAAAAACAAAAAAAAAACAAAAAQAAAAAAAAACAAAAAAAAAFAPAAABAAAA//8QAA==
+        QA8AAAEAAABWc3RXAAAACAAAAAEAAAAAQ2NuSwAADyhGQkNoAAAAAk5DUzIAAQA3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOkFZDMiFoDgAA
+        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4gPFNTTF9QTFVHSU5fU1RBVEUgUGx1Z2luTmFtZT0iU1NMIE5hdGl2ZSBDaGFubmVsIFN0cmlwIDIi
+        IFZlcnNpb249IjEuMC41NSIgU3RhdGVBU2VsZWN0ZWQ9IjEiPjxBIExhc3RMb2FkZWRQcmVzZXQ9IkM6XFByb2dyYW1EYXRhXFNvbGlkIFN0YXRlIExvZ2ljXFNTTCBO
+        YXRpdmVcUHJlc2V0c1xDaGFubmVsU3RyaXAyXERlZmF1bHQgUHJlc2V0LnhtbCI+PFBST0NFU1NPUl9TVEFURT48UEFSQU0gaWQ9IkJ5cGFzcyIgdmFsdWU9IjAuMCIv
+        PjxQQVJBTSBpZD0iQ29tcEZhc3RBdHRhY2siIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkNvbXBQZWFrIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJDb21wUmF0aW8i
+        IHZhbHVlPSI2LjAwMDAwMDk1MzY3NDMxNiIvPjxQQVJBTSBpZD0iQ29tcFJlbGVhc2UiIHZhbHVlPSIwLjEwMDAwMDAwMTQ5MDExNjEiLz48UEFSQU0gaWQ9IkNvbXBU
+        aHJlc2hvbGQiIHZhbHVlPSIxMC4wIi8+PFBBUkFNIGlkPSJEeW5hbWljc0luIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJEeW5hbWljc1ByZUVxIiB2YWx1ZT0iMC4w
+        Ii8+PFBBUkFNIGlkPSJFcUUiIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkVxSW4iIHZhbHVlPSIxLjAiLz48UEFSQU0gaWQ9IkVxVG9TaWRlY2hhaW4iIHZhbHVlPSIw
+        LjAiLz48UEFSQU0gaWQ9IkZpbHRlcnNUb0lucHV0IiB2YWx1ZT0iMS4wIi8+PFBBUkFNIGlkPSJGaWx0ZXJzVG9TaWRlY2hhaW4iIHZhbHVlPSIwLjAiLz48UEFSQU0g
+        aWQ9IkdhdGVFeHBhbmRlciIgdmFsdWU9IjAuMCIvPjxQQVJBTSBpZD0iR2F0ZUZhc3RBdHRhY2siIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkdhdGVIb2xkIiB2YWx1
+        ZT0iMC4yNSIvPjxQQVJBTSBpZD0iR2F0ZVJhbmdlIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJHYXRlUmVsZWFzZSIgdmFsdWU9IjAuMTAwMDAwMDAxNDkwMTE2MSIv
+        PjxQQVJBTSBpZD0iR2F0ZVRocmVzaG9sZCIgdmFsdWU9IjEwLjAiLz48UEFSQU0gaWQ9IkhpZ2hFcUJlbGwiIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkhpZ2hFcUZy
+        ZXEiIHZhbHVlPSI3LjUiLz48UEFSQU0gaWQ9IkhpZ2hFcUdhaW4iIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkhpZ2hNaWRFcUZyZXEiIHZhbHVlPSIyLjUiLz48UEFS
+        QU0gaWQ9IkhpZ2hNaWRFcUdhaW4iIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkhpZ2hNaWRFcVEiIHZhbHVlPSIxLjUiLz48UEFSQU0gaWQ9IkhpZ2hQYXNzRnJlcSIg
+        dmFsdWU9IjIwLjAiLz48UEFSQU0gaWQ9IklucHV0VHJpbSIgdmFsdWU9IjAuMCIvPjxQQVJBTSBpZD0iTG93RXFCZWxsIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJM
+        b3dFcUZyZXEiIHZhbHVlPSIxODUuMCIvPjxQQVJBTSBpZD0iTG93RXFHYWluIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJMb3dNaWRFcUZyZXEiIHZhbHVlPSIwLjc5
+        OTk5OTk1MjMxNjI4NDIiLz48UEFSQU0gaWQ9Ikxvd01pZEVxR2FpbiIgdmFsdWU9IjAuMCIvPjxQQVJBTSBpZD0iTG93TWlkRXFRIiB2YWx1ZT0iMS41Ii8+PFBBUkFN
+        IGlkPSJMb3dQYXNzRnJlcSIgdmFsdWU9IjM1LjAiLz48UEFSQU0gaWQ9Ik91dHB1dFRyaW0iIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IlBoYXNlSW52ZXJ0IiB2YWx1
+        ZT0iMC4wIi8+PFBBUkFNIGlkPSJTaWRlY2hhaW5MaXN0ZW4iIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IlVzZUV4dGVybmFsS2V5IiB2YWx1ZT0iMC4wIi8+PC9QUk9D
+        RVNTT1JfU1RBVEU+PC9BPjxCIExhc3RMb2FkZWRQcmVzZXQ9IkM6XFByb2dyYW1EYXRhXFNvbGlkIFN0YXRlIExvZ2ljXFNTTCBOYXRpdmVcUHJlc2V0c1xDaGFubmVs
+        U3RyaXAyXERlZmF1bHQgUHJlc2V0LnhtbCI+PFBST0NFU1NPUl9TVEFURT48UEFSQU0gaWQ9IkJ5cGFzcyIgdmFsdWU9IjAuMCIvPjxQQVJBTSBpZD0iQ29tcEZhc3RB
+        dHRhY2siIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkNvbXBQZWFrIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJDb21wUmF0aW8iIHZhbHVlPSI2LjAwMDAwMDk1MzY3
+        NDMxNiIvPjxQQVJBTSBpZD0iQ29tcFJlbGVhc2UiIHZhbHVlPSIwLjEwMDAwMDAwMTQ5MDExNjEiLz48UEFSQU0gaWQ9IkNvbXBUaHJlc2hvbGQiIHZhbHVlPSIxMC4w
+        Ii8+PFBBUkFNIGlkPSJEeW5hbWljc0luIiB2YWx1ZT0iMS4wIi8+PFBBUkFNIGlkPSJEeW5hbWljc1ByZUVxIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJFcUUiIHZh
+        bHVlPSIwLjAiLz48UEFSQU0gaWQ9IkVxSW4iIHZhbHVlPSIxLjAiLz48UEFSQU0gaWQ9IkVxVG9TaWRlY2hhaW4iIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkZpbHRl
+        cnNUb0lucHV0IiB2YWx1ZT0iMS4wIi8+PFBBUkFNIGlkPSJGaWx0ZXJzVG9TaWRlY2hhaW4iIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkdhdGVFeHBhbmRlciIgdmFs
+        dWU9IjAuMCIvPjxQQVJBTSBpZD0iR2F0ZUZhc3RBdHRhY2siIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkdhdGVIb2xkIiB2YWx1ZT0iMC4yNSIvPjxQQVJBTSBpZD0i
+        R2F0ZVJhbmdlIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJHYXRlUmVsZWFzZSIgdmFsdWU9IjAuMTAwMDAwMDAxNDkwMTE2MSIvPjxQQVJBTSBpZD0iR2F0ZVRocmVz
+        aG9sZCIgdmFsdWU9IjEwLjAiLz48UEFSQU0gaWQ9IkhpZ2hFcUJlbGwiIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkhpZ2hFcUZyZXEiIHZhbHVlPSI3LjUiLz48UEFS
+        QU0gaWQ9IkhpZ2hFcUdhaW4iIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkhpZ2hNaWRFcUZyZXEiIHZhbHVlPSIyLjUiLz48UEFSQU0gaWQ9IkhpZ2hNaWRFcUdhaW4i
+        IHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IkhpZ2hNaWRFcVEiIHZhbHVlPSIxLjUiLz48UEFSQU0gaWQ9IkhpZ2hQYXNzRnJlcSIgdmFsdWU9IjIwLjAiLz48UEFSQU0g
+        aWQ9IklucHV0VHJpbSIgdmFsdWU9IjAuMCIvPjxQQVJBTSBpZD0iTG93RXFCZWxsIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJMb3dFcUZyZXEiIHZhbHVlPSIxODUu
+        MCIvPjxQQVJBTSBpZD0iTG93RXFHYWluIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJMb3dNaWRFcUZyZXEiIHZhbHVlPSIwLjc5OTk5OTk1MjMxNjI4NDIiLz48UEFS
+        QU0gaWQ9Ikxvd01pZEVxR2FpbiIgdmFsdWU9IjAuMCIvPjxQQVJBTSBpZD0iTG93TWlkRXFRIiB2YWx1ZT0iMS41Ii8+PFBBUkFNIGlkPSJMb3dQYXNzRnJlcSIgdmFs
+        dWU9IjM1LjAiLz48UEFSQU0gaWQ9Ik91dHB1dFRyaW0iIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IlBoYXNlSW52ZXJ0IiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJT
+        aWRlY2hhaW5MaXN0ZW4iIHZhbHVlPSIwLjAiLz48UEFSQU0gaWQ9IlVzZUV4dGVybmFsS2V5IiB2YWx1ZT0iMC4wIi8+PC9QUk9DRVNTT1JfU1RBVEU+PC9CPjxQQVJB
+        TSBpZD0iQ3V0IiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJTb2xvIiB2YWx1ZT0iMC4wIi8+PFBBUkFNIGlkPSJTb2xvU2FmZSIgdmFsdWU9IjAuMCIvPjxQQVJBTV9O
+        T05fQVVUTyBpZD0iR3VpU2xvdEluZGV4IiB2YWx1ZT0iLTEuMCIvPjxQQVJBTV9OT05fQVVUTyBpZD0iU2Vzc2lvbkRhdGFJZCIgdmFsdWU9IjAuMCIvPjxQQVJBTSBp
+        ZD0iR3JvdXBTZW5zZSIgdmFsdWU9IjAuMCIvPjxQQVJBTV9OT05fQVVUTyBpZD0iUGx1Z2luSWRlbnQiIHZhbHVlPSIwLjAiLz48UEFSQU1fTk9OX0FVVE8gaWQ9IlVu
+        aXF1ZUlkIiB2YWx1ZT0iMC4wIi8+PC9TU0xfUExVR0lOX1NUQVRFPgAAAAAAAAAAAAAAAAAAAAAASlVDRVByaXZhdGVEYXRhAAAAAAAAAAA=
+        AE5vIHByZXNldAAQAAAA
+      >
+      PRESETNAME "No preset"
+      FLOATPOS 0 0 0 0
+      FXID {4AAC615D-DB1D-4096-B42D-AB0163B5C069}
+      WAK 0 0
+    >
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 16
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {762D065D-C0B7-4B7E-9584-FDB815B35EAF}
+      IID 20
+      NAME "*60BPM Hat-glued"
+      VOLPAN 1 0 1 -1
+      SOFFS 0 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F706111E-8CB6-406A-98ED-830A20C307A7}
+      <SOURCE MIDI
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {25A528C9-18BF-416C-9155-8DC2686C34E9}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
+        CCINTERP 32
+        CHASE_CC_TAKEOFFS 1
+        GUID {E3C5D8DE-A9F2-4A08-9EF1-90DC9068A601}
+        IGNTEMPO 0 120 4 4
+        SRCCOLOR 38
+      >
+    >
+    <ITEM
+      POSITION 16
+      SNAPOFFS 0
+      LENGTH 16
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A9E4782E-3245-4D30-921E-7732EEFBD965}
+      IID 21
+      NAME "*60BPM Kick & Hat-glued"
+      VOLPAN 1 0 1 -1
+      SOFFS 0 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5BC1D394-08C7-4DE2-9FD6-6CD379B2915B}
+      <SOURCE MIDI
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {A4FB311B-2EC2-4050-8742-01B0B3A16042}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 0 80 24 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 0 80 24 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 0 80 24 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 0 80 24 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
+        CCINTERP 32
+        CHASE_CC_TAKEOFFS 1
+        GUID {22148822-C320-4087-908A-F990CB6BE2E9}
+        IGNTEMPO 0 120 4 4
+        SRCCOLOR 39
+      >
+    >
+    <ITEM
+      POSITION 32
+      SNAPOFFS 0
+      LENGTH 16
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {64F3CEC0-3AEC-47C2-9BDE-8E0D4FBEE446}
+      IID 22
+      NAME "*60BPM Snare & Hat-glued"
+      VOLPAN 1 0 1 -1
+      SOFFS 0 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2CEBC4F9-F91E-4FCE-A9F8-8624C8B56073}
+      <SOURCE MIDI
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {3D112DA4-8B71-48CB-B661-E173CC559A0F}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
+        CCINTERP 32
+        CHASE_CC_TAKEOFFS 1
+        GUID {B6572E02-8B37-4B75-B7CD-341B1C8718E6}
+        IGNTEMPO 0 120 4 4
+        SRCCOLOR 40
+      >
+    >
+    <ITEM
+      POSITION 48
+      SNAPOFFS 0
+      LENGTH 16
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {95A88B6B-BB9A-4DC3-B497-347E60255BAC}
+      IID 23
+      NAME "*60BPM Combined-glued"
+      VOLPAN 1 0 1 -1
+      SOFFS 0 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {820C9C4E-8182-4D40-A412-4CEFC0D788F9}
+      <SOURCE MIDI
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {3E4FF20B-36D7-4CD4-B4C2-1DB297D3A771}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
+        CCINTERP 32
+        CHASE_CC_TAKEOFFS 1
+        GUID {E535D09E-C3B9-41E7-8BB1-BE1F8BFD4D86}
+        IGNTEMPO 0 120 4 4
+        SRCCOLOR 37
+      >
+    >
+    <ITEM
+      POSITION 64
+      SNAPOFFS 0
+      LENGTH 12
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1EF387FD-DBF4-4AE8-92F2-FAE4746A7E63}
+      IID 24
+      NAME "*120BPM Combined-glued"
+      VOLPAN 1 0 1 -1
+      SOFFS 0 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0333E495-00E9-462A-84B1-6CD9FC670CDC}
+      <SOURCE MIDI
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {1361655C-EAB0-4D0E-9ABD-ACCF02AB862F}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
+        CCINTERP 32
+        CHASE_CC_TAKEOFFS 1
+        GUID {51EEED9D-5885-43F4-8DE9-C98BA69B13E0}
+        IGNTEMPO 0 120 4 4
+        SRCCOLOR 41
+      >
+    >
+  >
+  <EXTENSIONS
+    <MCU_B_KLINKE
+      |#{PROJECT_CONFIG/}#|
+      
+    >
+    <MCU_KLINKE
+      |#{PROJECT_CONFIG/}#|
+      
+    >
+  >
+  <EXTSTATE
+    <ARC_COUNTER_TIMER_IN_PROJ_WIN
+      PROJECT_STARTED "11/07/2025 / 13:24:47"
+      TIME_PLAY 85.099999904633
+      TIME_SEC_AFK 1193.0999999046
+      TIME_SEC_AFK_SESSION 95.099999904633
+      TIME_SEC_RESET 7985.0999999046
+      TIME_SEC_SESSION 95.099999904633
+      TIME_SEC_TOTAL 7985.0999999046
+    >
+  >
+>
