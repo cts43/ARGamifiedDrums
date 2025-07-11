@@ -115,8 +115,6 @@ public class ControllerRecorder : MonoBehaviour
     {
         LeftHandAnchor = GameObject.FindGameObjectWithTag("LeftHandAnchor");
         RightHandAnchor = GameObject.FindGameObjectWithTag("RightHandAnchor");
-        moveableSceneTransform = GameObject.FindWithTag("Moveable Scene").transform;
-        moveableSceneRotation = moveableSceneTransform.rotation;
     }
 
     public bool hasStoredRecording()
@@ -144,6 +142,10 @@ public class ControllerRecorder : MonoBehaviour
 
     public void Record()
     {
+        
+        moveableSceneTransform = GameObject.FindWithTag("Moveable Scene").transform;
+        moveableSceneRotation = moveableSceneTransform.rotation;
+
         playing = false;
         leftHand = GameObject.FindWithTag("LeftHandTracker");
         rightHand = GameObject.FindWithTag("RightHandTracker");
@@ -175,8 +177,8 @@ public class ControllerRecorder : MonoBehaviour
         }
         playing = false;
         recording = false;
-        moveableSceneTransform = GameObject.FindGameObjectWithTag("Moveable Scene").transform;
-        moveableSceneRotation = moveableSceneTransform.rotation;
+        //moveableSceneTransform = GameObject.FindGameObjectWithTag("Moveable Scene").transform;
+        //moveableSceneRotation = moveableSceneTransform.rotation;
         Destroy(DrumStickL);
         Destroy(DrumStickR);
         Destroy(GhostHandL);
