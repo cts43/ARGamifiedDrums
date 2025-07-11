@@ -5905,8 +5905,8 @@ MonoBehaviour:
   handDrumstickOffsetFrames: 5
   leftHandPrefab: {fileID: 1732268206786806, guid: 4e8c8dea8c93b254c9379222ab65e650, type: 3}
   rightHandPrefab: {fileID: 1581749144712736, guid: cb846a4acb232b4458d8f1ef24852291, type: 3}
-  DrumStickLPrefab: {fileID: 2873981299412852974, guid: bb7cba90ddd3aa7479d36894d8a39ead, type: 3}
-  DrumStickRPrefab: {fileID: 2873981299412852974, guid: b949efb2a3a759f4d9355234564ba884, type: 3}
+  DrumStickLPrefab: {fileID: 2873981299412852974, guid: b949efb2a3a759f4d9355234564ba884, type: 3}
+  DrumStickRPrefab: {fileID: 2873981299412852974, guid: bb7cba90ddd3aa7479d36894d8a39ead, type: 3}
 --- !u!4 &823286945
 Transform:
   m_ObjectHideFlags: 0
