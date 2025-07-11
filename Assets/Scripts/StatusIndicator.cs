@@ -33,7 +33,7 @@ public class StatusIndicator : MonoBehaviour
     {
         if (fading)
         {
-            yield break;
+            //yield break;
         }
 
         fading = true;

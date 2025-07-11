@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Melanchall.DryWetMidi.Interaction;
@@ -140,9 +141,15 @@ public class PlaybackManager : MonoBehaviour
         }
     }
 
-    private void playWithRecord()
+    private IEnumerator playWithRecord()
     {
         //reload and play with recording on
+
+        for (int i = 5; i >= 0; i--)
+        {
+            statusIndicator.ShowStatus("Recording in " + i + " seconds...");
+            yield return new WaitForSeconds(1);
+        }
 
         if (MIDILoaded)
         {
@@ -290,7 +297,7 @@ public class PlaybackManager : MonoBehaviour
         {
             if (!playing)
             {
-                playWithRecord();
+                StartCoroutine(playWithRecord());
             }
         }
 

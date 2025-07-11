@@ -2902,7 +2902,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &428631589
 Transform:
   m_ObjectHideFlags: 0
@@ -3607,7 +3607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11479374, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_showState
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11479374, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_controller
@@ -4939,7 +4939,7 @@ GameObject:
   - component: {fileID: 736820413}
   m_Layer: 0
   m_Name: '[BuildingBlock] Hand Tracking left'
-  m_TagString: LeftHandTracker
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5903,9 +5903,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handDrumstickOffsetFrames: 5
-  leftHandPrefab: {fileID: 1732268206786806, guid: d28ec6c17b738b94d87e7e5dc7c5bb1a, type: 3}
-  rightHandPrefab: {fileID: 1581749144712736, guid: 19b48b930aac9ba4b99ebb30bf13b7f1, type: 3}
-  playbackObject: {fileID: 2873981299412852974, guid: b949efb2a3a759f4d9355234564ba884, type: 3}
+  leftHandPrefab: {fileID: 1732268206786806, guid: 4e8c8dea8c93b254c9379222ab65e650, type: 3}
+  rightHandPrefab: {fileID: 1581749144712736, guid: cb846a4acb232b4458d8f1ef24852291, type: 3}
+  DrumStickLPrefab: {fileID: 2873981299412852974, guid: bb7cba90ddd3aa7479d36894d8a39ead, type: 3}
+  DrumStickRPrefab: {fileID: 2873981299412852974, guid: b949efb2a3a759f4d9355234564ba884, type: 3}
 --- !u!4 &823286945
 Transform:
   m_ObjectHideFlags: 0
@@ -8296,7 +8297,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1104235128
 Transform:
   m_ObjectHideFlags: 0
@@ -8461,7 +8462,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11479374, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_showState
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11479374, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_controller
@@ -9328,7 +9329,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1278009376
 Transform:
   m_ObjectHideFlags: 0
@@ -10224,7 +10225,7 @@ GameObject:
   - component: {fileID: 1389409759}
   m_Layer: 0
   m_Name: '[BuildingBlock] Hand Tracking right'
-  m_TagString: RightHandTracker
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13369,7 +13370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1937310335
 Transform:
   m_ObjectHideFlags: 0
@@ -15091,6 +15092,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: OVRLeftControllerVisual
       objectReference: {fileID: 0}
+    - target: {fileID: 699218207496619424, guid: a3cb63fbc355e984e9e5c2ca9e016b73, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 699218207496619425, guid: a3cb63fbc355e984e9e5c2ca9e016b73, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -15372,6 +15377,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1678554349857304352, guid: 34a22dd67c1e5344591237fdd61e78ec, type: 3}
+      propertyPath: m_TagString
+      value: RightHandTracker
+      objectReference: {fileID: 0}
     - target: {fileID: 1678554349857304353, guid: 34a22dd67c1e5344591237fdd61e78ec, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -15421,7 +15430,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1474483260}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4588995244568401618, guid: 34a22dd67c1e5344591237fdd61e78ec, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34a22dd67c1e5344591237fdd61e78ec, type: 3}
@@ -15720,6 +15730,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: OVRRightControllerVisual
       objectReference: {fileID: 0}
+    - target: {fileID: 699218207496619424, guid: a3cb63fbc355e984e9e5c2ca9e016b73, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 699218207496619425, guid: a3cb63fbc355e984e9e5c2ca9e016b73, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -16016,6 +16030,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: OVRLeftHandVisual
       objectReference: {fileID: 0}
+    - target: {fileID: 6536860776232889746, guid: 70d02a90551f23042a882cdceeaf8e3a, type: 3}
+      propertyPath: m_TagString
+      value: LeftHandTracker
+      objectReference: {fileID: 0}
     - target: {fileID: 6536860776232889756, guid: 70d02a90551f23042a882cdceeaf8e3a, type: 3}
       propertyPath: _hand
       value: 
@@ -16065,7 +16083,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 163823175599483173, guid: 70d02a90551f23042a882cdceeaf8e3a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70d02a90551f23042a882cdceeaf8e3a, type: 3}
@@ -16077,6 +16096,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 951497584}
     m_Modifications:
+    - target: {fileID: 811892384566685292, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1440425882918320826, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547618890348747761, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1594904356697162746, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _updateAfter
       value: 
@@ -16093,6 +16124,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2004145283704361226, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2022636603947279596, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _updateAfter
       value: 
@@ -16101,10 +16136,18 @@ PrefabInstance:
       propertyPath: _iModifyDataFromSourceMono
       value: 
       objectReference: {fileID: 1437523079}
+    - target: {fileID: 2096718731825123247, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2809427387468595372, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _handler
       value: 
       objectReference: {fileID: 1657748213}
+    - target: {fileID: 3195791027062315400, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3280343642790589917, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -16149,6 +16192,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3877423890583842503, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3936392276774760159, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _handSkeletonProvider
       value: 
@@ -16157,6 +16204,10 @@ PrefabInstance:
       propertyPath: _trackingToWorldTransformer
       value: 
       objectReference: {fileID: 951497585}
+    - target: {fileID: 5018382618200165174, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6345339904669506827, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _monoBehaviours.Array.size
       value: 1
@@ -16178,7 +16229,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 211734585}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7898996250721229903, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+    - {fileID: 6202238973272792943, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5099001635832392411, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       insertIndex: -1
@@ -16287,6 +16340,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 951497584}
     m_Modifications:
+    - target: {fileID: 811892384566685292, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1440425882918320826, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1594904356697162746, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _updateAfter
       value: 
@@ -16299,6 +16360,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeftInteractions
       objectReference: {fileID: 0}
+    - target: {fileID: 2004145283704361226, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2022636603947279596, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _updateAfter
       value: 
@@ -16307,11 +16372,19 @@ PrefabInstance:
       propertyPath: _iModifyDataFromSourceMono
       value: 
       objectReference: {fileID: 1437523078}
+    - target: {fileID: 2096718731825123247, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2809427387468595372, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _handler
       value: 
       objectReference: {fileID: 1657748213}
     - target: {fileID: 2908619892832884743, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195791027062315400, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -16359,6 +16432,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3877423890583842503, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3936392276774760159, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _handSkeletonProvider
       value: 
@@ -16367,6 +16444,10 @@ PrefabInstance:
       propertyPath: _trackingToWorldTransformer
       value: 
       objectReference: {fileID: 951497585}
+    - target: {fileID: 5018382618200165174, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6379523454727153023, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       propertyPath: _hand
       value: 
@@ -16388,7 +16469,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7898996250721229903, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
+    - {fileID: 6202238973272792943, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5099001635832392411, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
       insertIndex: -1
