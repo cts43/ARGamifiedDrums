@@ -150,7 +150,7 @@ public class UserInputDialogue : MonoBehaviour
 
     public void showRecordingFiles()
     {
-        string path = Application.persistentDataPath;
+        string path = FileManager.Instance.GetRecordingsPath();
 
         var info = new DirectoryInfo(path);
 

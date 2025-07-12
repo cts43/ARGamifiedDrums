@@ -11,7 +11,7 @@ public class ControllerRecorder : MonoBehaviour
     public int handDrumstickOffsetFrames = 10;
 
     [Serializable]
-    public struct recordedTransform
+    public class recordedTransform
     {
         public Vector3 position;
         public Vector3 rotation;
@@ -352,15 +352,19 @@ public class ControllerRecorder : MonoBehaviour
         }
     }
 
-    public (Queue<transformPair>, Queue<handMotionFrame>, Queue<handMotionFrame>) getRecording()
+    public (Queue<transformPair>, Queue<handMotionFrame>, Queue<handMotionFrame>,recordedTransform) getRecording()
     {
-        return (recordedControllerTransforms, recordedLeftHandTransforms, recordedRightHandTransforms);
+        return (recordedControllerTransforms, recordedLeftHandTransforms, recordedRightHandTransforms,new recordedTransform(moveableSceneTransform.position,moveableSceneRotation.eulerAngles));
     }
 
-    public void loadRecording(Queue<transformPair> controllerMotion, Queue<handMotionFrame> leftHandMotion, Queue<handMotionFrame> rightHandMotion)
+    public void loadRecording(Queue<transformPair> controllerMotion, Queue<handMotionFrame> leftHandMotion, Queue<handMotionFrame> rightHandMotion, recordedTransform moveableSceneTransform)
     {
         recordedControllerTransforms = controllerMotion;
         recordedLeftHandTransforms = leftHandMotion;
         recordedRightHandTransforms = rightHandMotion;
+        this.moveableSceneTransform = GameObject.FindWithTag("Moveable Scene").transform;
+        this.moveableSceneRotation = this.moveableSceneTransform.rotation;
+
+
     }
 }

@@ -6,11 +6,8 @@ using Melanchall.DryWetMidi.Core;
 using System;
 using TMPro;
 using System.IO;
-using UnityEngine.Networking;
-using System.Threading.Tasks;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine.Timeline;
+
 
 
 
@@ -274,6 +271,12 @@ public class NoteSpawner : MonoBehaviour
         spawnedNote.transform.Translate(startPos);
         spawnedNote.GetComponent<NoteIndicator>().ScheduledTimeInTicks = noteTimeInTicks;// + TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
         spawnedNote.GetComponent<NoteIndicator>().TempoMap = tempoMap;
+
+        var drumColour = noteDrum.GetComponent<Renderer>().material.color;
+
+        spawnedNote.GetComponent<Renderer>().material.color = new Color(drumColour.r, drumColour.g, drumColour.b, 0.2f);
+
+        
         Vector3 distanceFromTarget = targetPos - startPos;
 
         Vector3 speedToMove = distanceFromTarget / spawnWindow;

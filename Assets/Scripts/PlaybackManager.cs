@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Melanchall.DryWetMidi.Interaction;
 using Meta.XR.ImmersiveDebugger.UserInterface.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 
 public class PlaybackManager : MonoBehaviour
 {
@@ -31,6 +29,8 @@ public class PlaybackManager : MonoBehaviour
 
     private controllerActions inputActions;
 
+    private MidiEventCatcher MIDIEventCatcher;
+
     public static bool playing = false;
     private bool motionRecording = false;
     private bool motionRecorded = false;
@@ -45,13 +45,13 @@ public class PlaybackManager : MonoBehaviour
 
     //Serialisable classes for saving playthrough to file -- needed for plotting graphs etc.
     [Serializable]
-    private class playthroughFrame
+    public class playthroughFrame
     {
-        [SerializeField] private int note;
-        [SerializeField] private int velocity;
-        [SerializeField] private long hitTime;
-        [SerializeField] private long closestNoteTime;
-        [SerializeField] private bool hitSuccessfully;
+        [SerializeField] public int note;
+        [SerializeField] public int velocity;
+        [SerializeField] public long hitTime;
+        [SerializeField] public long closestNoteTime;
+        [SerializeField] public bool hitSuccessfully;
         //Constructor
         public playthroughFrame(int note, int velocity, long hitTime, long closestNoteTime, bool hitSuccessfully)
         {
@@ -73,7 +73,7 @@ public class PlaybackManager : MonoBehaviour
 
     }
     [Serializable]
-    private class playthroughData
+    public class playthroughData
     {
         [SerializeField] public List<playthroughFrame> frames;
 
@@ -84,23 +84,25 @@ public class PlaybackManager : MonoBehaviour
     }
 
     [Serializable]
-    private class motionData
+    public class motionData
     {
         [SerializeField] public List<ControllerRecorder.transformPair> controllerFrames;
         [SerializeField] public List<ControllerRecorder.handMotionFrame> leftHandFrames;
         [SerializeField] public List<ControllerRecorder.handMotionFrame> rightHandFrames;
+        [SerializeField] public ControllerRecorder.recordedTransform moveableSceneTransform;
 
-        public motionData(List<ControllerRecorder.transformPair> controllerFrames, List<ControllerRecorder.handMotionFrame> leftHandFrames, List<ControllerRecorder.handMotionFrame> rightHandFrames)
+        public motionData(List<ControllerRecorder.transformPair> controllerFrames, List<ControllerRecorder.handMotionFrame> leftHandFrames, List<ControllerRecorder.handMotionFrame> rightHandFrames, ControllerRecorder.recordedTransform moveableSceneTransform = null)
         {
             this.controllerFrames = controllerFrames;
             this.leftHandFrames = leftHandFrames;
             this.rightHandFrames = rightHandFrames;
+            this.moveableSceneTransform = moveableSceneTransform;
         }
     }
 
     //class that stores all motion + playthrough data to allow saving to single .json file
     [Serializable]
-    private class recordingData
+    public class recordingData
     {
         public motionData motion;
         public playthroughData inputs;
@@ -233,6 +235,8 @@ public class PlaybackManager : MonoBehaviour
         ControllerRecorder = ControllerRecorderObj.GetComponent<ControllerRecorder>();
         drumManager = drumManagerObj.GetComponent<DrumManager>();
 
+        MIDIEventCatcher = GameObject.FindWithTag("MIDI Input Handler").GetComponent<MidiEventCatcher>();
+
         activeNoteSpawner.StartedPlaying += OnMIDIStartedPlaying;
         activeNoteSpawner.FinishedPlaying += OnMIDIFinishedPlaying;
         ControllerRecorder.StartedRecording += OnStartedRecording;
@@ -274,6 +278,12 @@ public class PlaybackManager : MonoBehaviour
         if (RecordingMenu.activeInHierarchy)
         {
             return; //don't allow other inputs if menu is open
+        }
+
+        if (inputActions.Controller.Back.triggered)
+        {
+            MIDIEventCatcher.ToggleDrumSounds();
+            statusIndicator.ShowStatus("Toggled drum sounds "+ (MIDIEventCatcher.playDrumSounds ? "on" : "off"));
         }
 
 
@@ -327,7 +337,6 @@ public class PlaybackManager : MonoBehaviour
             {
                 Debug.Log("Note time: "+ time+ " Playback time: "+ activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks());
                 savedPlaythroughCopy.Dequeue();
-                MidiEventCatcher MIDIEventCatcher = GameObject.FindWithTag("MIDI Input Handler").GetComponent<MidiEventCatcher>();
                 MIDIEventCatcher.checkForDrum(note, velocity);
             }
             else
@@ -418,9 +427,9 @@ public class PlaybackManager : MonoBehaviour
             try
             {
 
-                var (controllerRecording, leftHandRecording, rightHandRecording) = ControllerRecorder.getRecording();
+                var (controllerRecording, leftHandRecording, rightHandRecording, moveableSceneTransform) = ControllerRecorder.getRecording();
 
-                var recordedMotion = new motionData(new List<ControllerRecorder.transformPair>(controllerRecording), new List<ControllerRecorder.handMotionFrame>(leftHandRecording), new List<ControllerRecorder.handMotionFrame>(rightHandRecording)); //List from queue for serialisation.
+                var recordedMotion = new motionData(new List<ControllerRecorder.transformPair>(controllerRecording), new List<ControllerRecorder.handMotionFrame>(leftHandRecording), new List<ControllerRecorder.handMotionFrame>(rightHandRecording),moveableSceneTransform); //List from queue for serialisation.
                 var recordedInput = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //same here
 
                 //saving each of these in a combined class recordingData to have the recording as a single file. Can still load motion / inputs individually if we want to but they get recorded together
@@ -428,12 +437,12 @@ public class PlaybackManager : MonoBehaviour
 
                 string date = System.DateTime.Now.ToString("yyyyMMdd-HH-mm");
 
-                string savePath = Path.Combine(Application.persistentDataPath, date+".json");
+                string savePath = Path.Combine(FileManager.Instance.GetRecordingsPath(), MIDIFilePath+".json");
 
                 int i = 1;
                 while (File.Exists(savePath))
                 {
-                    savePath = Path.Combine(Application.persistentDataPath, "saved" + " - " + i + ".json");
+                    savePath = Path.Combine(Application.persistentDataPath, MIDIFilePath + " - " + i + ".json");
                     i++;
                 }
 
@@ -463,7 +472,7 @@ public class PlaybackManager : MonoBehaviour
 
         Debug.Log("(Playback Manager) Loading recording from file: " + filename);
 
-        var loadPath = Path.Combine(Application.persistentDataPath, filename);
+        var loadPath = Path.Combine(FileManager.Instance.GetRecordingsPath(), filename);
 
         if (File.Exists(loadPath))
         {
@@ -478,8 +487,9 @@ public class PlaybackManager : MonoBehaviour
             var controllerMotion = new Queue<ControllerRecorder.transformPair>(loadedData.motion.controllerFrames);
             var leftHandMotion = new Queue<ControllerRecorder.handMotionFrame>(loadedData.motion.leftHandFrames);
             var rightHandMotion = new Queue<ControllerRecorder.handMotionFrame>(loadedData.motion.rightHandFrames); //back to queues from serialised Lists 
+            var moveableSceneTransform = loadedData.motion.moveableSceneTransform;
 
-            ControllerRecorder.loadRecording(controllerMotion, leftHandMotion, rightHandMotion);
+            ControllerRecorder.loadRecording(controllerMotion, leftHandMotion, rightHandMotion,moveableSceneTransform);
             motionRecorded = true;
 
             return true;

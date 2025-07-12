@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ManualAlign : MonoBehaviour
 {
@@ -23,6 +24,16 @@ public class ManualAlign : MonoBehaviour
 
         if (align)
         {
+
+            if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickDown))
+            {
+                MoveableScene.transform.Translate(0, -0.001f, 0);
+            }
+            else if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickUp))
+            {
+                MoveableScene.transform.Translate(0, 0.001f, 0);
+            }
+
             var newXPos = RightHandAnchor.transform.position.x;
             var newYPos = MoveableScene.transform.position.y; //existing position
             var newZPos = RightHandAnchor.transform.position.z;
