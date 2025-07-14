@@ -73,24 +73,20 @@ public class DrumHit : MonoBehaviour
             if (diff <= TimeConverter.ConvertFrom(hitWindowAsTimeSpan, note.TempoMap) / 2)
             {
                 hitNote = true;
-                Debug.Log("Successfully Hit Note at Tick " + currentTime + ", closest note: " + closestNoteTime + " Diff: "+diff);
+                //Debug.Log("Successfully Hit Note at Tick " + currentTime + ", closest note: " + closestNoteTime + " Diff: "+diff);
                 note.destroy(); //destroy hit note
-                Debug.Log(scoreIndicator);
 
                 if (diff <= 50)
                 {
-                    Debug.Log("Perfect!");
                     StartCoroutine(scoreIndicator.ReplaceLabel("Perfect!"));
 
                 }
                 else if (diff <= 100)
                 {
-                    Debug.Log("Great!");
                     StartCoroutine(scoreIndicator.ReplaceLabel("Great!"));
                 }
                 else
                 {
-                    Debug.Log("OK!");
                     StartCoroutine(scoreIndicator.ReplaceLabel("OK!"));
                 }
 
@@ -124,7 +120,7 @@ public class DrumHit : MonoBehaviour
         if (!hitNote)
         {
             {
-                Debug.Log("Missed Note at Tick " + currentTime);
+                //Debug.Log("Missed Note at Tick " + currentTime);
                 StartCoroutine(scoreIndicator.ReplaceLabel("Missed!"));
             }
         }

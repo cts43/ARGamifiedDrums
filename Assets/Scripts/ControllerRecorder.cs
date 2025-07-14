@@ -28,10 +28,13 @@ public class ControllerRecorder : MonoBehaviour
         public recordedTransform leftControllerMotion;
         public recordedTransform rightControllerMotion;
 
-        public transformPair(recordedTransform leftControllerMotion, recordedTransform rightControllerMotion)
+        public long currentTick;
+
+        public transformPair(recordedTransform leftControllerMotion, recordedTransform rightControllerMotion, long currentTick)
         {
             this.leftControllerMotion = leftControllerMotion;
             this.rightControllerMotion = rightControllerMotion;
+            this.currentTick = currentTick;
         }
 
         public void Deconstruct(out recordedTransform leftControllerMotion, out recordedTransform rightControllerMotion)
@@ -209,6 +212,7 @@ public class ControllerRecorder : MonoBehaviour
                 recordedLeftHandTransforms = new Queue<handMotionFrame>();
                 recordedRightHandTransforms = new Queue<handMotionFrame>();
                 justStartedRecording = false;
+
             }
 
             //CONTROLLER RECORDING//////////////////////
@@ -230,8 +234,8 @@ public class ControllerRecorder : MonoBehaviour
             recordedTransform recordedMotionL = new recordedTransform(localPosL, localRotL);
             recordedTransform recordedMotionR = new recordedTransform(localPosR, localRotR);
 
-            recordedControllerTransforms.Enqueue(new transformPair(recordedMotionL, recordedMotionR));
-
+            recordedControllerTransforms.Enqueue(new transformPair(recordedMotionL, recordedMotionR,PlaybackManager.Instance.currentTimeInTicks));
+            Debug.Log(PlaybackManager.Instance.currentTimeInTicks);
             //set drum stick prefab transforms for visual while recording
             DrumStickL.transform.position = leftControllerPosition;
             DrumStickL.transform.rotation = leftControllerRotation;
@@ -288,58 +292,62 @@ public class ControllerRecorder : MonoBehaviour
                 GhostHandR = Instantiate(rightHandPrefab, moveableSceneTransform);
             }
 
-            if (recordedControllerTransformsCopy.Count > 0 || recordedLeftHandTransforms.Count > 0)
+            if (recordedControllerTransformsCopy.Count > 0 && recordedLeftHandTransforms.Count > 0)
             {
                 //CONTROLLER/DRUMSTICK PLAYBACK
 
-                if (recordedControllerTransformsCopy.Count > 0)
+                while (recordedControllerTransformsCopy.Count > 0 && recordedControllerTransformsCopy.Peek().currentTick <= PlaybackManager.Instance.currentTimeInTicks)
                 {
 
-                    (var playbackMotionL, var playbackMotionR) = recordedControllerTransformsCopy.Dequeue();
-
-                    //set transforms from queued recording
-                    DrumStickL.transform.localPosition = playbackMotionL.position;
-                    DrumStickL.transform.localRotation = Quaternion.Euler(playbackMotionL.rotation);
-
-                    DrumStickR.transform.localPosition = playbackMotionR.position;
-                    DrumStickR.transform.localRotation = Quaternion.Euler(playbackMotionR.rotation);
-                }
-
-                if (recordedLeftHandTransformsCopy.Count > 0 && recordedRightHandTransformsCopy.Count > 0)
-                {
-                    //HAND MOTION PLAYBACK
-                    //don't really need to reassign this every frame but fine for testing
-
-
-                    Transform[] ghostHandLTransforms = GhostHandL.GetComponentsInChildren<Transform>();
-                    Transform[] ghostHandRTransforms = GhostHandR.GetComponentsInChildren<Transform>();
-
-                    var (leftFrames, leftRootPos) = recordedLeftHandTransformsCopy.Dequeue();
-                    var (rightFrames, rightRootPos) = recordedRightHandTransformsCopy.Dequeue();
-
-                    GhostHandL.transform.localPosition = leftRootPos.position;
-                    GhostHandL.transform.localRotation = Quaternion.Euler(leftRootPos.rotation);
-                    GhostHandR.transform.localPosition = rightRootPos.position;
-                    GhostHandR.transform.localRotation = Quaternion.Euler(rightRootPos.rotation);
-
-                    int indexBound = Mathf.Min(Mathf.Min(ghostHandLTransforms.Length, ghostHandRTransforms.Length), Mathf.Min(leftFrames.Count, rightFrames.Count));
-                    //use shortest array length for max index value to prevent out of bounds
-
-                    for (int i = 1; i < indexBound; i++)
+                    if (recordedControllerTransformsCopy.Count > 0)
                     {
-                        //to world position
-                        // Vector3 worldPositionL = moveableSceneTransform.TransformPoint(recordedLeftHandTransformFrame[i].position);
-                        // Quaternion worldRotationL = moveableSceneRotation * Quaternion.Euler(recordedLeftHandTransformFrame[i].rotation);
-                        // Vector3 worldPositionR = moveableSceneTransform.TransformPoint(recordedRightHandTransformFrame[i].position);
-                        // Quaternion worldRotationR = moveableSceneRotation * Quaternion.Euler(recordedRightHandTransformFrame[i].rotation);
 
-                        ghostHandLTransforms[i].localPosition = leftFrames[i].position;
-                        ghostHandLTransforms[i].localRotation = Quaternion.Euler(leftFrames[i].rotation);
-                        ghostHandRTransforms[i].localPosition = rightFrames[i].position;
-                        ghostHandRTransforms[i].localRotation = Quaternion.Euler(rightFrames[i].rotation);
+                        (var playbackMotionL, var playbackMotionR) = recordedControllerTransformsCopy.Dequeue();
 
+                        //set transforms from queued recording
+                        DrumStickL.transform.localPosition = playbackMotionL.position;
+                        DrumStickL.transform.localRotation = Quaternion.Euler(playbackMotionL.rotation);
+
+                        DrumStickR.transform.localPosition = playbackMotionR.position;
+                        DrumStickR.transform.localRotation = Quaternion.Euler(playbackMotionR.rotation);
                     }
 
+                    if (recordedLeftHandTransformsCopy.Count > 0 && recordedRightHandTransformsCopy.Count > 0)
+                    {
+                        //HAND MOTION PLAYBACK
+                        //don't really need to reassign this every frame but fine for testing
+
+
+                        Transform[] ghostHandLTransforms = GhostHandL.GetComponentsInChildren<Transform>();
+                        Transform[] ghostHandRTransforms = GhostHandR.GetComponentsInChildren<Transform>();
+
+                        var (leftFrames, leftRootPos) = recordedLeftHandTransformsCopy.Dequeue();
+                        var (rightFrames, rightRootPos) = recordedRightHandTransformsCopy.Dequeue();
+
+                        GhostHandL.transform.localPosition = leftRootPos.position;
+                        GhostHandL.transform.localRotation = Quaternion.Euler(leftRootPos.rotation);
+                        GhostHandR.transform.localPosition = rightRootPos.position;
+                        GhostHandR.transform.localRotation = Quaternion.Euler(rightRootPos.rotation);
+
+                        int indexBound = Mathf.Min(Mathf.Min(ghostHandLTransforms.Length, ghostHandRTransforms.Length), Mathf.Min(leftFrames.Count, rightFrames.Count));
+                        //use shortest array length for max index value to prevent out of bounds
+
+                        for (int i = 1; i < indexBound; i++)
+                        {
+                            //to world position
+                            // Vector3 worldPositionL = moveableSceneTransform.TransformPoint(recordedLeftHandTransformFrame[i].position);
+                            // Quaternion worldRotationL = moveableSceneRotation * Quaternion.Euler(recordedLeftHandTransformFrame[i].rotation);
+                            // Vector3 worldPositionR = moveableSceneTransform.TransformPoint(recordedRightHandTransformFrame[i].position);
+                            // Quaternion worldRotationR = moveableSceneRotation * Quaternion.Euler(recordedRightHandTransformFrame[i].rotation);
+
+                            ghostHandLTransforms[i].localPosition = leftFrames[i].position;
+                            ghostHandLTransforms[i].localRotation = Quaternion.Euler(leftFrames[i].rotation);
+                            ghostHandRTransforms[i].localPosition = rightFrames[i].position;
+                            ghostHandRTransforms[i].localRotation = Quaternion.Euler(rightFrames[i].rotation);
+
+                        }
+
+                    }
                 }
 
 

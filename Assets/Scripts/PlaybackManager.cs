@@ -19,6 +19,8 @@ public class PlaybackManager : MonoBehaviour
     private DrumManager drumManager;
     private GameObject RecordingMenu;
 
+    public Action FinishedPlaying;
+
     private StatusIndicator statusIndicator;
 
     public string MIDIFilePath;
@@ -124,11 +126,14 @@ public class PlaybackManager : MonoBehaviour
             activeNoteSpawner.Initialise(MIDIFilePath);
             MIDILoaded = true;
 
+            currentTimeInTicks = -activeNoteSpawner.spawnWindowAsTicks;
+
             return true;
 
         }
         catch (Exception)
         {
+            Debug.Log($"Failed to load MIDI: {Path}");
             return false;
         }
 
@@ -172,7 +177,7 @@ public class PlaybackManager : MonoBehaviour
         }
     }
 
-    private void playRecorded(bool motion, bool drumHits) //arguments decide whether the recorded notes hit should be played back. vital for demonstating while the player is playing
+    public void playRecorded(bool motion, bool drumHits) //arguments decide whether the recorded notes hit should be played back. vital for demonstating while the player is playing
     {
 
         if (!MIDILoaded)
@@ -283,7 +288,7 @@ public class PlaybackManager : MonoBehaviour
         if (inputActions.Controller.Back.triggered)
         {
             MIDIEventCatcher.ToggleDrumSounds();
-            statusIndicator.ShowStatus("Toggled drum sounds "+ (MIDIEventCatcher.playDrumSounds ? "on" : "off"));
+            statusIndicator.ShowStatus("Toggled drum sounds " + (MIDIEventCatcher.playDrumSounds ? "on" : "off"));
         }
 
 
@@ -335,7 +340,7 @@ public class PlaybackManager : MonoBehaviour
             (var note, var velocity, var time, _, _) = savedPlaythroughCopy.Peek();
             if (activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks() >= time) //offset based on spawn window
             {
-                Debug.Log("Note time: "+ time+ " Playback time: "+ activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks());
+                //Debug.Log("Note time: " + time + " Playback time: " + activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks());
                 savedPlaythroughCopy.Dequeue();
                 MIDIEventCatcher.checkForDrum(note, velocity);
             }
@@ -363,6 +368,7 @@ public class PlaybackManager : MonoBehaviour
     private void OnMIDIFinishedPlaying()
     {
         Debug.Log("(Playback Manager) MIDI Finished");
+        FinishedPlaying?.Invoke();
 
         ControllerRecorder.Reset();
         savingPlaythrough = false;
@@ -370,7 +376,7 @@ public class PlaybackManager : MonoBehaviour
         readyToSaveInput = true;
         motionPlaying = false;
         playingRecordedInputs = false;
-        currentTimeInTicks = 0;
+        currentTimeInTicks = -activeNoteSpawner.spawnWindowAsTicks;
         int hitNotes = 0;
         int missedNotes;
 
@@ -388,6 +394,8 @@ public class PlaybackManager : MonoBehaviour
             missedNotes = activeNoteSpawner.totalNotes - hitNotes;
 
             Debug.Log("Missed Notes: " + missedNotes);
+
+            statusIndicator.ShowStatus($"Hit {hitNotes}/{activeNoteSpawner.totalNotes} notes.");
 
             double percentageMissed = (double)missedNotes / activeNoteSpawner.totalNotes * 100;
 
@@ -429,7 +437,7 @@ public class PlaybackManager : MonoBehaviour
 
                 var (controllerRecording, leftHandRecording, rightHandRecording, moveableSceneTransform) = ControllerRecorder.getRecording();
 
-                var recordedMotion = new motionData(new List<ControllerRecorder.transformPair>(controllerRecording), new List<ControllerRecorder.handMotionFrame>(leftHandRecording), new List<ControllerRecorder.handMotionFrame>(rightHandRecording),moveableSceneTransform); //List from queue for serialisation.
+                var recordedMotion = new motionData(new List<ControllerRecorder.transformPair>(controllerRecording), new List<ControllerRecorder.handMotionFrame>(leftHandRecording), new List<ControllerRecorder.handMotionFrame>(rightHandRecording), moveableSceneTransform); //List from queue for serialisation.
                 var recordedInput = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //same here
 
                 //saving each of these in a combined class recordingData to have the recording as a single file. Can still load motion / inputs individually if we want to but they get recorded together
@@ -437,12 +445,14 @@ public class PlaybackManager : MonoBehaviour
 
                 string date = System.DateTime.Now.ToString("yyyyMMdd-HH-mm");
 
-                string savePath = Path.Combine(FileManager.Instance.GetRecordingsPath(), MIDIFilePath+".json");
+                string recordingFolder = FileManager.Instance.GetRecordingsPath();
+
+                string savePath = Path.Combine(recordingFolder, MIDIFilePath + ".json");
 
                 int i = 1;
                 while (File.Exists(savePath))
                 {
-                    savePath = Path.Combine(Application.persistentDataPath, MIDIFilePath + " - " + i + ".json");
+                    savePath = Path.Combine(recordingFolder, MIDIFilePath + " - " + i + ".json");
                     i++;
                 }
 
@@ -459,7 +469,7 @@ public class PlaybackManager : MonoBehaviour
             catch (Exception e)
             {
                 Debug.Log(e);
-                return false; //return false if something failed. should maybe do more of a real check here
+                return false;
             }
         }
 
@@ -489,7 +499,7 @@ public class PlaybackManager : MonoBehaviour
             var rightHandMotion = new Queue<ControllerRecorder.handMotionFrame>(loadedData.motion.rightHandFrames); //back to queues from serialised Lists 
             var moveableSceneTransform = loadedData.motion.moveableSceneTransform;
 
-            ControllerRecorder.loadRecording(controllerMotion, leftHandMotion, rightHandMotion,moveableSceneTransform);
+            ControllerRecorder.loadRecording(controllerMotion, leftHandMotion, rightHandMotion, moveableSceneTransform);
             motionRecorded = true;
 
             return true;

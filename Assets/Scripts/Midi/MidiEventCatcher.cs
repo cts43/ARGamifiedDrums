@@ -107,7 +107,7 @@ public class MidiEventCatcher : MonoBehaviour
     {
         if (acceptInputs)
         {
-            Debug.Log("Note " + note + " on, velocity " + velocity);
+            //Debug.Log("Note " + note + " on, velocity " + velocity);
             context.Post(_ => { checkForDrum(note, velocity); }, null); //queue to run on the main thread
         }
         else
@@ -123,14 +123,10 @@ public class MidiEventCatcher : MonoBehaviour
         {
             return;
         }
-        
-        Debug.Log("Note is" + note);
 
         int scaledVelocity = (velocity * 31 / 128) + 1; //scale velocity to be within 1-32
 
-        Debug.Log("Velocity for file load: " + scaledVelocity);
         scaledVelocity = Math.Clamp(scaledVelocity, 1, 32); //make sure resulting number is definitely within the range
-        Debug.Log("Velocity after clamp: " + scaledVelocity);
         var soundToPlay = drumClips[note][scaledVelocity];
 
         sound.PlayOneShot(soundToPlay);
@@ -138,7 +134,7 @@ public class MidiEventCatcher : MonoBehaviour
 
     private void NoteOff(int note)
     {
-        Debug.Log("Note " + note + " off");
+        //Debug.Log("Note " + note + " off");
     }
 
     private void Update()

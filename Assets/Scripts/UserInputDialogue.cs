@@ -129,8 +129,6 @@ public class UserInputDialogue : MonoBehaviour
     public void showMIDIFiles()
     {
 
-        Debug.Log(FileManager.Instance);
-
         var info = new DirectoryInfo(FileManager.Instance.GetMIDIPath());
 
         List<FileInfo> validMidiFiles = new List<FileInfo>();
@@ -158,7 +156,6 @@ public class UserInputDialogue : MonoBehaviour
 
         foreach (var file in info.GetFiles())
         {
-            Debug.Log(file.Extension);
             if (file.Extension == ".json")
             {
                 validFiles.Add(file);

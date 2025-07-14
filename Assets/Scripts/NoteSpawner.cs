@@ -36,9 +36,11 @@ public class NoteSpawner : MonoBehaviour
     private Vector3 targetPos = new Vector3(0, 0, 0);
     private Vector3 startPos = new Vector3(0, 1, 0);
 
-    public long spawnWindow = 0; //How long before a beat to spawn a note in seconds
+    public long spawnWindow = 2; //How long before a beat to spawn a note in seconds
 
     private long spawnWindowinUs = 0;
+
+    public long spawnWindowAsTicks;
 
     private BarBeatTicksTimeSpan spawnWindowAsBarsBeats;
 
@@ -86,8 +88,6 @@ public class NoteSpawner : MonoBehaviour
         
         string path = Path.Combine(FileManager.Instance.GetMIDIPath(), filename);
 
-        Debug.Log(path);
-
         //first clear existing note queue if exists
         notesList = new Queue<(int, int, BarBeatTicksTimeSpan)>();
 
@@ -115,8 +115,8 @@ public class NoteSpawner : MonoBehaviour
         //init spawn window as bars beats for easy operations
         var spawnWindowAsTimespan = new MetricTimeSpan(spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
+        spawnWindowAsTicks = TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
         kickAnimationOffset = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 0, (int)kickAnimationOffsetInMs), tempoMap); //convert to ticks
-        Debug.Log("KICK TIME IN TICKS: "+kickAnimationOffset);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -128,6 +128,7 @@ public class NoteSpawner : MonoBehaviour
 
         GameObject Legs = GameObject.FindWithTag("Legs");
         kickMotion = Legs.GetComponent<Animator>();
+        spawnWindowinUs = spawnWindow * 1000000;
 
         metronomeSource = gameObject.AddComponent<AudioSource>();
     }
@@ -202,9 +203,6 @@ public class NoteSpawner : MonoBehaviour
 
     public long GetCurrentOffsetMusicalTimeAsTicks()
     {
-        //long BarAsTicks = TimeConverter.ConvertFrom(new BarBeatTicksTimeSpan(1, 0), tempoMap);
-        long spawnWindowAsTicks = TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
-
         return currentTick - spawnWindowAsTicks;
     }
 
@@ -230,7 +228,6 @@ public class NoteSpawner : MonoBehaviour
 
     IEnumerator playKickMotion(long scheduledTime) //refactor this. bad
     {
-        long spawnWindowAsTicks = TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
         while (GetCurrentOffsetMusicalTimeAsTicks() < scheduledTime - kickAnimationOffset)
         {
             yield return new WaitForFixedUpdate(); //wait one frame and check again
@@ -275,7 +272,7 @@ public class NoteSpawner : MonoBehaviour
         spawnedNote.GetComponent<NoteIndicator>().ScheduledTimeInTicks = noteTimeInTicks;// + TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
         spawnedNote.GetComponent<NoteIndicator>().TempoMap = tempoMap;
 
-        var drumColour = noteDrum.GetComponent<Renderer>().material.color;
+        var drumColour = noteDrum.GetComponent<DrumHit>().drumColour;
 
         spawnedNote.GetComponent<Renderer>().material.color = new Color(drumColour.r, drumColour.g, drumColour.b, 0.2f);
 
@@ -303,32 +300,34 @@ public class NoteSpawner : MonoBehaviour
 
     void FixedUpdate() //fixed update is set to run at 120Hz so better for fast updates like this.
     {
-        
-        //convert delta time (seconds) to microseconds and then to midi ticks
-        long deltaTimeinuS = (long)(Time.fixedDeltaTime * 1000000);
-
-        MetricTimeSpan deltaAsTimeSpan = new MetricTimeSpan(deltaTimeinuS);
-           long deltaAsTicks = TimeConverter.ConvertFrom(deltaAsTimeSpan, tempoMap);
-        currentTick += deltaAsTicks;
-
-        
         if (playing)
         {
-            if (GetVisualTime().Beats != previousBeat)
-            {
-                if (GetVisualTime().Beats == 0)
-                {
-                    metronomeSource.pitch = 2;
-                }
-                else
-                {
-                    metronomeSource.pitch = 1;
-                }
 
-                previousBeat = GetVisualTime().Beats;
-                metronomeSource.PlayOneShot(metronomeClip);
-            }
+            //convert delta time (seconds) to microseconds and then to midi ticks
+            long deltaTimeinuS = (long)(Time.fixedDeltaTime * 1000000);
+
+            MetricTimeSpan deltaAsTimeSpan = new MetricTimeSpan(deltaTimeinuS);
+            long deltaAsTicks = TimeConverter.ConvertFrom(deltaAsTimeSpan, tempoMap);
+            currentTick += deltaAsTicks;
         }
+
+        if (playing)
+            {
+                if (GetVisualTime().Beats != previousBeat)
+                {
+                    if (GetVisualTime().Beats == 0)
+                    {
+                        metronomeSource.pitch = 2;
+                    }
+                    else
+                    {
+                        metronomeSource.pitch = 1;
+                    }
+
+                    previousBeat = GetVisualTime().Beats;
+                    metronomeSource.PlayOneShot(metronomeClip);
+                }
+            }
     }
 
     // Update is called once per frame
@@ -371,7 +370,6 @@ public class NoteSpawner : MonoBehaviour
 
         }
 
-
         //show beats on label
         if (playing)
         {
@@ -382,7 +380,7 @@ public class NoteSpawner : MonoBehaviour
                 sign = "-";
             }
 
-            var newText = sign+VisualTime.Bars.ToString() + ":" + (VisualTime.Beats + 1).ToString() + ":" + VisualTime.Ticks.ToString();
+            var newText = sign + VisualTime.Bars.ToString() + ":" + (VisualTime.Beats + 1).ToString() + ":" + VisualTime.Ticks.ToString();
             currentBeatLabel.text = newText;
         }
 

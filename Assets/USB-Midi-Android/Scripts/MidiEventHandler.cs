@@ -38,7 +38,7 @@ namespace Midi
 
         public void NoteOn(int note, int velocity)
         {
-            Debug.Log("Note On " + note + " velocity " + velocity);
+            //Debug.Log("Note On " + note + " velocity " + velocity);
 
             OnNoteOn?.Invoke(note, velocity);
 
@@ -46,7 +46,7 @@ namespace Midi
 
         public void NoteOff(int note)
         {
-            Debug.Log("Note off " + note);
+            //Debug.Log("Note off " + note);
 
             OnNoteOff?.Invoke(note);
         }
