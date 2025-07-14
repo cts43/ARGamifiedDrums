@@ -14,13 +14,15 @@ using UnityEngine.UI;
 public class MidiEventCatcher : MonoBehaviour
 {
 
-    public Boolean enableDebugActions;
-    public Boolean acceptInputs = true;
+    public bool enableDebugActions;
+    public bool acceptInputs = true;
     public int RTriggerMIDINote;
     public DrumManager drumManager;
     private AudioSource sound;
 
     private Dictionary<int, Dictionary<int, AudioClip>> drumClips = new Dictionary<int, Dictionary<int, AudioClip>>();
+
+    public bool playDrumSounds { private set; get; } = true;
 
 
     private static SynchronizationContext context; //for running on main thread as these midi calls are not
@@ -34,7 +36,7 @@ public class MidiEventCatcher : MonoBehaviour
             var velocityDict = new Dictionary<int, AudioClip>();
 
             string drumName;
-            
+
             for (int i = 1; i < 33; i++)
             {
                 //for every note in the samples folder (files are labelled 1-32 and then some name)
@@ -52,14 +54,14 @@ public class MidiEventCatcher : MonoBehaviour
                     drumName = "Hat";
                 } //just an else here as a fallback
 
-                var path = Path.Combine("Audio/Drum Samples", drumName , i.ToString()); 
+                var path = Path.Combine("Audio/Drum Samples", drumName, i.ToString());
                 //this would be folder+some file that starts with the right number
 
                 var audioClip = Resources.Load<AudioClip>(path);
                 velocityDict.Add(i, audioClip);
             }
 
-            drumClips.Add(note,velocityDict);
+            drumClips.Add(note, velocityDict);
         }
     }
 
@@ -107,22 +109,26 @@ public class MidiEventCatcher : MonoBehaviour
         {
             Debug.Log("Note " + note + " on, velocity " + velocity);
             context.Post(_ => { checkForDrum(note, velocity); }, null); //queue to run on the main thread
-            //sound should play here as above waits a frame before playing
         }
         else
         {
             Debug.Log("Recieved MIDI input but acceptInputs = False");
         }
-        
+
     }
 
     private void playSound(int note, int velocity)
     {
+        if (!playDrumSounds)
+        {
+            return;
+        }
+        
         Debug.Log("Note is" + note);
 
         int scaledVelocity = (velocity * 31 / 128) + 1; //scale velocity to be within 1-32
 
-        Debug.Log("Velocity for file load: "+scaledVelocity);
+        Debug.Log("Velocity for file load: " + scaledVelocity);
         scaledVelocity = Math.Clamp(scaledVelocity, 1, 32); //make sure resulting number is definitely within the range
         Debug.Log("Velocity after clamp: " + scaledVelocity);
         var soundToPlay = drumClips[note][scaledVelocity];
@@ -156,6 +162,11 @@ public class MidiEventCatcher : MonoBehaviour
                 //playSound(RTriggerMIDINote, 10);
             }
         }
+    }
+
+    public void ToggleDrumSounds()
+    {
+        playDrumSounds = !playDrumSounds;
     }
 
 

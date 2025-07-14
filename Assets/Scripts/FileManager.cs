@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 using Unity.SharpZipLib.Utils;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -6,9 +7,8 @@ using UnityEngine.Networking;
 public class FileManager : MonoBehaviour
 {
     public static FileManager Instance { get; private set; }
-
-    private bool MIDIExtracted = false;
-    private string ExtractedPath;
+    private string ExtractedMIDIPath;
+    private string ExtractedRecordingsPath;
 
     private void Start()
     {
@@ -16,42 +16,59 @@ public class FileManager : MonoBehaviour
         {
             Instance = this;
         }
-        GetMIDIFromZip();
+
+        extractFiles();
     }
 
-    private async void GetMIDIFromZip()
+    private async void extractFiles()
     {
-        string filename = "MIDI Files.zip";
+        ExtractedMIDIPath = await GetFromZip("MIDI Files.zip", "Extracted MIDI");
+        ExtractedRecordingsPath = await GetFromZip("Motion Recordings.zip", "Extracted Recordings");
+    }
+
+    private async Task<string> GetFromZip(string filename, string outFolder)
+    {
         string copiedPath;
 
-        var MIDIZipPath = Path.Combine(Application.streamingAssetsPath, filename);
-        var MIDIZipRequest = UnityWebRequest.Get(MIDIZipPath);
+        var zipPath = Path.Combine(Application.streamingAssetsPath, filename);
+        var zipRequest = UnityWebRequest.Get(zipPath);
 
-        await MIDIZipRequest.SendWebRequest();
+        await zipRequest.SendWebRequest();
 
-        if (MIDIZipRequest.result == UnityWebRequest.Result.Success)
+        if (zipRequest.result == UnityWebRequest.Result.Success)
         {
-            //yay
             copiedPath = Path.Combine(Application.persistentDataPath, filename);
-            File.WriteAllBytes(copiedPath, MIDIZipRequest.downloadHandler.data);
+            File.WriteAllBytes(copiedPath, zipRequest.downloadHandler.data);
         }
         else
         {
-            //noo
-            return;
+            return null;
         }
 
-        string outPath = Path.Combine(Application.persistentDataPath, "Extracted MIDI");
+        string outPath = Path.Combine(Application.persistentDataPath, outFolder);
         ZipUtility.UncompressFromZip(copiedPath, null, outPath);
-        ExtractedPath = outPath;
-        MIDIExtracted = true;
+        var ExtractedPath = outPath;
+        return ExtractedPath;
     }
 
     public string GetMIDIPath()
     {
-        if (MIDIExtracted)
+        if (ExtractedMIDIPath != null)
         {
-            return ExtractedPath;
+            return ExtractedMIDIPath;
+        }
+        else
+        {
+            Debug.Log("Zip not loaded!");
+            return null;
+        }
+    }
+
+    public string GetRecordingsPath()
+    {
+        if (ExtractedRecordingsPath != null)
+        {
+            return ExtractedRecordingsPath;
         }
         else
         {

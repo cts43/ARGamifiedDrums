@@ -6,11 +6,8 @@ using Melanchall.DryWetMidi.Core;
 using System;
 using TMPro;
 using System.IO;
-using UnityEngine.Networking;
-using System.Threading.Tasks;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine.Timeline;
+
 
 
 
@@ -64,7 +61,9 @@ public class NoteSpawner : MonoBehaviour
 
     public bool showKickMotion = false;
     private Animator kickMotion;
-    private long kickAnimationOffset = 200; // time in ms that the foot takes to hit the floor
+    private long kickAnimationOffsetInMs = 367; // time in ms that the foot takes to hit the floor
+
+    private long kickAnimationOffset;
 
     long previousBeat = 0;
     public AudioClip metronomeClip;
@@ -116,7 +115,8 @@ public class NoteSpawner : MonoBehaviour
         //init spawn window as bars beats for easy operations
         var spawnWindowAsTimespan = new MetricTimeSpan(spawnWindowinUs); //time in microseconds
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
-        kickAnimationOffset = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 0, (int)kickAnimationOffset), tempoMap); //convert to ticks
+        kickAnimationOffset = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 0, (int)kickAnimationOffsetInMs), tempoMap); //convert to ticks
+        Debug.Log("KICK TIME IN TICKS: "+kickAnimationOffset);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -231,9 +231,9 @@ public class NoteSpawner : MonoBehaviour
     IEnumerator playKickMotion(long scheduledTime) //refactor this. bad
     {
         long spawnWindowAsTicks = TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
-        while (GetCurrentOffsetMusicalTimeAsTicks() < scheduledTime - kickAnimationOffset) //where 1 is kick animation window
+        while (GetCurrentOffsetMusicalTimeAsTicks() < scheduledTime - kickAnimationOffset)
         {
-            yield return null; //wait one frame and check again
+            yield return new WaitForFixedUpdate(); //wait one frame and check again
         }
         kickMotion.Play("Kick", 0, 0); //finally play the animation
     }
@@ -274,6 +274,12 @@ public class NoteSpawner : MonoBehaviour
         spawnedNote.transform.Translate(startPos);
         spawnedNote.GetComponent<NoteIndicator>().ScheduledTimeInTicks = noteTimeInTicks;// + TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
         spawnedNote.GetComponent<NoteIndicator>().TempoMap = tempoMap;
+
+        var drumColour = noteDrum.GetComponent<Renderer>().material.color;
+
+        spawnedNote.GetComponent<Renderer>().material.color = new Color(drumColour.r, drumColour.g, drumColour.b, 0.2f);
+
+        
         Vector3 distanceFromTarget = targetPos - startPos;
 
         Vector3 speedToMove = distanceFromTarget / spawnWindow;
@@ -297,7 +303,17 @@ public class NoteSpawner : MonoBehaviour
 
     void FixedUpdate() //fixed update is set to run at 120Hz so better for fast updates like this.
     {
-        if (playing) {
+        
+        //convert delta time (seconds) to microseconds and then to midi ticks
+        long deltaTimeinuS = (long)(Time.fixedDeltaTime * 1000000);
+
+        MetricTimeSpan deltaAsTimeSpan = new MetricTimeSpan(deltaTimeinuS);
+           long deltaAsTicks = TimeConverter.ConvertFrom(deltaAsTimeSpan, tempoMap);
+        currentTick += deltaAsTicks;
+
+        
+        if (playing)
+        {
             if (GetVisualTime().Beats != previousBeat)
             {
                 if (GetVisualTime().Beats == 0)
@@ -343,13 +359,6 @@ public class NoteSpawner : MonoBehaviour
 
 
             }
-
-            //convert delta time (seconds) to microseconds and then to midi ticks
-            long deltaTimeinuS = (long)(Time.deltaTime * 1000000);
-
-            MetricTimeSpan deltaAsTimeSpan = new MetricTimeSpan(deltaTimeinuS);
-            long deltaAsTicks = TimeConverter.ConvertFrom(deltaAsTimeSpan, tempoMap);
-            currentTick += deltaAsTicks;
 
             if (GetCurrentOffsetMusicalTimeAsTicks() >= TimeConverter.ConvertFrom(finalNoteTime, tempoMap) + 480) //quarter note window to allow for final hits
             {

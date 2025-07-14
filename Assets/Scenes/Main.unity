@@ -1437,7 +1437,7 @@ MonoBehaviour:
   isRecordingPath: 0
   isMIDIPath: 0
   buttonID: SaveRecording
-  userInputDialoguePrefab: {fileID: 3617658324783567740, guid: 007bd36c9e4db5748a51274f42eaa32a, type: 3}
+  userInputDialoguePrefab: {fileID: 2718169324766515142, guid: 2f90f68f45ab233418208f8c91d8c405, type: 3}
 --- !u!114 &183123972 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1274930656038644243, guid: 56cff61beea5f3c478bbadad485238a7, type: 3}
@@ -2702,13 +2702,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 415179857}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.22, y: 0.32, z: 0.237}
+  m_LocalRotation: {x: -0.72046274, y: 0.20881148, z: 0.048696823, w: 0.6595149}
+  m_LocalPosition: {x: 0.237, y: 0.269, z: 0.207}
   m_LocalScale: {x: 0.1, y: 0.005, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1568977028}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -103.916, y: -58.591003, z: 79.731}
 --- !u!114 &415179862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2721,7 +2721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e382533c2fa734ca40b5d7af3df9cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drumColour: {r: 0, g: 0, b: 0, a: 0}
+  drumColour: {r: 1, g: 1, b: 0, a: 0.7882353}
   changeColour: {r: 1, g: 0, b: 0, a: 1}
   note: 36
   isKick: 1
@@ -4905,7 +4905,7 @@ MonoBehaviour:
   noteSpawnerObj: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
   ControllerRecorderObj: {fileID: 823286943}
   drumManagerObj: {fileID: 1568977026}
-  MIDIFilePath: Basic 4-4.mid
+  MIDIFilePath: 120BPM Combined.mid
 --- !u!4 &736645346
 Transform:
   m_ObjectHideFlags: 0
@@ -5476,7 +5476,7 @@ MonoBehaviour:
   isRecordingPath: 1
   isMIDIPath: 0
   buttonID: LoadRecording
-  userInputDialoguePrefab: {fileID: 3617658324783567740, guid: 007bd36c9e4db5748a51274f42eaa32a, type: 3}
+  userInputDialoguePrefab: {fileID: 2718169324766515142, guid: 2f90f68f45ab233418208f8c91d8c405, type: 3}
 --- !u!1 &757262261
 GameObject:
   m_ObjectHideFlags: 0
@@ -5905,8 +5905,8 @@ MonoBehaviour:
   handDrumstickOffsetFrames: 5
   leftHandPrefab: {fileID: 1732268206786806, guid: 4e8c8dea8c93b254c9379222ab65e650, type: 3}
   rightHandPrefab: {fileID: 1581749144712736, guid: cb846a4acb232b4458d8f1ef24852291, type: 3}
-  DrumStickLPrefab: {fileID: 2873981299412852974, guid: bb7cba90ddd3aa7479d36894d8a39ead, type: 3}
-  DrumStickRPrefab: {fileID: 2873981299412852974, guid: b949efb2a3a759f4d9355234564ba884, type: 3}
+  DrumStickLPrefab: {fileID: 2873981299412852974, guid: b949efb2a3a759f4d9355234564ba884, type: 3}
+  DrumStickRPrefab: {fileID: 2873981299412852974, guid: bb7cba90ddd3aa7479d36894d8a39ead, type: 3}
 --- !u!4 &823286945
 Transform:
   m_ObjectHideFlags: 0
@@ -8831,8 +8831,8 @@ Transform:
   m_GameObject: {fileID: 1248980087}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.14, y: 0.82, z: 0.17}
-  m_LocalScale: {x: 0.2, y: 0.01, z: 0.19999999}
+  m_LocalPosition: {x: -0.076, y: 0.773, z: 0.158}
+  m_LocalScale: {x: 0.25, y: 0.01, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1568977028}
@@ -8849,7 +8849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e382533c2fa734ca40b5d7af3df9cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drumColour: {r: 0, g: 0, b: 0, a: 0}
+  drumColour: {r: 0, g: 0.09379864, b: 1, a: 0.78039217}
   changeColour: {r: 1, g: 0, b: 0, a: 1}
   note: 46
   isKick: 0
@@ -9916,7 +9916,7 @@ MonoBehaviour:
   isRecordingPath: 0
   isMIDIPath: 1
   buttonID: LoadMIDI
-  userInputDialoguePrefab: {fileID: 3617658324783567740, guid: 007bd36c9e4db5748a51274f42eaa32a, type: 3}
+  userInputDialoguePrefab: {fileID: 2718169324766515142, guid: 2f90f68f45ab233418208f8c91d8c405, type: 3}
 --- !u!1 &1336239162
 GameObject:
   m_ObjectHideFlags: 0
@@ -10453,7 +10453,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 13d8a6c6d3aee9a45a21de5c94727347, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -11479,8 +11479,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e382533c2fa734ca40b5d7af3df9cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drumColour: {r: 0, g: 0, b: 0, a: 0}
-  changeColour: {r: 1, g: 0, b: 0, a: 1}
+  drumColour: {r: 1, g: 0, b: 0, a: 0.78039217}
+  changeColour: {r: 0.5529412, g: 0, b: 0, a: 1}
   note: 38
   isKick: 0
 --- !u!136 &1637887935
@@ -13667,8 +13667,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966957412}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalRotation: {x: -2.3283062e-10, y: 0.21699283, z: 3.4924594e-10, w: 0.97617316}
+  m_LocalPosition: {x: 0, y: 0, z: 4.89}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13679,10 +13679,10 @@ RectTransform:
   - {fileID: 11728315}
   - {fileID: 857597628}
   m_Father: {fileID: 963107}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 25.065, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1.39, y: 1.5274999}
+  m_AnchoredPosition: {x: 1.48, y: 1.53}
   m_SizeDelta: {x: 985, y: 529}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1976260863

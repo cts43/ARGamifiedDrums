@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "7.39/win64" 1752244577
+<REAPER_PROJECT 0.1 "7.39/win64" 1752254393
   RIPPLE 2 1
   GROUPOVERRIDE 0 0 0
   AUTOXFADE 129
@@ -15,8 +15,8 @@
   TIMEMODE 1 5 -1 30 0 0 -1
   VIDEO_CONFIG 0 0 256
   PANMODE 3
-  CURSOR 15
-  ZOOM 6.3640081551335 0 0
+  CURSOR 75
+  ZOOM 69.66017832322949 4023 0
   VZOOMEX 6.74928761 0
   USE_REC_CFG 0
   RECMODE 1
@@ -206,12 +206,116 @@
       CHANMODE 0
       GUID {F706111E-8CB6-406A-98ED-830A20C307A7}
       <SOURCE MIDI
-        FILE "C:\Users\chris\Documents\REAPER Media\60BPM Hat-glued MIDI 001.mid" QN
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {25A528C9-18BF-416C-9155-8DC2686C34E9}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
         CCINTERP 32
         CHASE_CC_TAKEOFFS 1
-        GUID {D126B335-E547-420F-8731-3EBE6A7EC544}
+        GUID {E3C5D8DE-A9F2-4A08-9EF1-90DC9068A601}
         IGNTEMPO 0 120 4 4
-        SRCCOLOR 32
+        SRCCOLOR 38
+        VELLANE -1 100 0 0 1
       >
     >
     <ITEM
@@ -233,12 +337,132 @@
       CHANMODE 0
       GUID {5BC1D394-08C7-4DE2-9FD6-6CD379B2915B}
       <SOURCE MIDI
-        FILE "C:\Users\chris\Documents\REAPER Media\60BPM Kick & Hat-glued MIDI 001.mid" QN
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {A4FB311B-2EC2-4050-8742-01B0B3A16042}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 0 80 24 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 0 80 24 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 0 80 24 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 0 80 24 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
         CCINTERP 32
         CHASE_CC_TAKEOFFS 1
-        GUID {50B068E7-B9D1-4B43-89EA-50EE9CB42E04}
+        GUID {22148822-C320-4087-908A-F990CB6BE2E9}
         IGNTEMPO 0 120 4 4
-        SRCCOLOR 33
+        SRCCOLOR 39
+        VELLANE -1 100 0 0 1
       >
     >
     <ITEM
@@ -260,12 +484,132 @@
       CHANMODE 0
       GUID {2CEBC4F9-F91E-4FCE-A9F8-8624C8B56073}
       <SOURCE MIDI
-        FILE "C:\Users\chris\Documents\REAPER Media\60BPM Snare & Hat-glued MIDI 001.mid" QN
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {3D112DA4-8B71-48CB-B661-E173CC559A0F}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
         CCINTERP 32
         CHASE_CC_TAKEOFFS 1
-        GUID {232238A1-034C-4792-9EF2-CC58CD8A28FB}
+        GUID {B6572E02-8B37-4B75-B7CD-341B1C8718E6}
         IGNTEMPO 0 120 4 4
-        SRCCOLOR 34
+        SRCCOLOR 40
+        VELLANE -1 100 0 0 1
       >
     >
     <ITEM
@@ -287,12 +631,148 @@
       CHANMODE 0
       GUID {820C9C4E-8182-4D40-A412-4CEFC0D788F9}
       <SOURCE MIDI
-        FILE "C:\Users\chris\Documents\REAPER Media\60BPM Combined-glued MIDI 001.mid" QN
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {3E4FF20B-36D7-4CD4-B4C2-1DB297D3A771}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
         CCINTERP 32
         CHASE_CC_TAKEOFFS 1
-        GUID {A5BC99E8-F4AE-4D38-AAD6-C8C86193F4FA}
+        GUID {E535D09E-C3B9-41E7-8BB1-BE1F8BFD4D86}
         IGNTEMPO 0 120 4 4
-        SRCCOLOR 35
+        SRCCOLOR 37
+        VELLANE -1 100 0 0 1
       >
     >
     <ITEM
@@ -304,7 +784,7 @@
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
-      SEL 0
+      SEL 1
       IGUID {1EF387FD-DBF4-4AE8-92F2-FAE4746A7E63}
       IID 24
       NAME "*120BPM Combined-glued"
@@ -314,12 +794,219 @@
       CHANMODE 0
       GUID {0333E495-00E9-462A-84B1-6CD9FC670CDC}
       <SOURCE MIDI
-        FILE "C:\Users\chris\Documents\REAPER Media\120BPM Combined-glued MIDI 001.mid" QN
+        HASDATA 1 960 QN
+        CCINTERP 32
+        POOLEDEVTS {1361655C-EAB0-4D0E-9ABD-ACCF02AB862F}
+        <X 0 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        <X 400 0 0 0 3 "Basic 4-4"
+          /wNCYXNpYyA0LTQ=
+        >
+        <X 0 0 0 0 3 "REAPER Media"
+          /wNSRUFQRVIgTWVkaWE=
+        >
+        <X 0 0 0 0 3 untitled
+          /wN1bnRpdGxlZA==
+        >
+        E 0 90 24 7f
+        E 0 90 2e 7f
+        E 80 80 24 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 26 7f
+        E 0 90 2e 7f
+        E 80 80 26 00
+        E 0 80 2e 00
+        E 400 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 24 7f
+        E 80 80 2e 00
+        E 40 80 24 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 90 2e 7f
+        E 0 90 26 7f
+        E 80 80 2e 00
+        E 40 80 26 00
+        E 360 90 2e 7f
+        E 80 80 2e 00
+        E 400 b0 7b 00
         CCINTERP 32
         CHASE_CC_TAKEOFFS 1
-        GUID {DE5E81D1-6907-45A9-9712-6711E74A2509}
+        GUID {51EEED9D-5885-43F4-8DE9-C98BA69B13E0}
         IGNTEMPO 0 120 4 4
-        SRCCOLOR 36
+        SRCCOLOR 41
+        VELLANE -1 100 0 0 1
+        CFGEDITVIEW 11204.79821 0.033613 80 12 0 -1 0 0 0 0.5
+        KEYSNAP 0
+        TRACKSEL 252
+        EVTFILTER 0 -1 -1 -1 -1 0 0 0 0 -1 -1 -1 -1 0 -1 0 -1 -1
+        CFGEDIT 1 1 0 1 0 16 1 1 1 1 1 0.04166667 428 79 1501 971 0 0 0 0 0 0 0 0 0 0.5 0 0 0 64
       >
     >
   >
@@ -337,11 +1024,11 @@
     <ARC_COUNTER_TIMER_IN_PROJ_WIN
       PROJECT_STARTED "11/07/2025 / 13:24:47"
       TIME_PLAY 85.099999904633
-      TIME_SEC_AFK 1098.0999999046
-      TIME_SEC_AFK_SESSION 1098.0999999046
-      TIME_SEC_RESET 7890.0999999046
-      TIME_SEC_SESSION 7890.0999999046
-      TIME_SEC_TOTAL 7890.0999999046
+      TIME_SEC_AFK 1203.0999999046
+      TIME_SEC_AFK_SESSION 10.099999904633
+      TIME_SEC_RESET 7995.0999999046
+      TIME_SEC_SESSION 10.099999904633
+      TIME_SEC_TOTAL 7995.0999999046
     >
   >
 >
