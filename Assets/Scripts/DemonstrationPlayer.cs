@@ -29,10 +29,11 @@ public class DemonstrationPlayer : MonoBehaviour
     private async void StartRoutine()
     {
         await FileManager.Instance.GetRecordingsPathAsync();
+        await Task.Delay(2000); //for debug purpose only
         PlayNextDemonstation();
     }
 
-    private async void PlayNextDemonstation()
+    private void PlayNextDemonstation()
     {
 
         if (recordingsToPlayCopy.Count <= 0)
@@ -44,9 +45,7 @@ public class DemonstrationPlayer : MonoBehaviour
         var currentRecording = currentMIDI + ".json";
 
         playbackManager.TryLoadData(currentRecording);
-        await Task.Delay(50);
         playbackManager.loadNewMIDI(currentMIDI);
-        await Task.Delay(50);
         playbackManager.playRecorded(true, true);
 
     }

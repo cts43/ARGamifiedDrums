@@ -137,7 +137,7 @@ public class DrumHit : MonoBehaviour
         }
 
         changeColourOnHit = StartCoroutine(ShowDrumHitbyChangeColour());
-        if (PlaybackManager.playing)
+        if (PlaybackManager.Instance.playing)
         {
             (var timeHit,var closestNote,var hitNote) = checkIfHitNote();
             RaiseHitDrum(note, velocity, timeHit, closestNote, hitNote); //send hit drum signal with int note number, velocity (not here yet), time hit

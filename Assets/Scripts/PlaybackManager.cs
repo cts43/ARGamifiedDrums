@@ -13,7 +13,7 @@ public class PlaybackManager : MonoBehaviour
 
     public GameObject noteSpawnerObj; //prefab for note spawner class
     public GameObject ControllerRecorderObj;
-    private NoteSpawner activeNoteSpawner;
+    public NoteSpawner activeNoteSpawner;
     private ControllerRecorder ControllerRecorder;
     public GameObject drumManagerObj;
     private DrumManager drumManager;
@@ -25,7 +25,7 @@ public class PlaybackManager : MonoBehaviour
 
     public string MIDIFilePath;
 
-    public static bool MIDILoaded = false;
+    public bool MIDILoaded = false;
 
     public long currentTimeInTicks { get; private set; }
 
@@ -33,7 +33,7 @@ public class PlaybackManager : MonoBehaviour
 
     private MidiEventCatcher MIDIEventCatcher;
 
-    public static bool playing = false;
+    public bool playing = false;
     private bool motionRecording = false;
     private bool motionRecorded = false;
     private bool motionPlaying = false;

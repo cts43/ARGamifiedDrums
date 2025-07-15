@@ -4904,8 +4904,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noteSpawnerObj: {fileID: 5642116151032964898, guid: 868b0f6218a1b6d49a5448c27e207548, type: 3}
   ControllerRecorderObj: {fileID: 823286943}
+  activeNoteSpawner: {fileID: 0}
   drumManagerObj: {fileID: 1568977026}
   MIDIFilePath: 120BPM Combined.mid
+  MIDILoaded: 0
+  playing: 0
 --- !u!4 &736645346
 Transform:
   m_ObjectHideFlags: 0
@@ -8738,6 +8741,51 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 891992164}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1213725826
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1213725828}
+  - component: {fileID: 1213725827}
+  m_Layer: 0
+  m_Name: Metronome
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1213725827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213725826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32ce0fb10026f84da1c38c1a2b39b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  metronomeClip: {fileID: 0}
+--- !u!4 &1213725828
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213725826}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.12257, y: 0, z: 5.76103}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1241933915
 GameObject:
@@ -14607,7 +14655,7 @@ MonoBehaviour:
   - 120BPM Combined.mid
   numberOfDemonstrations: 0
   numberOfPlaythroughs: 0
-  Enabled: 0
+  Enabled: 1
 --- !u!1 &2068966076
 GameObject:
   m_ObjectHideFlags: 0
@@ -16764,3 +16812,4 @@ SceneRoots:
   - {fileID: 736645346}
   - {fileID: 1327406401}
   - {fileID: 2057525792}
+  - {fileID: 1213725828}
