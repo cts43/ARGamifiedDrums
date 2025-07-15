@@ -23,6 +23,7 @@ public class PlaybackManager : MonoBehaviour
     public Action FinishedPlaying;
 
     private StatusIndicator statusIndicator;
+    private ScoreIndicator scoreIndicator;
 
     public string MIDIFilePath;
 
@@ -44,6 +45,8 @@ public class PlaybackManager : MonoBehaviour
     private bool playingRecordedInputs = false;
     private bool readyToSaveMotion = false;
     private bool readyToSaveInput = false;
+
+    int currentHitNotes = 0;
 
 
     //Serialisable classes for saving playthrough to file -- needed for plotting graphs etc.
@@ -218,17 +221,22 @@ public class PlaybackManager : MonoBehaviour
     {
         if (savingPlaythrough)
         {
-            //Debug.Log("Hit note: " + noteNumber + " with velocity: " + velocity + " Success: " + hitNote + " At: " + timeHit);
-            savedPlaythrough.Enqueue(new playthroughFrame(noteNumber, velocity, timeHit, closestNote, hitNote)); //store note hit at what time + closest note. allows calculation of offsets + playing back a run at the correct ticks
+            savedPlaythrough.Enqueue(new playthroughFrame(noteNumber, velocity, timeHit, closestNote, hitNote));
         }
+        Debug.Log($"Hit {noteNumber} at {timeHit}");
+        currentHitNotes++;
     }
-
+    bool subscribed = false;
     private void subscribeToDrumHits()
     {
-        foreach (var drum in drumManager.GetComponentsInChildren<DrumHit>())
+        if (!subscribed)
         {
-            drum.HitDrum += recordHit;
+            foreach (var drum in drumManager.GetComponentsInChildren<DrumHit>())
+            {
+                drum.HitDrum += recordHit;
+            }
         }
+        subscribed = true;
     }
 
     private void Start()
@@ -237,6 +245,10 @@ public class PlaybackManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
         }
 
         inputActions = new controllerActions();
@@ -266,11 +278,13 @@ public class PlaybackManager : MonoBehaviour
     private void Update()
     {
 
+
+
         playing = activeNoteSpawner.playing;
         bool subMenuOpen = GameObject.FindWithTag("SubMenu") != null;
         if (playing)
         {
-            currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks(); //Update current time from active note spawner instance. unsure if necessary
+            currentTimeInTicks = activeNoteSpawner.GetCurrentOffsetMusicalTimeAsTicks();
         }
 
         if (inputActions.Controller.OpenMenu.triggered && !playing)
@@ -375,7 +389,7 @@ public class PlaybackManager : MonoBehaviour
     {
         Debug.Log("(Playback Manager) MIDI Finished");
         FinishedPlaying?.Invoke();
-
+        currentHitNotes = 0;
         ControllerRecorder.Reset();
         savingPlaythrough = false;
         drumManager.clearNotes();
@@ -483,6 +497,46 @@ public class PlaybackManager : MonoBehaviour
 
         //if it wasn't in the correct state to save, return false
         return false;
+    }
+
+    public void TrySavePlaythroughData()
+    {
+        if (readyToSaveInput)
+        {
+            try
+            {
+
+                var recordedInput = new playthroughData(new List<playthroughFrame>(savedPlaythrough)); //same here
+
+                string date = System.DateTime.Now.ToString("yyyy-MM-dd--HH-mm");
+
+                int i = 1;
+                string recordingsFolder = FileManager.Instance.GetRecordingsPath();
+                string saveFolder = Path.Combine(recordingsFolder, $"Playthrough {i}");
+
+                while (Directory.Exists(saveFolder))
+                {
+                    i++;
+                    saveFolder = recordingsFolder + $"Playthrough {i}";
+
+                }
+
+                Directory.CreateDirectory(saveFolder);
+
+                string savePath = Path.Combine(saveFolder, MIDIFilePath + ".json");
+                string datePath = Path.Combine(saveFolder, "date.txt");
+
+                string combinedJson = JsonUtility.ToJson(recordedInput);
+
+                File.WriteAllText(savePath, combinedJson);
+                File.WriteAllText(datePath, date);
+
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+        }
     }
 
     public bool TryLoadData(string filename)

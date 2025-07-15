@@ -126,6 +126,15 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Next"",
+                    ""type"": ""Button"",
+                    ""id"": ""fac5e9cd-8580-46eb-8ef0-298473ee963e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -216,6 +225,17 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
                     ""action"": ""Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2724d127-9d14-4ad1-8479-72b336c0a4b8"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -228,6 +248,7 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         m_Controller_Select = m_Controller.FindAction("Select", throwIfNotFound: true);
         m_Controller_DPad = m_Controller.FindAction("DPad", throwIfNotFound: true);
         m_Controller_Back = m_Controller.FindAction("Back", throwIfNotFound: true);
+        m_Controller_Next = m_Controller.FindAction("Next", throwIfNotFound: true);
     }
 
     ~@controllerActions()
@@ -312,6 +333,7 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Controller_Select;
     private readonly InputAction m_Controller_DPad;
     private readonly InputAction m_Controller_Back;
+    private readonly InputAction m_Controller_Next;
     /// <summary>
     /// Provides access to input actions defined in input action map "Controller".
     /// </summary>
@@ -339,6 +361,10 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Controller/Back".
         /// </summary>
         public InputAction @Back => m_Wrapper.m_Controller_Back;
+        /// <summary>
+        /// Provides access to the underlying input action "Controller/Next".
+        /// </summary>
+        public InputAction @Next => m_Wrapper.m_Controller_Next;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -377,6 +403,9 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
             @Back.started += instance.OnBack;
             @Back.performed += instance.OnBack;
             @Back.canceled += instance.OnBack;
+            @Next.started += instance.OnNext;
+            @Next.performed += instance.OnNext;
+            @Next.canceled += instance.OnNext;
         }
 
         /// <summary>
@@ -400,6 +429,9 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
             @Back.started -= instance.OnBack;
             @Back.performed -= instance.OnBack;
             @Back.canceled -= instance.OnBack;
+            @Next.started -= instance.OnNext;
+            @Next.performed -= instance.OnNext;
+            @Next.canceled -= instance.OnNext;
         }
 
         /// <summary>
@@ -468,5 +500,12 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Next" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNext(InputAction.CallbackContext context);
     }
 }
