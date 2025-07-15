@@ -8771,7 +8771,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32ce0fb10026f84da1c38c1a2b39b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  metronomeClip: {fileID: 0}
+  metronomeClip: {fileID: 8300000, guid: bd4379a66e0cb344cae44a7220ab2584, type: 3}
+  BarPitch: 2
+  BeatPitch: 1
 --- !u!4 &1213725828
 Transform:
   m_ObjectHideFlags: 0

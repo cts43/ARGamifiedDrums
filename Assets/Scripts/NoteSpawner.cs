@@ -7,6 +7,7 @@ using System;
 using TMPro;
 using System.IO;
 using System.Linq;
+using UnityEditor.SceneTemplate;
 
 
 
@@ -33,9 +34,9 @@ public class NoteSpawner : MonoBehaviour
     private long currentTick;
 
     private Vector3 targetPos = new Vector3(0, 0, 0);
-    private Vector3 startPos = new Vector3(0, 1, 0);
+    private Vector3 startPos = new Vector3(0, 2, 0);
 
-    public float spawnWindow = 4; //How long before a beat to spawn a note in seconds
+    public float spawnWindow; //How long before a beat to spawn a note in bars
 
     private float spawnWindowinUs = 0;
 
@@ -107,8 +108,13 @@ public class NoteSpawner : MonoBehaviour
         //Load MIDI from file
         LoadMIDI(filename);
 
-        //init spawn window as bars beats for easy operations
-        var spawnWindowAsTimespan = new MetricTimeSpan((long)spawnWindowinUs); //time in microseconds
+        var timeSig = tempoMap.GetTimeSignatureAtTime(new MetricTimeSpan(0));
+        var beatsPerBar = timeSig.Numerator;
+        var bar = Mathf.FloorToInt(spawnWindow);
+        var remainder = spawnWindow - bar;
+        double beats = remainder * beatsPerBar;
+        var spawnWindowAsTimespan = new BarBeatFractionTimeSpan(bar, beats);
+
         spawnWindowAsBarsBeats = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(spawnWindowAsTimespan, tempoMap);
         spawnWindowAsTicks = TimeConverter.ConvertFrom(spawnWindowAsBarsBeats, tempoMap);
         kickAnimationOffset = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 0, (int)kickAnimationOffsetInMs), tempoMap); //convert to ticks
@@ -129,7 +135,7 @@ public class NoteSpawner : MonoBehaviour
         spawnWindowinUs = spawnWindow * 1000000;
     }
 
-    public void Initialise(string filePath, float window = 6f)
+    public void Initialise(string filePath, float window = 1.2f)
     {
         visualNotePrefab = Resources.Load<GameObject>(visualNotePrefabPath);
         spawnWindow = window;
@@ -227,6 +233,8 @@ public class NoteSpawner : MonoBehaviour
     IEnumerator SpawnNote(int note, int velocity, BarBeatTicksTimeSpan noteTime)
     {
 
+        var localStartPos = startPos;
+
         long noteTimeInTicks = TimeConverter.ConvertFrom(noteTime, tempoMap);
 
         GameObject noteDrum = GetDrum(note);
@@ -244,7 +252,7 @@ public class NoteSpawner : MonoBehaviour
             //but recorded 'motion' could be animated leg
 
             //big line doesn't necessarily work as drums will be in different positions.
-            startPos = new Vector3(0, 0, 1); //right now kick drum is the same as the others but spawns from Z+1 instead of Y+1
+            localStartPos = new Vector3(0, 0, 1); //right now kick drum is the same as the others but spawns from Z+1 instead of Y+1
             if (showKickMotion)
             {
                 StartCoroutine(playKickMotion(noteTimeInTicks));
@@ -252,11 +260,11 @@ public class NoteSpawner : MonoBehaviour
         }
         else
         {
-            startPos = new Vector3(0, 1, 0);
+            localStartPos = startPos;
         }
 
         GameObject spawnedNote = Instantiate(visualNotePrefab, noteDrum.transform);
-        spawnedNote.transform.Translate(startPos);
+        spawnedNote.transform.Translate(localStartPos);
         spawnedNote.GetComponent<NoteIndicator>().ScheduledTimeInTicks = noteTimeInTicks;// + TimeConverter.ConvertFrom(spawnWindowAsBarsBeats,tempoMap);
         spawnedNote.GetComponent<NoteIndicator>().TempoMap = tempoMap;
 
@@ -265,9 +273,9 @@ public class NoteSpawner : MonoBehaviour
         spawnedNote.GetComponent<Renderer>().material.color = new Color(drumColour.r, drumColour.g, drumColour.b, 0.2f);
 
         
-        Vector3 distanceFromTarget = targetPos - startPos;
+        Vector3 distanceFromTarget = targetPos - localStartPos;
 
-        Vector3 speedToMove = distanceFromTarget / spawnWindow;
+        Vector3 speedToMove = distanceFromTarget / (float)TimeConverter.ConvertTo<MetricTimeSpan>(spawnWindowAsBarsBeats,tempoMap).TotalSeconds;
         //Debug.Log(speedToMove);
 
         while (true)

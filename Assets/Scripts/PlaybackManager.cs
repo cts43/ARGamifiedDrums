@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Meta.XR.ImmersiveDebugger.UserInterface.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 
@@ -205,6 +206,11 @@ public class PlaybackManager : MonoBehaviour
                     playingRecordedInputs = true;
                 }
             }
+            else //automatically save the current playthrough if chose not to play with recorded inputs
+            {
+                savedPlaythrough = new Queue<playthroughFrame>();
+                SavePlaythrough();
+            }
         }
     }
 
@@ -401,6 +407,8 @@ public class PlaybackManager : MonoBehaviour
 
             Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
         }
+        savedPlaythrough = new Queue<playthroughFrame>();
+        savedPlaythroughCopy = new Queue<playthroughFrame>();
 
 
 

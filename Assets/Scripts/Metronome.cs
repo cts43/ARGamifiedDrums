@@ -7,6 +7,9 @@ public class Metronome : MonoBehaviour
     public AudioClip metronomeClip;
     private AudioSource metronomeSource;
 
+    public float BarPitch = 2;
+    public float BeatPitch = 1;
+
     private PlaybackManager playbackManager = null;
 
     private void Start()
@@ -22,6 +25,16 @@ public class Metronome : MonoBehaviour
             var time = playbackManager.activeNoteSpawner.GetVisualTime();
             if (time.Beats != previousBeat && !time.negative)
             {
+                if (time.Beats == 0)
+                {
+                    metronomeSource.pitch = BarPitch;
+                    metronomeSource.volume = 1;
+                }
+                else
+                {
+                    metronomeSource.pitch = BeatPitch;
+                    metronomeSource.volume = 0.5f;
+                }
                 metronomeSource.PlayOneShot(metronomeClip);
                 previousBeat = time.Beats;
             }
