@@ -7,7 +7,6 @@ using System;
 using TMPro;
 using System.IO;
 using System.Linq;
-using UnityEditor.SceneTemplate;
 
 
 
@@ -60,6 +59,8 @@ public class NoteSpawner : MonoBehaviour
     public int totalNotes { get; private set; }
 
     public bool playing { get; private set; } = false;
+
+    public bool showNotes = true;
 
     public bool showKickMotion = false;
     private Animator kickMotion;
@@ -270,7 +271,14 @@ public class NoteSpawner : MonoBehaviour
 
         var drumColour = noteDrum.GetComponent<DrumHit>().drumColour;
 
-        spawnedNote.GetComponent<Renderer>().material.color = new Color(drumColour.r, drumColour.g, drumColour.b, 0.2f);
+        var newOpacity = showNotes ? 0.2f : 0f;
+
+        spawnedNote.GetComponent<Renderer>().material.color = new Color(drumColour.r, drumColour.g, drumColour.b, newOpacity);
+
+        if (!showNotes)
+        {
+            spawnedNote.GetComponent<MeshRenderer>().enabled = false;
+        }
 
         
         Vector3 distanceFromTarget = targetPos - localStartPos;

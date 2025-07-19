@@ -7,7 +7,7 @@ public class StatusIndicator : MonoBehaviour
 {
     public int clearTimeInSeconds = 1;
     TextMeshProUGUI label;
-    private bool fading = false;
+    private Coroutine currentFade;
 
     private void Start()
     {
@@ -18,7 +18,11 @@ public class StatusIndicator : MonoBehaviour
 
     public void ShowStatus(string newText)
     {
-        StartCoroutine(ReplaceLabel(newText));
+        if (currentFade != null)
+        {
+            StopCoroutine(currentFade);
+        }
+        currentFade = StartCoroutine(ReplaceLabel(newText));
     }
 
     private IEnumerator ReplaceLabel(string stringToReplace)
@@ -31,12 +35,6 @@ public class StatusIndicator : MonoBehaviour
 
     private IEnumerator Fade(float time, float target)
     {
-        if (fading)
-        {
-            //yield break;
-        }
-
-        fading = true;
         float elapsedTime = 0f;
         float startValue = label.alpha;
 
@@ -46,8 +44,5 @@ public class StatusIndicator : MonoBehaviour
             label.alpha = Mathf.Lerp(startValue, target, elapsedTime / time);
             yield return null; //wait 1 frame
         }
-
-        fading = false;
-        
     }
 }

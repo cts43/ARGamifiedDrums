@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Melanchall.DryWetMidi.Interaction;
 using UnityEngine;
-using UnityEngine.XR.ARFoundation;
 
 
 public class DrumHit : MonoBehaviour

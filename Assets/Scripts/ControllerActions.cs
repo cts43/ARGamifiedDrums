@@ -135,6 +135,15 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftTrigger"",
+                    ""type"": ""Button"",
+                    ""id"": ""1d9980ed-30c3-4f55-96d1-8a77e0f965fc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -236,6 +245,17 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
                     ""action"": ""Next"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0ec6c833-34fd-4782-a22e-c3545e0be68f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftTrigger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -249,6 +269,7 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         m_Controller_DPad = m_Controller.FindAction("DPad", throwIfNotFound: true);
         m_Controller_Back = m_Controller.FindAction("Back", throwIfNotFound: true);
         m_Controller_Next = m_Controller.FindAction("Next", throwIfNotFound: true);
+        m_Controller_LeftTrigger = m_Controller.FindAction("LeftTrigger", throwIfNotFound: true);
     }
 
     ~@controllerActions()
@@ -334,6 +355,7 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Controller_DPad;
     private readonly InputAction m_Controller_Back;
     private readonly InputAction m_Controller_Next;
+    private readonly InputAction m_Controller_LeftTrigger;
     /// <summary>
     /// Provides access to input actions defined in input action map "Controller".
     /// </summary>
@@ -365,6 +387,10 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Controller/Next".
         /// </summary>
         public InputAction @Next => m_Wrapper.m_Controller_Next;
+        /// <summary>
+        /// Provides access to the underlying input action "Controller/LeftTrigger".
+        /// </summary>
+        public InputAction @LeftTrigger => m_Wrapper.m_Controller_LeftTrigger;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -406,6 +432,9 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
             @Next.started += instance.OnNext;
             @Next.performed += instance.OnNext;
             @Next.canceled += instance.OnNext;
+            @LeftTrigger.started += instance.OnLeftTrigger;
+            @LeftTrigger.performed += instance.OnLeftTrigger;
+            @LeftTrigger.canceled += instance.OnLeftTrigger;
         }
 
         /// <summary>
@@ -432,6 +461,9 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
             @Next.started -= instance.OnNext;
             @Next.performed -= instance.OnNext;
             @Next.canceled -= instance.OnNext;
+            @LeftTrigger.started -= instance.OnLeftTrigger;
+            @LeftTrigger.performed -= instance.OnLeftTrigger;
+            @LeftTrigger.canceled -= instance.OnLeftTrigger;
         }
 
         /// <summary>
@@ -507,5 +539,12 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNext(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LeftTrigger" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeftTrigger(InputAction.CallbackContext context);
     }
 }
