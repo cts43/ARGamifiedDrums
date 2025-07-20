@@ -18,7 +18,7 @@ public class DemonstrationPlayer : MonoBehaviour
 
     private int demonstrationNo = 0;
     private bool SequenceFinished = false;
-
+    public bool onlyEvalOnFinalRecording = false;
     public bool Enabled = false;
 
     private bool saveInputs = false;
@@ -94,6 +94,15 @@ public class DemonstrationPlayer : MonoBehaviour
         }
         else
         {
+            if (onlyEvalOnFinalRecording)
+            {
+                if (demonstrationNo != (totalStages * recordingsToPlay.Count) - 1)
+                {
+                    demonstrationNo++;
+                    PlayNextDemonstration();
+                    return;
+                }
+            }
             saveInputs = true;
             playbackManager.playRecorded(motion: false, drumHits: false, showNotes: false, recordInput: true);
         }
@@ -121,8 +130,8 @@ public class DemonstrationPlayer : MonoBehaviour
     {
         if (!playbackManager.playing && Enabled)
         {
-
-            if (SequenceFinished)
+            int totalStages = numberOfDemonstrations + numberOfPlaythroughs + numberOfEvaluations;
+            if (SequenceFinished && demonstrationNo >= totalStages * recordingsToPlay.Count)
             {
                 Reset();
             }
