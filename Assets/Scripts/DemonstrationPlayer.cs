@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using TMPro;
 using System;
+using Unity.XR.CoreUtils;
+using Unity.VisualScripting;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class DemonstrationPlayer : MonoBehaviour
 {
@@ -10,7 +14,7 @@ public class DemonstrationPlayer : MonoBehaviour
 
     public int numberOfDemonstrations;
     public int numberOfPlaythroughs;
-    public int numberOfEvalutations;
+    public int numberOfEvaluations;
 
     private int demonstrationNo = 0;
     private bool SequenceFinished = false;
@@ -22,7 +26,7 @@ public class DemonstrationPlayer : MonoBehaviour
     private PlaybackManager playbackManager;
     private StatusIndicator statusIndicator;
     private TextMeshProUGUI DemonstrationLabel;
-    controllerActions inputActions;
+    private controllerActions inputActions;
 
     private enum PlaybackMode
     {
@@ -31,6 +35,8 @@ public class DemonstrationPlayer : MonoBehaviour
         Combined = 2
     }
     PlaybackMode playbackMode;
+    GameObject demoMenu;
+    DemoFields demoFields;
     bool showMotion;
     bool showFallingNotes;
 
@@ -43,16 +49,20 @@ public class DemonstrationPlayer : MonoBehaviour
         playbackManager = PlaybackManager.Instance;
         playbackManager.FinishedPlaying += OnDemonstrationFinished;
         inputActions.Controller.Next.performed += OnNextPressed;
-        inputActions.Controller.LeftTrigger.performed += OnTriggerPressed;
+        inputActions.Controller.LeftTrigger.performed += OnLeftTriggerPressed;
+        inputActions.Controller.RightTrigger.performed += OnRightTriggerPressed;
         DemonstrationLabel = GameObject.FindWithTag("DemonstrationLabel").GetComponent<TextMeshProUGUI>();
         statusIndicator = GameObject.FindWithTag("StatusIndicator").GetComponent<StatusIndicator>();
         SetPlaybackMode(PlaybackMode.ActionObservation);
         playbackModes = (PlaybackMode[])Enum.GetValues(typeof(PlaybackMode));
+        demoMenu = GameObject.FindWithTag("DemoMenu");
+        demoFields = demoMenu.transform.Find("Fields").GetComponent<DemoFields>();
+        demoMenu.SetActive(false);
     }
 
     private void PlayNextDemonstration()
     {
-        int totalStages = numberOfDemonstrations + numberOfPlaythroughs + numberOfEvalutations;
+        int totalStages = numberOfDemonstrations + numberOfPlaythroughs + numberOfEvaluations;
         int currentRecording = demonstrationNo / totalStages;
         int nextRecording = (demonstrationNo + 1) / totalStages;
 
@@ -122,7 +132,7 @@ public class DemonstrationPlayer : MonoBehaviour
         }
     }
 
-    private void OnTriggerPressed(InputAction.CallbackContext context)
+    private void OnLeftTriggerPressed(InputAction.CallbackContext context)
     {
         if (!playbackManager.playing && Enabled)
         {
@@ -137,6 +147,21 @@ public class DemonstrationPlayer : MonoBehaviour
             }
             SetPlaybackMode((PlaybackMode)currentMode);
             statusIndicator.ShowStatus($"Mode set to {playbackMode}");
+        }
+    }
+
+    private void OnRightTriggerPressed(InputAction.CallbackContext context)
+    {
+        if (!demoMenu.activeInHierarchy)
+        {
+            demoMenu.SetActive(true);
+        }
+        else
+        {
+            numberOfDemonstrations = demoFields.demoField;
+            numberOfPlaythroughs = demoFields.playthroughField;
+            numberOfEvaluations = demoFields.evalField;
+            demoMenu.SetActive(false);
         }
     }
 

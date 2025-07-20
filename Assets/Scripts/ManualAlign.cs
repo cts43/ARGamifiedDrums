@@ -17,7 +17,7 @@ public class ManualAlign : MonoBehaviour
     private void Update()
     {
 
-        if (OVRInput.GetDown(OVRInput.Button.One))
+        if (OVRInput.GetDown(OVRInput.RawButton.A))
         {
             align = !align; //Toggle alignment when 'A' button pressed
         }
@@ -25,11 +25,11 @@ public class ManualAlign : MonoBehaviour
         if (align)
         {
 
-            if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickDown))
+            if (OVRInput.Get(OVRInput.RawButton.RThumbstickDown))
             {
                 MoveableScene.transform.Translate(0, -0.001f, 0);
             }
-            else if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickUp))
+            else if (OVRInput.Get(OVRInput.RawButton.RThumbstickUp))
             {
                 MoveableScene.transform.Translate(0, 0.001f, 0);
             }

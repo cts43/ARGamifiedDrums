@@ -144,6 +144,15 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightTrigger"",
+                    ""type"": ""Button"",
+                    ""id"": ""3e525671-a335-4b0c-abac-0d49e934bb94"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -216,7 +225,7 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""right"",
                     ""id"": ""de69cf3c-e270-44ce-89cf-1b59139a88c4"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -256,6 +265,17 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
                     ""action"": ""LeftTrigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e32f37dc-9f1d-4eae-b0f5-e7066041099c"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightTrigger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -270,6 +290,7 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         m_Controller_Back = m_Controller.FindAction("Back", throwIfNotFound: true);
         m_Controller_Next = m_Controller.FindAction("Next", throwIfNotFound: true);
         m_Controller_LeftTrigger = m_Controller.FindAction("LeftTrigger", throwIfNotFound: true);
+        m_Controller_RightTrigger = m_Controller.FindAction("RightTrigger", throwIfNotFound: true);
     }
 
     ~@controllerActions()
@@ -356,6 +377,7 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Controller_Back;
     private readonly InputAction m_Controller_Next;
     private readonly InputAction m_Controller_LeftTrigger;
+    private readonly InputAction m_Controller_RightTrigger;
     /// <summary>
     /// Provides access to input actions defined in input action map "Controller".
     /// </summary>
@@ -391,6 +413,10 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Controller/LeftTrigger".
         /// </summary>
         public InputAction @LeftTrigger => m_Wrapper.m_Controller_LeftTrigger;
+        /// <summary>
+        /// Provides access to the underlying input action "Controller/RightTrigger".
+        /// </summary>
+        public InputAction @RightTrigger => m_Wrapper.m_Controller_RightTrigger;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -435,6 +461,9 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
             @LeftTrigger.started += instance.OnLeftTrigger;
             @LeftTrigger.performed += instance.OnLeftTrigger;
             @LeftTrigger.canceled += instance.OnLeftTrigger;
+            @RightTrigger.started += instance.OnRightTrigger;
+            @RightTrigger.performed += instance.OnRightTrigger;
+            @RightTrigger.canceled += instance.OnRightTrigger;
         }
 
         /// <summary>
@@ -464,6 +493,9 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
             @LeftTrigger.started -= instance.OnLeftTrigger;
             @LeftTrigger.performed -= instance.OnLeftTrigger;
             @LeftTrigger.canceled -= instance.OnLeftTrigger;
+            @RightTrigger.started -= instance.OnRightTrigger;
+            @RightTrigger.performed -= instance.OnRightTrigger;
+            @RightTrigger.canceled -= instance.OnRightTrigger;
         }
 
         /// <summary>
@@ -546,5 +578,12 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLeftTrigger(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RightTrigger" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRightTrigger(InputAction.CallbackContext context);
     }
 }

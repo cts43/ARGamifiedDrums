@@ -8,9 +8,6 @@ using TMPro;
 using System.IO;
 using System.Linq;
 
-
-
-
 public class NoteSpawner : MonoBehaviour
 {
 
@@ -30,6 +27,8 @@ public class NoteSpawner : MonoBehaviour
             this.negative = negative;
         }
     }
+
+    private const float barLabelSizeMultiplier = 1.5f;
     private long currentTick;
 
     private Vector3 targetPos = new Vector3(0, 0, 0);
@@ -365,7 +364,8 @@ public class NoteSpawner : MonoBehaviour
                 sign = "-";
             }
 
-            var newText = sign + VisualTime.Bars.ToString() + ":" + (VisualTime.Beats + 1).ToString() + ":" + VisualTime.Ticks.ToString();
+            float textSize = currentBeatLabel.fontSize;
+            var newText = sign + $"<size={textSize*barLabelSizeMultiplier}>"+VisualTime.Bars.ToString()+"</size>"+ ":" + (VisualTime.Beats + 1).ToString() + ":" + VisualTime.Ticks.ToString();
             currentBeatLabel.text = newText;
         }
 
