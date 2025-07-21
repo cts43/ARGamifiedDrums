@@ -51,6 +51,7 @@ public class DemonstrationPlayer : MonoBehaviour
         inputActions.Controller.Next.performed += OnNextPressed;
         inputActions.Controller.LeftTrigger.performed += OnLeftTriggerPressed;
         inputActions.Controller.RightTrigger.performed += OnRightTriggerPressed;
+        inputActions.Controller.RightBumper.performed += OnRightBumperPressed;
         DemonstrationLabel = GameObject.FindWithTag("DemonstrationLabel").GetComponent<TextMeshProUGUI>();
         statusIndicator = GameObject.FindWithTag("StatusIndicator").GetComponent<StatusIndicator>();
         SetPlaybackMode(PlaybackMode.ActionObservation);
@@ -114,6 +115,8 @@ public class DemonstrationPlayer : MonoBehaviour
     {
         if (saveInputs)
         {
+            Debug.Log("Saving..");
+            playbackManager.readyToSaveInput = true;
             playbackManager.TrySavePlaythroughData();
         }
 
@@ -161,16 +164,28 @@ public class DemonstrationPlayer : MonoBehaviour
 
     private void OnRightTriggerPressed(InputAction.CallbackContext context)
     {
-        if (!demoMenu.activeInHierarchy)
+        if (!playbackManager.playing && Enabled)
         {
-            demoMenu.SetActive(true);
+            if (!demoMenu.activeInHierarchy)
+            {
+                demoMenu.SetActive(true);
+            }
+            else
+            {
+                numberOfDemonstrations = demoFields.demoField;
+                numberOfPlaythroughs = demoFields.playthroughField;
+                numberOfEvaluations = demoFields.evalField;
+                demoMenu.SetActive(false);
+            }
         }
-        else
+    }
+
+    private void OnRightBumperPressed(InputAction.CallbackContext context)
+    {
+        if (!playbackManager.playing && Enabled)
         {
-            numberOfDemonstrations = demoFields.demoField;
-            numberOfPlaythroughs = demoFields.playthroughField;
-            numberOfEvaluations = demoFields.evalField;
-            demoMenu.SetActive(false);
+            onlyEvalOnFinalRecording = !onlyEvalOnFinalRecording;
+            statusIndicator.ShowStatus($"Evaluate only on final recording set to {onlyEvalOnFinalRecording}");
         }
     }
 

@@ -42,7 +42,7 @@ public class PlaybackManager : MonoBehaviour
     private Queue<playthroughFrame> savedPlaythroughCopy = new Queue<playthroughFrame>();
     private bool playingRecordedInputs = false;
     private bool readyToSaveMotion = false;
-    private bool readyToSaveInput = false;
+    public bool readyToSaveInput = false;
 
     int currentHitNotes = 0;
 
@@ -537,6 +537,10 @@ public class PlaybackManager : MonoBehaviour
             {
                 Debug.Log(e);
             }
+        }
+        else
+        {
+            Debug.Log("Not ready to save");
         }
     }
 

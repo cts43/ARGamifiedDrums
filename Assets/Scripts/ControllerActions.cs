@@ -153,6 +153,15 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightBumper"",
+                    ""type"": ""Button"",
+                    ""id"": ""5db82787-8692-4f7b-b493-f2a00f73f6f1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -276,6 +285,17 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
                     ""action"": ""RightTrigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5e421fa6-8fc3-48f3-828d-9b47ac26b20d"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightBumper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -291,6 +311,7 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         m_Controller_Next = m_Controller.FindAction("Next", throwIfNotFound: true);
         m_Controller_LeftTrigger = m_Controller.FindAction("LeftTrigger", throwIfNotFound: true);
         m_Controller_RightTrigger = m_Controller.FindAction("RightTrigger", throwIfNotFound: true);
+        m_Controller_RightBumper = m_Controller.FindAction("RightBumper", throwIfNotFound: true);
     }
 
     ~@controllerActions()
@@ -378,6 +399,7 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Controller_Next;
     private readonly InputAction m_Controller_LeftTrigger;
     private readonly InputAction m_Controller_RightTrigger;
+    private readonly InputAction m_Controller_RightBumper;
     /// <summary>
     /// Provides access to input actions defined in input action map "Controller".
     /// </summary>
@@ -417,6 +439,10 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Controller/RightTrigger".
         /// </summary>
         public InputAction @RightTrigger => m_Wrapper.m_Controller_RightTrigger;
+        /// <summary>
+        /// Provides access to the underlying input action "Controller/RightBumper".
+        /// </summary>
+        public InputAction @RightBumper => m_Wrapper.m_Controller_RightBumper;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -464,6 +490,9 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
             @RightTrigger.started += instance.OnRightTrigger;
             @RightTrigger.performed += instance.OnRightTrigger;
             @RightTrigger.canceled += instance.OnRightTrigger;
+            @RightBumper.started += instance.OnRightBumper;
+            @RightBumper.performed += instance.OnRightBumper;
+            @RightBumper.canceled += instance.OnRightBumper;
         }
 
         /// <summary>
@@ -496,6 +525,9 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
             @RightTrigger.started -= instance.OnRightTrigger;
             @RightTrigger.performed -= instance.OnRightTrigger;
             @RightTrigger.canceled -= instance.OnRightTrigger;
+            @RightBumper.started -= instance.OnRightBumper;
+            @RightBumper.performed -= instance.OnRightBumper;
+            @RightBumper.canceled -= instance.OnRightBumper;
         }
 
         /// <summary>
@@ -585,5 +617,12 @@ public partial class @controllerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRightTrigger(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RightBumper" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRightBumper(InputAction.CallbackContext context);
     }
 }
