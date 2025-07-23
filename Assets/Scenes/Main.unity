@@ -1890,10 +1890,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a08ab88a7384d46b2606e7844505c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebugActions: 1
+  enableDebugActions: 0
   acceptInputs: 1
   RTriggerMIDINote: 38
   drumManager: {fileID: 1568977027}
+  kickVolumeMultiplier: 3
+  playDrumSounds: 1
 --- !u!1 &284627998
 GameObject:
   m_ObjectHideFlags: 0
@@ -15474,7 +15476,7 @@ MonoBehaviour:
   numberOfDemonstrations: 1
   numberOfPlaythroughs: 1
   numberOfEvaluations: 1
-  onlyEvalOnFinalRecording: 0
+  onlyEvalOnFinalRecording: 1
   Enabled: 1
 --- !u!1 &2068966076
 GameObject:
@@ -16309,7 +16311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1678554349857304352, guid: 34a22dd67c1e5344591237fdd61e78ec, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1678554349857304352, guid: 34a22dd67c1e5344591237fdd61e78ec, type: 3}
       propertyPath: m_TagString
@@ -16963,6 +16965,10 @@ PrefabInstance:
     - target: {fileID: 6536860776232889746, guid: 70d02a90551f23042a882cdceeaf8e3a, type: 3}
       propertyPath: m_Name
       value: OVRLeftHandVisual
+      objectReference: {fileID: 0}
+    - target: {fileID: 6536860776232889746, guid: 70d02a90551f23042a882cdceeaf8e3a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6536860776232889746, guid: 70d02a90551f23042a882cdceeaf8e3a, type: 3}
       propertyPath: m_TagString

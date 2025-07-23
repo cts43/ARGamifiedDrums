@@ -24,6 +24,7 @@ public class PlaybackManager : MonoBehaviour
     private ScoreIndicator scoreIndicator;
 
     public string MIDIFilePath;
+    private string userStudyDirectory = "User Study Playthroughs";
 
     public bool MIDILoaded = false;
 
@@ -424,6 +425,8 @@ public class PlaybackManager : MonoBehaviour
 
             double percentageMissed = (double)missedNotes / activeNoteSpawner.totalNotes * 100;
 
+            scoreIndicator.AddToLabel("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
+
             Debug.Log("Percentage missed: " + percentageMissed + "%. Percentage hit: " + (100 - percentageMissed) + "%.");
         }
         savedPlaythrough = new Queue<playthroughFrame>();
@@ -512,7 +515,11 @@ public class PlaybackManager : MonoBehaviour
                 string date = System.DateTime.Now.ToString("yyyy-MM-dd--HH-mm");
 
                 int i = 1;
-                string recordingsFolder = FileManager.Instance.GetRecordingsPath();
+
+                string newDir = Path.Combine(Application.persistentDataPath,userStudyDirectory);
+
+                Directory.CreateDirectory(newDir);
+                string recordingsFolder = newDir;
                 string saveFolder = Path.Combine(recordingsFolder, $"Playthrough {i}");
 
                 while (Directory.Exists(saveFolder))

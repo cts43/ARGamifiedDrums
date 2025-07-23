@@ -27,6 +27,7 @@ public class DemonstrationPlayer : MonoBehaviour
     private StatusIndicator statusIndicator;
     private TextMeshProUGUI DemonstrationLabel;
     private controllerActions inputActions;
+    private MidiEventCatcher MIDIEventCatcher;
 
     private enum PlaybackMode
     {
@@ -52,6 +53,7 @@ public class DemonstrationPlayer : MonoBehaviour
         inputActions.Controller.LeftTrigger.performed += OnLeftTriggerPressed;
         inputActions.Controller.RightTrigger.performed += OnRightTriggerPressed;
         inputActions.Controller.RightBumper.performed += OnRightBumperPressed;
+        MIDIEventCatcher = GameObject.FindWithTag("MIDI Input Handler").GetComponent<MidiEventCatcher>();
         DemonstrationLabel = GameObject.FindWithTag("DemonstrationLabel").GetComponent<TextMeshProUGUI>();
         statusIndicator = GameObject.FindWithTag("StatusIndicator").GetComponent<StatusIndicator>();
         SetPlaybackMode(PlaybackMode.ActionObservation);
@@ -87,11 +89,13 @@ public class DemonstrationPlayer : MonoBehaviour
         {
             saveInputs = false;
             playbackManager.playRecorded(motion: showMotion, drumHits: true, showNotes: showFallingNotes, recordInput: false);
+            MIDIEventCatcher.playDrumSounds = true;
         }
         else if (demonstrationNo % totalStages < numberOfDemonstrations + numberOfPlaythroughs)
         {
-            saveInputs = false;
-            playbackManager.playRecorded(motion: showMotion, drumHits: false, showNotes: showFallingNotes, recordInput: false);
+            saveInputs = true;
+            playbackManager.playRecorded(motion: showMotion, drumHits: false, showNotes: showFallingNotes, recordInput: true);
+            MIDIEventCatcher.playDrumSounds = false;
         }
         else
         {
@@ -105,6 +109,7 @@ public class DemonstrationPlayer : MonoBehaviour
                 }
             }
             saveInputs = true;
+            MIDIEventCatcher.playDrumSounds = false;
             playbackManager.playRecorded(motion: false, drumHits: false, showNotes: false, recordInput: true);
         }
 

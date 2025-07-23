@@ -20,9 +20,11 @@ public class MidiEventCatcher : MonoBehaviour
     public DrumManager drumManager;
     private AudioSource sound;
 
+    public int kickVolumeMultiplier = 3;
+
     private Dictionary<int, Dictionary<int, AudioClip>> drumClips = new Dictionary<int, Dictionary<int, AudioClip>>();
 
-    public bool playDrumSounds { private set; get; } = true;
+    public bool playDrumSounds = true;
 
 
     private static SynchronizationContext context; //for running on main thread as these midi calls are not
@@ -125,6 +127,11 @@ public class MidiEventCatcher : MonoBehaviour
         }
 
         int scaledVelocity = (velocity * 31 / 128) + 1; //scale velocity to be within 1-32
+
+        if (note == 36)
+        {
+            scaledVelocity *= kickVolumeMultiplier; //Just for user study, make kick louder to ensure participants can hear properly
+        }
 
         scaledVelocity = Math.Clamp(scaledVelocity, 1, 32); //make sure resulting number is definitely within the range
         var soundToPlay = drumClips[note][scaledVelocity];
