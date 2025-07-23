@@ -531,7 +531,7 @@ public class PlaybackManager : MonoBehaviour
 
                 Directory.CreateDirectory(saveFolder);
 
-                string savePath = Path.Combine(saveFolder, MIDIFilePath + ".json");
+                string savePath = Path.Combine(saveFolder, MIDIFilePath + $" - {date}.json");
                 string datePath = Path.Combine(saveFolder, "date.txt");
 
                 string combinedJson = JsonUtility.ToJson(recordedInput);

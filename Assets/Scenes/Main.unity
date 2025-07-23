@@ -1895,7 +1895,7 @@ MonoBehaviour:
   RTriggerMIDINote: 38
   drumManager: {fileID: 1568977027}
   kickVolumeMultiplier: 3
-  playDrumSounds: 1
+  playDrumSounds: 0
 --- !u!1 &284627998
 GameObject:
   m_ObjectHideFlags: 0
