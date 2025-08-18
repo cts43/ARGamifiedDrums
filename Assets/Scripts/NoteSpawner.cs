@@ -247,11 +247,7 @@ public class NoteSpawner : MonoBehaviour
 
         if (noteDrum.GetComponent<DrumHit>().isKick)
         {
-            //if the drum is designated as a kick drum, then the kick note should be spawned - big line like in guitar hero? 
-            //would then line up with the other drums visually
-            //but recorded 'motion' could be animated leg
-
-            //big line doesn't necessarily work as drums will be in different positions.
+            //if the drum is designated as a kick drum, then the kick note should be spawned
             localStartPos = new Vector3(0, 0, 1); //right now kick drum is the same as the others but spawns from Z+1 instead of Y+1
             if (showKickMotion)
             {

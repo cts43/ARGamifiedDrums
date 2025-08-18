@@ -41,10 +41,6 @@ public class ControllerRecorder : MonoBehaviour
         }
     }
 
-    private GameObject LeftHandAnchor; //Controller anchors. Named this way for consistency with hierarchy but should probably rename to avoid confusion between hand+controller tracking
-    private GameObject RightHandAnchor;
-
-
     private Transform[] leftHandJoints;
     private Transform[] rightHandJoints;
 
@@ -113,8 +109,6 @@ public class ControllerRecorder : MonoBehaviour
 
     private void Start()
     {
-        LeftHandAnchor = GameObject.FindGameObjectWithTag("LeftHandAnchor");
-        RightHandAnchor = GameObject.FindGameObjectWithTag("RightHandAnchor");
     }
 
     public bool hasStoredRecording()
