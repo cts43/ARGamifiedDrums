@@ -5,16 +5,28 @@ using System.Collections.Generic;
 using System.IO;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
-using Newtonsoft.Json;
-using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class MIDIConverter
 {
-    //This script was adapted from ChatGPT to quickly convert the recorded MIDI files in the video demonstration portion of the study into the same format as the recordings from the AR conditions. 
-
+    
     private const double hitWindowInMs = 300.0;
+
+    private class NoteData
+    {
+        public int note;
+        public int velocity;
+        public long timeInTicks;
+        public double timeInMs;
+
+        public NoteData(int note, int velocity, long timeInTicks, double timeInMs){
+            this.note = note;
+            this.velocity = velocity;
+            this.timeInTicks = timeInTicks;
+            this.timeInMs = timeInMs;
+        }
+    }
 
     [MenuItem("Tools/Batch convert .mid to .json")]
     public static void ConvertMIDIPerformances()
@@ -27,7 +39,7 @@ public class MIDIConverter
         Regex regex = new Regex(@"^(.*?)(?=\s*-\s*|$)");
 
         foreach (var performance in Directory.GetFiles(performancesFolder))
-        {
+        { //match by filename, ignoring suffixes per the above regex
             string performanceFileName = Path.GetFileNameWithoutExtension(performance);
             Match match = regex.Match(performanceFileName);
             if (match.Success)
@@ -50,7 +62,7 @@ public class MIDIConverter
         }
     }
 
-    private static void ConvertMIDIPerformance(string performancePath, string referencePath, string outputJsonPath)
+    private static void ConvertMIDIPerformance(string performancePath, string referencePath, string savePath)
     {
         var performanceMidi = MidiFile.Read(performancePath);
         var referenceMidi = MidiFile.Read(referencePath);
@@ -58,68 +70,58 @@ public class MIDIConverter
         var perfTempoMap = performanceMidi.GetTempoMap();
         var refTempoMap = referenceMidi.GetTempoMap();
 
-        var performanceNotes = GetNotes(performanceMidi, perfTempoMap, true);
+        var performanceNotes = GetNotes(performanceMidi, perfTempoMap);
         var referenceNotes = GetNotes(referenceMidi, refTempoMap);
 
-        var outputFrames = new List<Dictionary<string, object>>();
+        var outputData = new PlaybackManager.playthroughData(new List<PlaybackManager.playthroughFrame>());
 
-        var matchedReferenceNotes = new HashSet<NoteData>();
+        var hitNotes = new List<NoteData>();
 
-        foreach (var perfNote in performanceNotes)
+        foreach (var note in performanceNotes)
         {
+            NoteData matchedNote = null;
+
+            foreach (var reference in referenceNotes){
+                
+                if (hitNotes.Contains(reference) || reference.note != note.note){
+                    continue; //skip if already matched or wrong note
+                }
+
+                double diff = Math.Abs(reference.timeInMs - note.timeInMs);
+
+                if (diff <= hitWindowInMs){
+                    matchedNote = reference;
+                    break;
+                }
+            }
+
+            bool hitSuccessfully = (matchedNote != null);
+            if (hitSuccessfully)
+            {
+                hitNotes.Add(matchedNote); //mark as hit
+            }
+
+            double? smallest = null;
             NoteData closest = null;
-            double smallestTimeDiff = double.MaxValue;
-
-            NoteData closestMatchingPitch = null;
-            double smallestMatchingPitchTimeDiff = double.MaxValue;
-
-            foreach (var refNote in referenceNotes)
-            {
-                if (matchedReferenceNotes.Contains(refNote)) continue;
-
-                double timeDiff = Math.Abs(perfNote.TimeMs - refNote.TimeMs);
-
-                // Track closest overall
-                if (timeDiff < smallestTimeDiff)
-                {
-                    smallestTimeDiff = timeDiff;
-                    closest = refNote;
-                }
-
-                // Track closest matching pitch
-                if (refNote.NoteNumber == perfNote.NoteNumber && timeDiff < smallestMatchingPitchTimeDiff)
-                {
-                    smallestMatchingPitchTimeDiff = timeDiff;
-                    closestMatchingPitch = refNote;
+            //find closest time
+            foreach (var reference in referenceNotes){
+                double diff = Math.Abs(note.timeInMs - reference.timeInMs);
+                if (smallest == null || diff < smallest){
+                    smallest = diff;
+                    closest = reference;
                 }
             }
 
-            bool hitSuccessfully = false;
-            if (closestMatchingPitch != null && smallestMatchingPitchTimeDiff <= hitWindowInMs)
-            {
-                hitSuccessfully = true;
-                matchedReferenceNotes.Add(closestMatchingPitch); // ✅ don't reuse it
-            }
+            //we still want every note in the .json, matching just determines hitSuccessfully
+            var frame = new PlaybackManager.playthroughFrame(note.note,note.velocity,note.timeInTicks,closest.timeInTicks,hitSuccessfully);
 
-            var frame = new Dictionary<string, object>
-            {
-                { "note", perfNote.NoteNumber },
-                { "velocity", perfNote.Velocity },
-                { "hitTime", perfNote.TimeTicks },
-                { "closestNoteTime", closest?.TimeTicks ?? 0 },
-                { "hitSuccessfully", hitSuccessfully }
-            };
-
-            outputFrames.Add(frame);
+            outputData.frames.Add(frame);
         }
 
-        var jsonObject = new Dictionary<string, object>
-        {
-            { "frames", outputFrames }
-        };
 
-        var json = JsonConvert.SerializeObject(jsonObject, Formatting.Indented);
-        File.WriteAllText(outputJsonPath, json);
+        var json = JsonUtility.ToJson(outputData);
+        File.WriteAllText(savePath, json);
+        Debug.Log("Saved new json to " + savePath);
     }
 
     private static List<NoteData> GetNotes(MidiFile midiFile, TempoMap tempoMap, bool applyOffset = false)
@@ -127,70 +129,29 @@ public class MIDIConverter
 
         long barInTicks = TimeConverter.ConvertFrom(new BarBeatTicksTimeSpan(1), tempoMap);
         double barInMs = TimeConverter.ConvertTo<MetricTimeSpan>(new BarBeatTicksTimeSpan(1), tempoMap).TotalMilliseconds;
+        var notesList = new List<NoteData>();
 
-        return midiFile.GetNotes().Select(note =>
-        {
+        foreach (var note in midiFile.GetNotes()){
+            
+            long timeInTicks = note.Time;
 
-            long timeTicks = note.Time;
+            var timeAsMetric = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time, tempoMap);
+            double timeInMs = timeAsMetric.TotalMicroseconds / 1000.0;
 
-            var metricTime = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time, tempoMap);
-            double timeMs = metricTime.TotalMicroseconds / 1000.0;
-
-            if (applyOffset)
+            if (applyOffset) //offset to account for lack of spawn window
             {
-                timeTicks -= barInTicks;
-                timeMs -= barInMs;
+                timeInTicks -= barInTicks;
+                timeInMs -= barInMs;
             }
 
-            return new NoteData
-            {
-                NoteNumber = note.NoteNumber,
-                Velocity = note.Velocity,
-                TimeTicks = timeTicks,
-                TimeMs = timeMs
-            };
-        }).ToList();
-    }
+            var noteData = new NoteData(note.NoteNumber,note.Velocity,timeInTicks,timeInMs);
 
-    private class NoteData
-    {
-        public int NoteNumber { get; set; }
-        public int Velocity { get; set; }
-        public long TimeTicks { get; set; }
-        public double TimeMs { get; set; }
-    }
+            notesList.Add(noteData);
 
-    [MenuItem("Tools/120 -> 60BPM in C drive folder")]
-    public static void TempoChanger()
-    {
-        string inputFolder = @"C:\Midi\Input";
-        string outputFolder = @"C:\Midi\Output";
-
-        Directory.CreateDirectory(outputFolder);
-        int targetTempo = 60000000 / 60; // 60 BPM → 1,000,000 µs per quarter note
-
-        foreach (string file in Directory.GetFiles(inputFolder, "*.mid"))
-        {
-            var midi = MidiFile.Read(file);
-
-            // Remove all tempo events
-            foreach (var trackChunk in midi.GetTrackChunks())
-            {
-                var tempoEvents = trackChunk.Events.OfType<SetTempoEvent>().ToList();
-                foreach (var tempoEvent in tempoEvents)
-                    trackChunk.Events.Remove(tempoEvent);
-            }
-
-            // Insert new tempo event at time = 0
-            var firstTrack = midi.GetTrackChunks().First();
-            firstTrack.Events.Insert(0, new SetTempoEvent(targetTempo));
-
-            // Save to output folder
-            string outputPath = Path.Combine(outputFolder, Path.GetFileName(file));
-            midi.Write(outputPath);
         }
 
-        Console.WriteLine("All MIDI files processed.");
+        return notesList;
+
     }
 
 }
