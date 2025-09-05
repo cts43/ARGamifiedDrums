@@ -20,9 +20,11 @@ public class MidiEventCatcher : MonoBehaviour
     public DrumManager drumManager;
     private AudioSource sound;
 
+    public int kickVolumeMultiplier = 3;
+
     private Dictionary<int, Dictionary<int, AudioClip>> drumClips = new Dictionary<int, Dictionary<int, AudioClip>>();
 
-    public bool playDrumSounds { private set; get; } = true;
+    public bool playDrumSounds = true;
 
 
     private static SynchronizationContext context; //for running on main thread as these midi calls are not
@@ -107,7 +109,7 @@ public class MidiEventCatcher : MonoBehaviour
     {
         if (acceptInputs)
         {
-            Debug.Log("Note " + note + " on, velocity " + velocity);
+            //Debug.Log("Note " + note + " on, velocity " + velocity);
             context.Post(_ => { checkForDrum(note, velocity); }, null); //queue to run on the main thread
         }
         else
@@ -123,14 +125,15 @@ public class MidiEventCatcher : MonoBehaviour
         {
             return;
         }
-        
-        Debug.Log("Note is" + note);
 
         int scaledVelocity = (velocity * 31 / 128) + 1; //scale velocity to be within 1-32
 
-        Debug.Log("Velocity for file load: " + scaledVelocity);
+        if (note == 36)
+        {
+            scaledVelocity *= kickVolumeMultiplier; //Just for user study, make kick louder to ensure participants can hear properly
+        }
+
         scaledVelocity = Math.Clamp(scaledVelocity, 1, 32); //make sure resulting number is definitely within the range
-        Debug.Log("Velocity after clamp: " + scaledVelocity);
         var soundToPlay = drumClips[note][scaledVelocity];
 
         sound.PlayOneShot(soundToPlay);
@@ -138,7 +141,7 @@ public class MidiEventCatcher : MonoBehaviour
 
     private void NoteOff(int note)
     {
-        Debug.Log("Note " + note + " off");
+        //Debug.Log("Note " + note + " off");
     }
 
     private void Update()

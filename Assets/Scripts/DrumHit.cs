@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Melanchall.DryWetMidi.Interaction;
 using UnityEngine;
-using UnityEngine.XR.ARFoundation;
 
 
 public class DrumHit : MonoBehaviour
@@ -73,24 +72,20 @@ public class DrumHit : MonoBehaviour
             if (diff <= TimeConverter.ConvertFrom(hitWindowAsTimeSpan, note.TempoMap) / 2)
             {
                 hitNote = true;
-                Debug.Log("Successfully Hit Note at Tick " + currentTime + ", closest note: " + closestNoteTime + " Diff: "+diff);
+                //Debug.Log("Successfully Hit Note at Tick " + currentTime + ", closest note: " + closestNoteTime + " Diff: "+diff);
                 note.destroy(); //destroy hit note
-                Debug.Log(scoreIndicator);
 
                 if (diff <= 50)
                 {
-                    Debug.Log("Perfect!");
                     StartCoroutine(scoreIndicator.ReplaceLabel("Perfect!"));
 
                 }
                 else if (diff <= 100)
                 {
-                    Debug.Log("Great!");
                     StartCoroutine(scoreIndicator.ReplaceLabel("Great!"));
                 }
                 else
                 {
-                    Debug.Log("OK!");
                     StartCoroutine(scoreIndicator.ReplaceLabel("OK!"));
                 }
 
@@ -124,7 +119,7 @@ public class DrumHit : MonoBehaviour
         if (!hitNote)
         {
             {
-                Debug.Log("Missed Note at Tick " + currentTime);
+                //Debug.Log("Missed Note at Tick " + currentTime);
                 StartCoroutine(scoreIndicator.ReplaceLabel("Missed!"));
             }
         }
@@ -141,7 +136,7 @@ public class DrumHit : MonoBehaviour
         }
 
         changeColourOnHit = StartCoroutine(ShowDrumHitbyChangeColour());
-        if (PlaybackManager.playing)
+        if (PlaybackManager.Instance.playing)
         {
             (var timeHit,var closestNote,var hitNote) = checkIfHitNote();
             RaiseHitDrum(note, velocity, timeHit, closestNote, hitNote); //send hit drum signal with int note number, velocity (not here yet), time hit

@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.IO;
 using System.Threading.Tasks;
 using Unity.SharpZipLib.Utils;
@@ -9,6 +11,7 @@ public class FileManager : MonoBehaviour
     public static FileManager Instance { get; private set; }
     private string ExtractedMIDIPath;
     private string ExtractedRecordingsPath;
+    public bool Finished = false;
 
     private void Start()
     {
@@ -24,6 +27,7 @@ public class FileManager : MonoBehaviour
     {
         ExtractedMIDIPath = await GetFromZip("MIDI Files.zip", "Extracted MIDI");
         ExtractedRecordingsPath = await GetFromZip("Motion Recordings.zip", "Extracted Recordings");
+        Finished = true;
     }
 
     private async Task<string> GetFromZip(string filename, string outFolder)
@@ -51,29 +55,33 @@ public class FileManager : MonoBehaviour
         return ExtractedPath;
     }
 
-    public string GetMIDIPath()
-    {
-        if (ExtractedMIDIPath != null)
-        {
-            return ExtractedMIDIPath;
-        }
-        else
-        {
-            Debug.Log("Zip not loaded!");
-            return null;
-        }
-    }
-
     public string GetRecordingsPath()
     {
-        if (ExtractedRecordingsPath != null)
+        return ExtractedRecordingsPath;
+    }
+
+    public string GetMIDIPath()
+    {
+        return ExtractedMIDIPath;
+    }
+
+    public async Awaitable<string> GetRecordingsPathAsync()
+    {
+        while (!Finished)
         {
-            return ExtractedRecordingsPath;
+            await Task.Delay(100);
         }
-        else
+
+        return ExtractedRecordingsPath;
+    }
+
+    public async Awaitable<string> GetMIDIPathAsync()
+    {
+        while (!Finished)
         {
-            Debug.Log("Zip not loaded!");
-            return null;
+            await Task.Delay(100);
         }
+
+        return ExtractedMIDIPath;
     }
 }

@@ -22,6 +22,9 @@ TagManager:
   - SubMenu
   - StatusIndicator
   - LeftControllerAnchor
+  - DemonstrationLabel
+  - DemoMenu
+  - DemonstrationPlayer
   layers:
   - Default
   - TransparentFX
