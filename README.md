@@ -2,7 +2,7 @@
 
 An AR project built in Unity designed to aid in teaching the drums, incorporating motion captured action observation methods and gamification elements similar to those found in a rhythm game. Designed for use with a Meta Quest 3 headset.
 
-The Unity project is available in the `Unity Project` directory, and Python scripts along with raw data used for analysis is available in the `Data Analysis` directory.
+The Unity project is available in the `Unity Project` directory, and Python scripts along with raw data used for analysis are available in the `Data Analysis` directory.
 
 To open the project, clone the repository or the project directory and import it into Unity. It was developed in version 6000.1.6f1. 
 
