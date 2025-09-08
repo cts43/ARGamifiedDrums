@@ -1,0 +1,64 @@
+Participant ID,Question,Response,DemonstrationType,Aspect
+0,(AR only) To what extent did you find the falling drum notes helpful for indicating which notes to play?,4,Falling Notes,Differentiation
+0,(AR only) To what extent did you find the falling drum notes helpful for indicating when to play a given note?,3,Falling Notes,Timing
+0,(AR only) To what extent did you find the numeric scores effective for tracking your accuracy?,1,Falling Notes + Action Observation,Score
+0,(AR with Motion Demonstration Only) To what extent did you find the floating drum stick demonstration effective for indicating which notes to play?,5,Action Observation,Differentiation
+0,(AR with Motion Demonstration Only)  To what extent did you find the floating drum stick demonstration effective for indicating when to play a given note?,5,Action Observation,Timing
+0,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating which notes to play? ,2,Video,Differentiation
+0,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating when to play a given note?,2,Video,Timing
+1,(AR only) To what extent did you find the falling drum notes helpful for indicating which notes to play?,5,Falling Notes,Differentiation
+1,(AR only) To what extent did you find the falling drum notes helpful for indicating when to play a given note?,4,Falling Notes,Timing
+1,(AR only) To what extent did you find the numeric scores effective for tracking your accuracy?,3,Falling Notes + Action Observation,Score
+1,(AR with Motion Demonstration Only) To what extent did you find the floating drum stick demonstration effective for indicating which notes to play?,4,Action Observation,Differentiation
+1,(AR with Motion Demonstration Only)  To what extent did you find the floating drum stick demonstration effective for indicating when to play a given note?,4,Action Observation,Timing
+1,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating which notes to play? ,3,Video,Differentiation
+1,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating when to play a given note?,4,Video,Timing
+2,(AR only) To what extent did you find the falling drum notes helpful for indicating which notes to play?,5,Falling Notes,Differentiation
+2,(AR only) To what extent did you find the falling drum notes helpful for indicating when to play a given note?,4,Falling Notes,Timing
+2,(AR only) To what extent did you find the numeric scores effective for tracking your accuracy?,2,Falling Notes + Action Observation,Score
+2,(AR with Motion Demonstration Only) To what extent did you find the floating drum stick demonstration effective for indicating which notes to play?,4,Action Observation,Differentiation
+2,(AR with Motion Demonstration Only)  To what extent did you find the floating drum stick demonstration effective for indicating when to play a given note?,4,Action Observation,Timing
+2,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating which notes to play? ,4,Video,Differentiation
+2,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating when to play a given note?,3,Video,Timing
+3,(AR only) To what extent did you find the falling drum notes helpful for indicating which notes to play?,4,Falling Notes,Differentiation
+3,(AR only) To what extent did you find the falling drum notes helpful for indicating when to play a given note?,4,Falling Notes,Timing
+3,(AR only) To what extent did you find the numeric scores effective for tracking your accuracy?,2,Falling Notes + Action Observation,Score
+3,(AR with Motion Demonstration Only) To what extent did you find the floating drum stick demonstration effective for indicating which notes to play?,3,Action Observation,Differentiation
+3,(AR with Motion Demonstration Only)  To what extent did you find the floating drum stick demonstration effective for indicating when to play a given note?,4,Action Observation,Timing
+3,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating which notes to play? ,4,Video,Differentiation
+3,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating when to play a given note?,3,Video,Timing
+4,(AR only) To what extent did you find the falling drum notes helpful for indicating which notes to play?,3,Falling Notes,Differentiation
+4,(AR only) To what extent did you find the falling drum notes helpful for indicating when to play a given note?,3,Falling Notes,Timing
+4,(AR only) To what extent did you find the numeric scores effective for tracking your accuracy?,1,Falling Notes + Action Observation,Score
+4,(AR with Motion Demonstration Only) To what extent did you find the floating drum stick demonstration effective for indicating which notes to play?,4,Action Observation,Differentiation
+4,(AR with Motion Demonstration Only)  To what extent did you find the floating drum stick demonstration effective for indicating when to play a given note?,4,Action Observation,Timing
+4,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating which notes to play? ,4,Video,Differentiation
+4,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating when to play a given note?,4,Video,Timing
+5,(AR only) To what extent did you find the falling drum notes helpful for indicating which notes to play?,5,Falling Notes,Differentiation
+5,(AR only) To what extent did you find the falling drum notes helpful for indicating when to play a given note?,5,Falling Notes,Timing
+5,(AR only) To what extent did you find the numeric scores effective for tracking your accuracy?,3,Falling Notes + Action Observation,Score
+5,(AR with Motion Demonstration Only) To what extent did you find the floating drum stick demonstration effective for indicating which notes to play?,4,Action Observation,Differentiation
+5,(AR with Motion Demonstration Only)  To what extent did you find the floating drum stick demonstration effective for indicating when to play a given note?,3,Action Observation,Timing
+5,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating which notes to play? ,5,Video,Differentiation
+5,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating when to play a given note?,2,Video,Timing
+6,(AR only) To what extent did you find the falling drum notes helpful for indicating which notes to play?,4,Falling Notes,Differentiation
+6,(AR only) To what extent did you find the falling drum notes helpful for indicating when to play a given note?,4,Falling Notes,Timing
+6,(AR only) To what extent did you find the numeric scores effective for tracking your accuracy?,2,Falling Notes + Action Observation,Score
+6,(AR with Motion Demonstration Only) To what extent did you find the floating drum stick demonstration effective for indicating which notes to play?,5,Action Observation,Differentiation
+6,(AR with Motion Demonstration Only)  To what extent did you find the floating drum stick demonstration effective for indicating when to play a given note?,4,Action Observation,Timing
+6,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating which notes to play? ,4,Video,Differentiation
+6,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating when to play a given note?,4,Video,Timing
+7,(AR only) To what extent did you find the falling drum notes helpful for indicating which notes to play?,2,Falling Notes,Differentiation
+7,(AR only) To what extent did you find the falling drum notes helpful for indicating when to play a given note?,3,Falling Notes,Timing
+7,(AR only) To what extent did you find the numeric scores effective for tracking your accuracy?,3,Falling Notes + Action Observation,Score
+7,(AR with Motion Demonstration Only) To what extent did you find the floating drum stick demonstration effective for indicating which notes to play?,2,Action Observation,Differentiation
+7,(AR with Motion Demonstration Only)  To what extent did you find the floating drum stick demonstration effective for indicating when to play a given note?,4,Action Observation,Timing
+7,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating which notes to play? ,1,Video,Differentiation
+7,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating when to play a given note?,1,Video,Timing
+8,(AR only) To what extent did you find the falling drum notes helpful for indicating which notes to play?,5,Falling Notes,Differentiation
+8,(AR only) To what extent did you find the falling drum notes helpful for indicating when to play a given note?,4,Falling Notes,Timing
+8,(AR only) To what extent did you find the numeric scores effective for tracking your accuracy?,3,Falling Notes + Action Observation,Score
+8,(AR with Motion Demonstration Only) To what extent did you find the floating drum stick demonstration effective for indicating which notes to play?,3,Action Observation,Differentiation
+8,(AR with Motion Demonstration Only)  To what extent did you find the floating drum stick demonstration effective for indicating when to play a given note?,5,Action Observation,Timing
+8,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating which notes to play? ,3,Video,Differentiation
+8,(Video Demonstration Only)  To what extent did you find the video demonstration effective for indicating when to play a given note?,4,Video,Timing

@@ -1,0 +1,8 @@
+Predictor,Estimate,Pred. M ± SE,p-value
+Baseline (A),5.23,5.23 ± 2.07,-
+Condition B,-2.43,2.8 ± 2.44,0.319
+Condition C,3.38,8.61 ± 2.3,0.141
+Condition D,1.84,7.06 ± 2.38,0.44
+Component,2.33,-,<.001*
+Cognitive Load,-0.48,-,0.534
+Group Var,0.11,-,0.252
