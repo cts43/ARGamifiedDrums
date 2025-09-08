@@ -1,0 +1,270 @@
+{
+  "frames": [
+    {
+      "note": 46,
+      "velocity": 103,
+      "hitTime": -36,
+      "closestNoteTime": 0,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 74,
+      "hitTime": 476,
+      "closestNoteTime": 480,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 80,
+      "hitTime": 936,
+      "closestNoteTime": 960,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 84,
+      "hitTime": 1418,
+      "closestNoteTime": 1440,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 36,
+      "velocity": 30,
+      "hitTime": 1847,
+      "closestNoteTime": 1920,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 100,
+      "hitTime": 1859,
+      "closestNoteTime": 1920,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 79,
+      "hitTime": 2340,
+      "closestNoteTime": 2400,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 77,
+      "hitTime": 2840,
+      "closestNoteTime": 2880,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 75,
+      "hitTime": 3333,
+      "closestNoteTime": 3360,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 100,
+      "hitTime": 3803,
+      "closestNoteTime": 3840,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 77,
+      "hitTime": 4284,
+      "closestNoteTime": 4320,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 82,
+      "hitTime": 4776,
+      "closestNoteTime": 4800,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 79,
+      "hitTime": 5269,
+      "closestNoteTime": 5280,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 108,
+      "hitTime": 5736,
+      "closestNoteTime": 5760,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 36,
+      "velocity": 32,
+      "hitTime": 5758,
+      "closestNoteTime": 5760,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 82,
+      "hitTime": 6241,
+      "closestNoteTime": 6240,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 83,
+      "hitTime": 6703,
+      "closestNoteTime": 6720,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 80,
+      "hitTime": 7203,
+      "closestNoteTime": 7200,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 104,
+      "hitTime": 7663,
+      "closestNoteTime": 7680,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 36,
+      "velocity": 27,
+      "hitTime": 7674,
+      "closestNoteTime": 7680,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 82,
+      "hitTime": 8146,
+      "closestNoteTime": 8160,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 83,
+      "hitTime": 8625,
+      "closestNoteTime": 8640,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 82,
+      "hitTime": 9119,
+      "closestNoteTime": 9120,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 36,
+      "velocity": 30,
+      "hitTime": 9589,
+      "closestNoteTime": 9600,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 102,
+      "hitTime": 9589,
+      "closestNoteTime": 9600,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 82,
+      "hitTime": 10061,
+      "closestNoteTime": 10080,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 82,
+      "hitTime": 10542,
+      "closestNoteTime": 10560,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 80,
+      "hitTime": 11053,
+      "closestNoteTime": 11040,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 100,
+      "hitTime": 11495,
+      "closestNoteTime": 11520,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 77,
+      "hitTime": 12017,
+      "closestNoteTime": 12000,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 84,
+      "hitTime": 12477,
+      "closestNoteTime": 12480,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 79,
+      "hitTime": 12970,
+      "closestNoteTime": 12960,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 36,
+      "velocity": 34,
+      "hitTime": 13478,
+      "closestNoteTime": 13440,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 94,
+      "hitTime": 13480,
+      "closestNoteTime": 13440,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 79,
+      "hitTime": 13952,
+      "closestNoteTime": 13920,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 80,
+      "hitTime": 14444,
+      "closestNoteTime": 14400,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 46,
+      "velocity": 79,
+      "hitTime": 14925,
+      "closestNoteTime": 14880,
+      "hitSuccessfully": true
+    },
+    {
+      "note": 36,
+      "velocity": 42,
+      "hitTime": 15341,
+      "closestNoteTime": 11520,
+      "hitSuccessfully": false
+    }
+  ]
+}

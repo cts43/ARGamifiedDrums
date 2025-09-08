@@ -1,0 +1,8 @@
+Predictor,Estimate,Pred. M ± SE,p-value
+Baseline (A),10.62,10.62 ± 3.48,-
+"C(Condition, Treatment(reference='C'))[T.A]",-1.01,9.61 ± 2.64,0.703
+"C(Condition, Treatment(reference='C'))[T.B]",0.26,10.88 ± 2.72,0.923
+"C(Condition, Treatment(reference='C'))[T.D]",2.44,13.06 ± 2.66,0.359
+Component,2.19,-,<.001*
+Cognitive Load,3.73,-,<.001*
+Group Var,0.5,-,0.097
